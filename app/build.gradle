@@ -14,7 +14,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050/api/"')
+        buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
