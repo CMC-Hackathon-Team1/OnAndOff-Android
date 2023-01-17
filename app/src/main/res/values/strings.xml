@@ -26,4 +26,9 @@
     <string name="hashtag_hint">해시태그를 달아보세요.(ex: #에세이#수필)</string>
     <string name="content_hint">작가님의 하루를 기록하고 공유해주세요.</string>
 
+    <string name="look_around_related_users">관련 유저들을 둘러보세요.</string>
+    <string name="author_kiki_nim">작가 키키님,</string>
+    <string name="please_share_your_today">오늘 당신의 하루를 공유해주세요</string>
+    <string name="post">기록하기</string>
+    <string name="hashtag_author_essay">#작가 #에세이</string>
 </resources>
