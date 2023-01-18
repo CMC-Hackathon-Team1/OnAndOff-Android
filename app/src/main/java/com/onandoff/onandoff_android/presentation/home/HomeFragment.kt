@@ -75,10 +75,10 @@ class HomeFragment: Fragment(), OnDayClickListener {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = myProfileListAdapter
-            myProfileListAdapter.submitList(listOf(MyProfileData(
-                profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"),
-                MyProfileData(isAlreadyAdded=true))
-            )
+//            myProfileListAdapter.submitList(listOf(MyProfileData(
+//                profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"),
+//                MyProfileData(isAlreadyAdded=true))
+//            )
         }
     }
 
