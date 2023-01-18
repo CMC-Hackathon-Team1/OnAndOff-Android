@@ -1,4 +1,4 @@
-package com.onandoff.onandoff_android
+package com.onandoff.onandoff_android.presentation.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,28 +8,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.onandoff.onandoff_android.CalendarData
 import com.onandoff.onandoff_android.databinding.ItemCalendarBinding
 
 class CalendarAdapter(private val dayClick: (day: String) -> Unit) :
-    ListAdapter<Calendar, CalendarAdapter.CalendarViewHolder>(
+    ListAdapter<CalendarData, CalendarAdapter.CalendarViewHolder>(
         CalendarDiffUtil
     ) {
 
     inner class CalendarViewHolder(private val binding: ItemCalendarBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(calendar: Calendar, dayClick: (day: String) -> Unit) { // databinding 수정하기
-            binding.calendar = calendar
-            if (calendar.isCurrentMonth) {
+        fun bind(calendarData: CalendarData, dayClick: (day: String) -> Unit) { // databinding 수정하기
+            binding.calendar = calendarData
+            if (calendarData.isCurrentMonth) {
                 binding.tvDay.visibility = View.VISIBLE
-                if (calendar.isExist) {
+                if (calendarData.isExist) {
                     binding.sivCalendar.isVisible = true
 
                     Glide.with(binding.root.context)
-                        .load(calendar.imageUrl)
+                        .load(calendarData.imageUrl)
                         .into(binding.sivCalendar)
 
                     binding.root.setOnClickListener {
-                        dayClick(calendar.day)
+                        dayClick(calendarData.day)
                     }
                 } else {
                     binding.sivCalendar.isVisible = false
@@ -51,12 +52,12 @@ class CalendarAdapter(private val dayClick: (day: String) -> Unit) :
         holder.bind(getItem(position), dayClick)
     }
 
-    companion object CalendarDiffUtil : DiffUtil.ItemCallback<Calendar>() {
-        override fun areItemsTheSame(oldItem: Calendar, newItem: Calendar): Boolean {
+    companion object CalendarDiffUtil : DiffUtil.ItemCallback<CalendarData>() {
+        override fun areItemsTheSame(oldItem: CalendarData, newItem: CalendarData): Boolean {
             return (oldItem.day == newItem.day) && (oldItem.isCurrentMonth == newItem.isCurrentMonth)
         }
 
-        override fun areContentsTheSame(oldItem: Calendar, newItem: Calendar) =
+        override fun areContentsTheSame(oldItem: CalendarData, newItem: CalendarData) =
             oldItem == newItem
     }
 }
