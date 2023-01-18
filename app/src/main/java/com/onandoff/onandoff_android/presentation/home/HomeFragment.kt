@@ -10,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.onandoff.onandoff_android.MyProfileData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import java.util.*
 
 class HomeFragment: Fragment(), OnDayClickListener {
@@ -22,7 +19,7 @@ class HomeFragment: Fragment(), OnDayClickListener {
             get() = _binding!!
 
     private lateinit var myProfileListAdapter: MyProfileListAdapter
-    private lateinit var relatedUserListAdapter: RelatedUserListAdapter
+    private lateinit var relevantUserListAdapter: RelevantUserListAdapter
 
     private val datePicker
         = MaterialDatePicker.Builder.datePicker()
@@ -49,7 +46,7 @@ class HomeFragment: Fragment(), OnDayClickListener {
     private fun setupView() {
         initMyProfileListRecyclerView(binding.rvMyProfileList)
         setupCalendar()
-        initRelatedUserListRecyclerView(binding.rvRelatedUsers)
+        initRelevantUserListRecyclerView(binding.rvRelatedUsers)
     }
 
     private fun setupListeners() {
@@ -97,23 +94,30 @@ class HomeFragment: Fragment(), OnDayClickListener {
         TODO("Not yet implemented")
     }
 
-    private fun initRelatedUserListRecyclerView(recyclerView: RecyclerView) {
-        relatedUserListAdapter = RelatedUserListAdapter()
+    private fun initRelevantUserListRecyclerView(recyclerView: RecyclerView) {
+        relevantUserListAdapter = RelevantUserListAdapter(
+            userProfileClick = ::intentUserProfile
+        )
 
         recyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = relatedUserListAdapter
+            adapter = relevantUserListAdapter
         }
     }
 
-    private fun intentPostActivity() {
-//        val intent =  PostingAddActivity.getIntent(requireActivity())
+    private fun intentUserProfile() {
+//        val intent = UserProfileActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
 
     private fun createNewProfile() {
 //        val intent = CreateNewProfileActivity.getIntent(requireActivity())
+//        startActivity(intent)
+    }
+
+    private fun intentPostActivity() {
+//        val intent =  PostingAddActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
 
