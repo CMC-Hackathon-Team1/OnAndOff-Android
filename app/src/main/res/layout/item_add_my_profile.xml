@@ -2,17 +2,65 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/item_add_my_profile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:src="@drawable/ic_plus"
-        style="@style/Circle"
+    <View
+        android:id="@+id/view_left"
+        android:layout_width="21dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_right"
+        android:layout_width="21dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_my_profile_add"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="4dp"
+        app:cardElevation="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/view_right"
+        app:layout_constraintStart_toEndOf="@id/view_left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/Circle"
+        app:strokeColor="#DDDDDD"
+        app:strokeWidth="1dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_add_my_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:padding="15dp"
+            android:src="@drawable/ic_plus" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tv_my_profile_add"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="디자이너"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/cv_my_profile_add"
+        app:layout_constraintStart_toStartOf="@id/cv_my_profile_add"
+        app:layout_constraintTop_toBottomOf="@id/cv_my_profile_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
