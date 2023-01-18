@@ -1,4 +1,4 @@
-package com.onandoff.onandoff_android
+package com.onandoff.onandoff_android.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applandeo.materialcalendarview.EventDay
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.onandoff.onandoff_android.MyProfileData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter
+import java.util.*
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), OnDayClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding
             get() = _binding!!
@@ -42,11 +48,12 @@ class HomeFragment: Fragment() {
 
     private fun setupView() {
         initMyProfileListRecyclerView(binding.rvMyProfileList)
+        setupCalendar()
         initRelatedUserListRecyclerView(binding.rvRelatedUsers)
     }
 
     private fun setupListeners() {
-        binding.ivBell.setOnClickListener {
+        binding.ivAlarm.setOnClickListener {
 
         }
 
@@ -68,7 +75,26 @@ class HomeFragment: Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = myProfileListAdapter
+            myProfileListAdapter.submitList(listOf(MyProfileData(
+                profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"),
+                MyProfileData(isAlreadyAdded=true))
+            )
         }
+    }
+
+    private fun setupCalendar() {
+//        binding.calendar.setTitleFormatter { day -> "${day!!.year}년 ${day.month}월" }
+        val calendarMin = Calendar.getInstance()
+        calendarMin.add(Calendar.DAY_OF_MONTH, -30)
+        val calendarMax = Calendar.getInstance()
+        calendarMax.add(Calendar.DAY_OF_MONTH, +30)
+//        binding.calendarView.setOnSampleReceivedEvent(this)
+        binding.calendarView.setMinimumDate(calendarMin)
+        binding.calendarView.setMaximumDate(calendarMax)
+    }
+
+    override fun onDayClick(eventDay: EventDay) {
+        TODO("Not yet implemented")
     }
 
     private fun initRelatedUserListRecyclerView(recyclerView: RecyclerView) {
@@ -82,7 +108,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun intentPostActivity() {
-//        val intent = PostActivity.getIntent(requireActivity())
+//        val intent =  PostingAddActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
 
