@@ -1,11 +1,13 @@
-package com.onandoff.onandoff_android
+package com.onandoff.onandoff_android.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import com.google.android.material.navigation.NavigationBarView
+import com.onandoff.onandoff_android.FragmentAdapter
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
+import com.onandoff.onandoff_android.presentation.home.HomeFragment
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener  {
     private lateinit var binding: ActivityMainBinding
@@ -47,8 +49,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 fragmentTransaction.replace(binding.fcvMain.id, HomeFragment.newInstance()).commit()
             }
             R.id.menu_look_around -> {
+//                fragmentTransaction.replace(binding.fcvMain.id, HomeFragment.newInstance()).commit()
             }
             R.id.menu_my_page -> {
+//                fragmentTransaction.replace(binding.fcvMain.id, HomeFragment.newInstance()).commit()
 
             }
             else -> {

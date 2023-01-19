@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">OnAndOff-Android</string>
-    <string name="look_around_related_users">관련 유저들을 둘러보세요.</string>
+    <string name="look_around_relevant_users">관련 유저들을 둘러보세요.</string>
     <string name="author_kiki_nim">작가 키키님,</string>
     <string name="please_share_your_today">오늘 당신의 하루를 공유해주세요</string>
     <string name="post">기록하기</string>
