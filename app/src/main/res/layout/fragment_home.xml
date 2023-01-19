@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".presentation.home.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
@@ -27,13 +28,16 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="430dp">
+                    android:layout_height="440dp">
 
-                    <FrameLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/container_my_profile_list"
                         android:layout_width="0dp"
                         android:layout_height="70dp"
+                        android:orientation="horizontal"
                         android:layout_marginTop="15dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="25dp"
                         app:layout_constraintEnd_toStartOf="@id/layout_bell"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -43,17 +47,51 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:clipToPadding="false"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/item_my_profile" />
+                            tools:listitem="@layout/item_my_profile"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintWidth_max="wrap"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/cv_add_my_profile"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    </FrameLayout>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cv_add_my_profile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="3dp"
+                            android:adjustViewBounds="true"
+                            app:cardElevation="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintStart_toEndOf="@id/rv_my_profile_list"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/rv_my_profile_list"
+                            app:shapeAppearanceOverlay="@style/Circle"
+                            app:strokeColor="#DDDDDD"
+                            app:strokeWidth="1dp">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_add_my_profile"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:padding="18dp"
+                                android:src="@drawable/ic_plus" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layout_bell"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="20dp"
                         app:layout_constraintEnd_toStartOf="@id/iv_setting"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -89,7 +127,7 @@
                     <View
                         android:id="@+id/view_empty"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="30dp"
                         app:layout_constraintTop_toBottomOf="@id/container_my_profile_list" />
 
                     <LinearLayout
@@ -175,39 +213,42 @@
 
             </androidx.cardview.widget.CardView>
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_calendar"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginTop="25dp"
                 app:layout_constraintTop_toBottomOf="@id/cv_home1">
 
-<!--                <com.prolificinteractive.materialcalendarview.MaterialCalendarView-->
-<!--                    android:id="@+id/calendar"-->
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:mcv_headerTextAppearance="@layout/header_calendar"
+                    app:mcv_dateTextAppearance="@layout/header_calendar"
+                    app:mcv_selectionColor="#5a7fbf"
+                    app:mcv_showOtherDates="all" />
+
+<!--                <com.applandeo.materialcalendarview.CalendarView-->
+<!--                    android:id="@+id/calendarView"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="match_parent"-->
-<!--                    app:mcv_headerTextAppearance="@layout/header_calendar"-->
-<!--                    app:mcv_dateTextAppearance="@layout/header_calendar"-->
-<!--                    app:mcv_selectionColor="#00F"-->
-<!--                    app:mcv_showOtherDates="all" />-->
+<!--                    android:layout_marginHorizontal="20dp"-->
+<!--                    app:eventsEnabled="true"-->
+<!--                    app:forwardButtonSrc="@drawable/ic_right_arrow_black_20px"-->
+<!--                    app:previousButtonSrc="@drawable/ic_back_arrow_black_20px"-->
+<!--                    app:headerColor="@color/white"-->
+<!--                    app:headerLabelColor="@color/black"/>-->
 
-                <com.applandeo.materialcalendarview.CalendarView
-                    android:id="@+id/calendarView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="20dp"
-                    app:eventsEnabled="true"
-                    app:forwardButtonSrc="@drawable/ic_right_arrow_black_20px"
-                    app:previousButtonSrc="@drawable/ic_back_arrow_black_20px"
-                    app:headerColor="@color/white"
-                    app:headerLabelColor="@color/black"/>
-
-            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/view_empty_2"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 app:layout_constraintTop_toBottomOf="@id/container_calendar" />
 
             <View
@@ -381,27 +422,27 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_look_around_related_users"
+                android:id="@+id/tv_look_around_relevant_users"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="4dp"
-                android:text="@string/look_around_related_users"
+                android:text="@string/look_around_relevant_users"
                 android:textColor="@color/black"
                 android:textSize="@dimen/head_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_hashtags" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_related_users"
+                android:id="@+id/rv_relevant_users"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="25dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_look_around_related_users"
+                app:layout_constraintTop_toBottomOf="@id/tv_look_around_relevant_users"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_relevant_user" />
 
@@ -409,7 +450,7 @@
                 android:id="@+id/view_empty_3"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                app:layout_constraintTop_toBottomOf="@id/rv_related_users" />
+                app:layout_constraintTop_toBottomOf="@id/rv_relevant_users" />
 
             <View
                 android:id="@+id/view_divider_3"

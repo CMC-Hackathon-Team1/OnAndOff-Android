@@ -7,7 +7,7 @@
 
     <View
         android:id="@+id/view_left"
-        android:layout_width="21dp"
+        android:layout_width="1dp"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/view_right"
-        android:layout_width="21dp"
+        android:layout_width="1dp"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,7 +27,7 @@
         android:id="@+id/cv_my_profile"
         android:layout_width="55dp"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="4dp"
+        android:layout_marginHorizontal="2dp"
         app:cardElevation="0dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/view_right"

@@ -12,9 +12,7 @@ import com.onandoff.onandoff_android.MyProfileData
 import com.onandoff.onandoff_android.databinding.ItemAddMyProfileBinding
 import com.onandoff.onandoff_android.databinding.ItemMyProfileBinding
 
-class MyProfileListAdapter(
-    private val addProfileClick: () -> Unit
-): ListAdapter<MyProfileData, RecyclerView.ViewHolder>(MyProfileDiffUtil) {
+class MyProfileListAdapter: ListAdapter<MyProfileData, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
 
     class MyProfileViewHolder(
         private val binding: ItemMyProfileBinding
@@ -30,43 +28,47 @@ class MyProfileListAdapter(
         }
     }
 
-    class AddMyProfileViewHolder(
-        private val binding: ItemAddMyProfileBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+//    class AddMyProfileViewHolder(
+//        private val binding: ItemAddMyProfileBinding
+//    ): RecyclerView.ViewHolder(binding.root) {
+//
+//        fun bind(myProfileData: MyProfileData, addProfileClick: () -> Unit) {
+//            binding.viewRight.isVisible = true
+//            binding.root.setOnClickListener {
+//                addProfileClick()
+//            }
+//        }
+//    }
 
-        fun bind(myProfileData: MyProfileData, addProfileClick: () -> Unit) {
-            binding.viewRight.isVisible = true
-            binding.root.setOnClickListener {
-                addProfileClick()
-            }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyProfileViewHolder {
+//        return when (viewType) {
+//            0 -> {
+//                val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//
+//                MyProfileViewHolder(binding)
+//            }
+//
+//            else -> {
+//                val binding = ItemAddMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//
+//                AddMyProfileViewHolder(binding)
+//            }
+//        }
+        val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return MyProfileViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            0 -> {
-                val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-                MyProfileViewHolder(binding)
-            }
-
-            else -> {
-                val binding = ItemAddMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-                AddMyProfileViewHolder(binding)
-            }
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is MyProfileViewHolder -> {
-                holder.bind(getItem(position), position)
-            }
-            is AddMyProfileViewHolder -> {
-                holder.bind(getItem(position), addProfileClick)
-            }
-        }
+    override fun onBindViewHolder(holder: MyProfileViewHolder, position: Int) {
+//        when (holder) {
+//            is MyProfileListAdapter.MyProfileViewHolder -> {
+//                holder.bind(getItem(position), position)
+//            }
+//            is AddMyProfileViewHolder -> {
+//                holder.bind(getItem(position), addProfileClick)
+//            }
+//        }
+        holder.bind(getItem(position), position)
     }
 
     override fun getItemViewType(position: Int): Int {
