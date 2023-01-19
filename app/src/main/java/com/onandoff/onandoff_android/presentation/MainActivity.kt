@@ -8,6 +8,7 @@ import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
+import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener  {
     private lateinit var binding: ActivityMainBinding
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 //                fragmentTransaction.replace(binding.fcvMain.id, HomeFragment.newInstance()).commit()
             }
             R.id.menu_my_page -> {
-//                fragmentTransaction.replace(binding.fcvMain.id, HomeFragment.newInstance()).commit()
+                fragmentTransaction.replace(binding.fcvMain.id, MypageFragment()).commit()
 
             }
             else -> {
