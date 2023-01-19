@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.MyProfileData
-import com.onandoff.onandoff_android.databinding.ItemAddMyProfileBinding
 import com.onandoff.onandoff_android.databinding.ItemMyProfileBinding
 
 class MyProfileListAdapter: ListAdapter<MyProfileData, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
@@ -28,46 +27,13 @@ class MyProfileListAdapter: ListAdapter<MyProfileData, MyProfileListAdapter.MyPr
         }
     }
 
-//    class AddMyProfileViewHolder(
-//        private val binding: ItemAddMyProfileBinding
-//    ): RecyclerView.ViewHolder(binding.root) {
-//
-//        fun bind(myProfileData: MyProfileData, addProfileClick: () -> Unit) {
-//            binding.viewRight.isVisible = true
-//            binding.root.setOnClickListener {
-//                addProfileClick()
-//            }
-//        }
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyProfileViewHolder {
-//        return when (viewType) {
-//            0 -> {
-//                val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//
-//                MyProfileViewHolder(binding)
-//            }
-//
-//            else -> {
-//                val binding = ItemAddMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//
-//                AddMyProfileViewHolder(binding)
-//            }
-//        }
         val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return MyProfileViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyProfileViewHolder, position: Int) {
-//        when (holder) {
-//            is MyProfileListAdapter.MyProfileViewHolder -> {
-//                holder.bind(getItem(position), position)
-//            }
-//            is AddMyProfileViewHolder -> {
-//                holder.bind(getItem(position), addProfileClick)
-//            }
-//        }
         holder.bind(getItem(position), position)
     }
 
