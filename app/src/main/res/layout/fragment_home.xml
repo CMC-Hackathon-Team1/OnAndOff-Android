@@ -229,6 +229,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:mcv_headerTextAppearance="@layout/header_calendar"
                     app:mcv_dateTextAppearance="@layout/header_calendar"
+                    app:mcv_tileWidth="50dp"
                     app:mcv_selectionColor="#5a7fbf"
                     app:mcv_showOtherDates="all" />
 
