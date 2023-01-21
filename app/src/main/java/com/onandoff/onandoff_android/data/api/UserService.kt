@@ -1,15 +1,9 @@
 package com.onandoff.onandoff_android.data.api
-//
-//import com.team1.projectteam1.data.model.AllProfileResponse
-//import com.team1.projectteam1.data.model.CalendarDataResponse
-//import com.team1.projectteam1.data.model.DayDetailResponse
-//import com.team1.projectteam1.data.model.StatisticsResponse
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+
 
 interface UserService {
+
+}
 //    @GET("users/{profileId}/profile/statistics")
 //    suspend fun getStatistics(
 //        @Path("profileId") profileId: Int
@@ -33,4 +27,3 @@ interface UserService {
 //        @Query("month") month: String,
 //        @Query("day") day: String
 //    ): Response<DayDetailResponse>
-}

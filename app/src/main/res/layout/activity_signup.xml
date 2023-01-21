@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginHorizontal="31dp"
-    >
+    android:layout_marginHorizontal="31dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +36,7 @@
             android:id="@+id/et_signup_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="null"/>
+            android:background="@null"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -61,7 +60,7 @@
             android:id="@+id/et_signup_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="null"/>
+            android:background="@null"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"

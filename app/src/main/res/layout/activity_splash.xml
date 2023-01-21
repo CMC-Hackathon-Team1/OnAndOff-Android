@@ -51,7 +51,7 @@
             android:textAlignment="center"
             android:paddingVertical="10dp"
             android:layout_gravity="center"
-            android:id="@+id/login_tv"
+            android:id="@+id/bt_service_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="회원가입"
