@@ -1,6 +1,5 @@
 package com.onandoff.onandoff_android.presentation.home
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -8,14 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.onandoff.onandoff_android.MyProfileData
 import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.RelevantUserData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -30,11 +26,6 @@ class HomeFragment: Fragment() {
 
     private lateinit var myProfileListAdapter: MyProfileListAdapter
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
-
-    private val datePicker
-        = MaterialDatePicker.Builder.datePicker()
-        .setTitleText("")
-        .build()
 
     override fun onCreateView(
         inflater: LayoutInflater,
