@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.onandoff.onandoff_android.MyProfileData
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -69,7 +69,9 @@ class HomeFragment: Fragment() {
     }
 
     private fun initMyProfileListRecyclerView(recyclerView: RecyclerView) {
-        myProfileListAdapter = MyProfileListAdapter()
+        myProfileListAdapter = MyProfileListAdapter(
+            onClick = ::getMyPersona
+        )
 
         recyclerView.run {
             setHasFixedSize(true)
@@ -95,6 +97,15 @@ class HomeFragment: Fragment() {
 //                )
 //            )
         }
+    }
+
+    private fun getMyPersona(myProfileData: MyProfileData) {
+        // TODO: 2023-01-21 데이터 연동 추가하기
+        binding.tvUserPersona1.text = myProfileData.name
+        binding.tvUserName1.text = myProfileData.name
+
+        binding.tvUserPersona2.text = myProfileData.name
+        binding.tvUserName2.text = myProfileData.name
     }
 
     private fun setupCalendar() {
