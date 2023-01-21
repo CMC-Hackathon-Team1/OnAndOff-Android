@@ -8,6 +8,7 @@ import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
+import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener  {
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 fragmentTransaction.replace(binding.fcvMain.id, LookAroundFragment.newInstance()).commit()
             }
             R.id.menu_my_page -> {
-//                fragmentTransaction.replace(binding.fcvMain.id, MyPageFragment.newInstance()).commit()
+                fragmentTransaction.replace(binding.fcvMain.id, MypageFragment()).commit()
             }
             else -> {
                 throw IllegalArgumentException("Not found menu item")
