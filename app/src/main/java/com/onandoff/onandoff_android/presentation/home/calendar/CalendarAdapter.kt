@@ -1,4 +1,4 @@
-package com.onandoff.onandoff_android.presentation.home
+package com.onandoff.onandoff_android.presentation.home.calendar
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.CalendarData
+import com.onandoff.onandoff_android.data.model.CalendarData
 import com.onandoff.onandoff_android.databinding.ItemCalendarBinding
 
 class CalendarAdapter(private val dayClick: (day: String) -> Unit) :
