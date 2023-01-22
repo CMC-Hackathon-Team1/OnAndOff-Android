@@ -3,6 +3,7 @@ package com.onandoff.onandoff_android
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.onandoff.onandoff_android.presentation.home.HomeFragment
 
 class FragmentAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity) {
 

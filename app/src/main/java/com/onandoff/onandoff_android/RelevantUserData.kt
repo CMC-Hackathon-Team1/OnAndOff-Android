@@ -1,6 +1,6 @@
 package com.onandoff.onandoff_android
 
-data class RelatedUserData(
+data class RelevantUserData(
     val profileImageUrl: String = "",
     val name: String = ""
 )

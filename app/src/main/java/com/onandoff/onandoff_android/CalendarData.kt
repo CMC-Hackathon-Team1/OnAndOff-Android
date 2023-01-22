@@ -1,6 +1,6 @@
 package com.onandoff.onandoff_android
 
-data class Calendar(
+data class CalendarData(
     val day: String,
     val isExist: Boolean = false,
     val isCurrentMonth: Boolean = false,

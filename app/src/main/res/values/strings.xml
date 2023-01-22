@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">OnAndOff-Android</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
     <!-- posting text -->
     <string name="posting_add">글 작성하기</string>
@@ -27,8 +25,14 @@
     <string name="content_hint">작가님의 하루를 기록하고 공유해주세요.</string>
 
     <string name="look_around_related_users">관련 유저들을 둘러보세요.</string>
+    <string name="look_around_relevant_users">관련 유저들을 둘러보세요.</string>
     <string name="author_kiki_nim">작가 키키님,</string>
     <string name="please_share_your_today">오늘 당신의 하루를 공유해주세요</string>
     <string name="post">기록하기</string>
     <string name="hashtag_author_essay">#작가 #에세이</string>
+    <string name="mypage_title">마이페이지</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_title_look_around">둘러보기</string>
+    <string name="tab_item_search">탐색</string>
+    <string name="tab_item_following">팔로잉</string>
 </resources>
