@@ -1,19 +1,13 @@
 package com.onandoff.onandoff_android.presentation.home.posting
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil.setContentView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
-import com.onandoff.onandoff_android.databinding.ActivityPostingModifyBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.databinding.FragmentPostingCategoryBinding
 
-class PostingCategoryFragment : Fragment() {
+class PostingCategoryFragment(val itemClick: (Int) -> Unit) : BottomSheetDialogFragment() {
     private var _binding : FragmentPostingCategoryBinding? = null
     private val binding
         get() = _binding!!
@@ -28,38 +22,34 @@ class PostingCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupListeners()
     }
 
     private fun setupListeners() {
         binding.btnPostingCategoryOut.setOnClickListener{
             // 창닫기
+            dialog?.dismiss()
         }
         binding.btnArt.setOnClickListener{
             // 카테고리 선택(문화/예슬)
-            intentPostingActivity("art")
+            itemClick(0)
+            dialog?.dismiss()
         }
         binding.btnSports.setOnClickListener {
             // 카테고리 선택(Sports)
-            intentPostingActivity("sports")
+            itemClick(1)
+            dialog?.dismiss()
         }
         binding.btnSelf.setOnClickListener {
             // 카테고리 선택(자기계발)
-            intentPostingActivity("self")
+            itemClick(2)
+            dialog?.dismiss()
         }
         binding.btnEtc.setOnClickListener {
             // 카테고리 선택(기타)
-            intentPostingActivity("etc")
+            itemClick(3)
+            dialog?.dismiss()
         }
-    }
-
-    private fun intentPostingActivity(category: String) {
-        val intent = Intent(activity, PostingAddActivity::class.java)
-        intent.apply {
-            this.putExtra("category", category)
-        }
-        startActivity(intent)
     }
 
     override fun onDestroyView() {
