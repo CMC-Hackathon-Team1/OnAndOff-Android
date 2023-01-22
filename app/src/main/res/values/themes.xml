@@ -12,6 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/color_main</item>
         <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="Theme.Newcalendar" parent="Theme.MaterialComponents.NoActionBar">
