@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.onandoff.onandoff_android.data.model.LookAroundData
+import com.onandoff.onandoff_android.data.model.LookAround
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.FragmentLookAroundBinding
 
@@ -22,8 +22,8 @@ class LookAroundFragment : Fragment() {
         get() = _binding!!
 
     private lateinit var lookAroundListAdapter: LookAroundListAdapter
-    private val searchLookAroundList = mutableListOf<LookAroundData>()
-    private val followingLookAroundList = mutableListOf<LookAroundData>()
+    private val searchLookAroundList = mutableListOf<LookAround>()
+    private val followingLookAroundList = mutableListOf<LookAround>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -188,17 +188,17 @@ class LookAroundFragment : Fragment() {
         }
     }
 
-    private fun intentPost(lookAroundData: LookAroundData) {
+    private fun intentPost(lookAround: LookAround) {
         // TODO: 해당 데이터의 상세 페이지로 이동하기
 //        val intent = UserPostActivity.getIntent(requireActivity(), lookAroundData.key)
 //        startActivity(intent)
     }
 
-    private fun addToFollowingList(lookAroundData: LookAroundData) {
+    private fun addToFollowingList(lookAround: LookAround) {
         // TODO: 해당 데이터를 팔로잉 목록에 추가하기
     }
 
-    private fun addLike(lookAroundData: LookAroundData) {
+    private fun addLike(lookAround: LookAround) {
         // TODO: 해당 데이터에 좋아요 개수를 +1 하기
     }
 

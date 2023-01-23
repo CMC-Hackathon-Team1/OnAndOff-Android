@@ -6,7 +6,7 @@
     <data>
         <variable
             name="calendar"
-            type="com.onandoff.onandoff_android.data.model.CalendarData" />
+            type="com.onandoff.onandoff_android.data.model.Calendar" />
 
     </data>
 

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.data.model.MyPersona
 import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.model.RelevantUser
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -159,7 +160,7 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun intentUserProfile() {
+    private fun intentUserProfile(relevantUser: RelevantUser) {
 //        val intent = UserProfileActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
