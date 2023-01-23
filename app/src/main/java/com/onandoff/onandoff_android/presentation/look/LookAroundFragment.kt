@@ -1,6 +1,7 @@
 package com.onandoff.onandoff_android.presentation.look
 
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.onandoff.onandoff_android.LookAroundData
+import com.onandoff.onandoff_android.data.model.LookAroundData
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.FragmentLookAroundBinding
 
@@ -23,8 +24,6 @@ class LookAroundFragment : Fragment() {
     private lateinit var lookAroundListAdapter: LookAroundListAdapter
     private val searchLookAroundList = mutableListOf<LookAroundData>()
     private val followingLookAroundList = mutableListOf<LookAroundData>()
-
-    private val items = activity?.resources?.getStringArray(R.array.look_category_array)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,37 +75,40 @@ class LookAroundFragment : Fragment() {
     }
 
     private fun initSpinner() {
-        val spinnerAdapter = object : ArrayAdapter<String>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, items.orEmpty()) {
-            override fun isEnabled(position: Int): Boolean {
-                // Disable the first item from Spinner
-                // First item will be used for hint
-                return position != 0
+        val items = activity?.resources?.getStringArray(R.array.look_category_array)
+
+        val spinnerAdapter = object : ArrayAdapter<String>(
+            requireActivity(),
+            R.layout.item_spinner
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+                val view = super.getView(position, convertView, parent)
+
+                if (position == count) {
+                    // 마지막 포지션의 textView 를 힌트 용으로 사용합니다.
+                    (view.findViewById<View>(R.id.tv_item_spinner) as TextView).text = ""
+                    // 아이템의 마지막 값을 불러와 hint로 추가해 줍니다.
+                    (view.findViewById<View>(R.id.tv_item_spinner) as TextView).hint = getItem(count)
+                }
+
+                return view
             }
 
-            override fun getDropDownView(
-                position: Int,
-                convertView: View?,
-                parent: ViewGroup
-            ): View {
-                val view = super.getDropDownView(position, convertView, parent) as TextView
-                //set the color of first item in the drop down list to gray
-                if(position == 0) {
-
-                } else {
-
-                }
-                return view
+            override fun getCount(): Int {
+                // 마지막 아이템은 힌트용으로만 사용하기 때문에 getCount에 1을 빼줍니다.
+                return super.getCount() - 1
             }
         }
 
-        // Set drop down view resource and attach the adapter to your spinner.
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // 아이템을 추가
-        spinnerAdapter.addAll(items.orEmpty().toMutableList())
+        spinnerAdapter.addAll(items!!.toMutableList()) // 아이템을 추가
+        spinnerAdapter.add("카테고리 전체")
         binding.spinner.adapter = spinnerAdapter
         binding.spinner.setSelection(spinnerAdapter.count)
+        binding.spinner.dropDownVerticalOffset = dipToPixels(55f).toInt()
 
-        //스피너 선택시 나오는 화면
+        // 스피너 선택시 나오는 화면
         binding.spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // 아이템이 클릭되면 맨 위(position 0번)부터 순서대로 동작하게 된다.
@@ -133,6 +135,14 @@ class LookAroundFragment : Fragment() {
         }
     }
 
+    private fun dipToPixels(dipValue: Float): Float {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dipValue,
+            resources.displayMetrics
+        )
+    }
+
     private fun getLookAroundList(position: Int) {
         // TODO: 카테고리에 따라 데이터를 불러오는 API 연동하기
     }
@@ -149,6 +159,32 @@ class LookAroundFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = lookAroundListAdapter
+//            lookAroundListAdapter.submitList(
+//                listOf(
+//                    LookAroundData(
+//                        key = "",
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+//                        name = "David",
+//                        postDate = listOf("2023", "01", "30"),
+//                        isFollowing = false,
+//                        like = true,
+//                        likeCount = 3,
+//                        desc = "dummy, dummy, dummy",
+//                        imageList = listOf("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", "https://cdn-icons-png.flaticon.com/512/3135/3135715.png")
+//                    ),
+//                    LookAroundData(
+//                        key = "",
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+//                        name = "David",
+//                        postDate = listOf("2023", "01", "30"),
+//                        isFollowing = true,
+//                        like = false,
+//                        likeCount = 3,
+//                        desc = "dummy, dummy, dummy",
+//                        imageList = listOf("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", "https://cdn-icons-png.flaticon.com/512/3135/3135715.png")
+//                    )
+//                )
+//            )
         }
     }
 
