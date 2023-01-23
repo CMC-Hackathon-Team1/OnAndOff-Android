@@ -2,35 +2,33 @@ package com.onandoff.onandoff_android.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.MyProfileData
-import com.onandoff.onandoff_android.data.model.LookAroundData
+import com.onandoff.onandoff_android.data.model.MyPersona
 import com.onandoff.onandoff_android.databinding.ItemMyProfileBinding
 
 class MyProfileListAdapter(
-    private val onClick: (MyProfileData) -> Unit
-): ListAdapter<MyProfileData, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
+    private val onClick: (MyPersona) -> Unit
+): ListAdapter<MyPersona, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
 
     class MyProfileViewHolder(
         private val binding: ItemMyProfileBinding,
-        private val onClick: (MyProfileData) -> Unit
+        private val onClick: (MyPersona) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(myProfileData: MyProfileData, position: Int) {
-            binding.tvMyProfile.text = myProfileData.name
+        fun bind(myPersona: MyPersona, position: Int) {
+            binding.tvMyProfile.text = myPersona.name
             binding.viewLeft.isVisible = position == 0
 
             Glide.with(binding.root.context)
-                .load(myProfileData.profileImageUrl)
+                .load(myPersona.profileImageUrl)
                 .into(binding.ivMyProfile)
 
             binding.root.setOnClickListener {
-                onClick(myProfileData)
+                onClick(myPersona)
             }
         }
     }
@@ -45,12 +43,12 @@ class MyProfileListAdapter(
         holder.bind(getItem(position), position)
     }
 
-    companion object MyProfileDiffUtil : DiffUtil.ItemCallback<MyProfileData>() {
-        override fun areItemsTheSame(oldItem: MyProfileData, newItem: MyProfileData): Boolean {
+    companion object MyProfileDiffUtil : DiffUtil.ItemCallback<MyPersona>() {
+        override fun areItemsTheSame(oldItem: MyPersona, newItem: MyPersona): Boolean {
             return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: MyProfileData, newItem: MyProfileData): Boolean {
+        override fun areContentsTheSame(oldItem: MyPersona, newItem: MyPersona): Boolean {
             return oldItem == newItem
         }
     }

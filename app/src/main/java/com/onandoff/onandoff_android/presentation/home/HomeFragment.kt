@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.onandoff.onandoff_android.MyProfileData
+import com.onandoff.onandoff_android.data.model.MyPersona
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -99,13 +99,13 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun getMyPersona(myProfileData: MyProfileData) {
+    private fun getMyPersona(myPersona: MyPersona) {
         // TODO: 2023-01-21 데이터 연동 추가하기
-        binding.tvUserPersona1.text = myProfileData.name
-        binding.tvUserName1.text = myProfileData.name
+        binding.tvUserPersona1.text = myPersona.name
+        binding.tvUserName1.text = myPersona.name
 
-        binding.tvUserPersona2.text = myProfileData.name
-        binding.tvUserName2.text = myProfileData.name
+        binding.tvUserPersona2.text = myPersona.name
+        binding.tvUserName2.text = myPersona.name
     }
 
     private fun setupCalendar() {
