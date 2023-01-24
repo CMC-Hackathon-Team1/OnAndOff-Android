@@ -1,6 +1,6 @@
-package com.onandoff.onandoff_android
+package com.onandoff.onandoff_android.data.model
 
-data class LookAroundData(
+data class LookAround(
     val key: String = "",
     val profileImageUrl: String = "",
     val name: String = "",
