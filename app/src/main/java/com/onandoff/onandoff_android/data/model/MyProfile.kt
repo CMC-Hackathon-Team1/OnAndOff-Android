@@ -4,4 +4,4 @@ data class MyProfile(
     val profileId: Int,
     val profileImgUrl: String,
     val profileName: String
-)
+){}

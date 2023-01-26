@@ -70,20 +70,7 @@
             android:textColor="@color/color_main"
             android:layout_marginBottom="15dp"
             />
-        <TextView
-            android:paddingVertical="10dp"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:id="@+id/bt_login_naver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="네이버 로그인"
-            android:background="@drawable/signup_bt_background"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_main"
-            android:layout_marginBottom="15dp"
-            />
+
         <TextView
             android:paddingVertical="10dp"
             android:textAlignment="center"

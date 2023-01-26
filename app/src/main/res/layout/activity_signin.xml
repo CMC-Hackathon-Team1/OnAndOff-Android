@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="가입하기"
+        android:text="로그인하기"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -25,7 +25,7 @@
         android:layout_marginTop="45dp"
         >
         <TextView
-            android:id="@+id/tv_signup_email_header"
+            android:id="@+id/tv_signin_email_header"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="이메일"
@@ -34,7 +34,7 @@
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
         <EditText
-            android:id="@+id/et_signup_email"
+            android:id="@+id/et_signin_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"/>
@@ -49,7 +49,7 @@
         android:orientation="horizontal"
         android:paddingVertical="9dp">
         <TextView
-            android:id="@+id/tv_signup_password_header"
+            android:id="@+id/tv_signin_password_header"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="비밀번호"
@@ -58,7 +58,7 @@
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
         <EditText
-            android:id="@+id/et_signup_password"
+            android:id="@+id/et_signin_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"/>
@@ -67,32 +67,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9A9A9A"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="9dp">
-        <TextView
-            android:id="@+id/tv_signup_password_header2"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="비밀번호 확인"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginRight="16dp"/>
-        <EditText
-            android:id="@+id/et_signup_password_repeat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"/>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9A9A9A"/>
+
     <Button
-        android:id="@+id/bt_singup"
+        android:id="@+id/bt_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="확인"

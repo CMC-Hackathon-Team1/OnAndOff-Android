@@ -8,7 +8,7 @@ import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
 
 class MypageRVAdapter(private val writeList : ArrayList<MyPosting>):RecyclerView.Adapter<MypageRVAdapter.MypageViewHolder>() {
     inner class MypageViewHolder(val binding:ItemMypageUserfeedBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(write:MyPosting){
+        fun bind(write: MyPosting){
             binding.tvMypageRvItemPostText.text = write.content
             binding.tvMypageRvItemLike.text = write.likeCount
             binding.tvMypageRvItemDate.text = write.createdAt
