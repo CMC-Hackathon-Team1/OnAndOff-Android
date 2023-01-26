@@ -1,23 +1,17 @@
 package com.onandoff.onandoff_android.presentation.home
 
-import android.content.Context
-import android.graphics.drawable.Drawable
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.onandoff.onandoff_android.data.model.MyPersona
-import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.data.model.RelevantUser
+import com.onandoff.onandoff_android.data.model.MyPersonaData
+import com.onandoff.onandoff_android.data.model.RelevantUserData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.DayViewDecorator
-import com.prolificinteractive.materialcalendarview.DayViewFacade
-import com.prolificinteractive.materialcalendarview.spans.DotSpan
+import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
 import java.util.*
 
 class HomeFragment: Fragment() {
@@ -100,13 +94,13 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun getMyPersona(myPersona: MyPersona) {
+    private fun getMyPersona(myPersonaData: MyPersonaData) {
         // TODO: 2023-01-21 데이터 연동 추가하기
-        binding.tvUserPersona1.text = myPersona.name
-        binding.tvUserName1.text = myPersona.name
+        binding.tvUserPersona1.text = myPersonaData.name
+        binding.tvUserName1.text = myPersonaData.name
 
-        binding.tvUserPersona2.text = myPersona.name
-        binding.tvUserName2.text = myPersona.name
+        binding.tvUserPersona2.text = myPersonaData.name
+        binding.tvUserName2.text = myPersonaData.name
     }
 
     private fun setupCalendar() {
@@ -160,7 +154,7 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun intentUserProfile(relevantUser: RelevantUser) {
+    private fun intentUserProfile(relevantUserData: RelevantUserData) {
 //        val intent = UserProfileActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
@@ -171,8 +165,8 @@ class HomeFragment: Fragment() {
     }
 
     private fun intentPostActivity() {
-//        val intent =  PostingAddActivity.getIntent(requireActivity())
-//        startActivity(intent)
+        val intent = Intent(requireActivity(), PostingAddActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {
@@ -182,44 +176,5 @@ class HomeFragment: Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-}
-
-class CurrentDayDecorator(context: Context, currentDay: CalendarDay) : DayViewDecorator {
-    private val drawable: Drawable?
-    var myDay = currentDay
-    override fun shouldDecorate(day: CalendarDay): Boolean {
-        return day == myDay
-    }
-
-    override fun decorate(view: DayViewFacade) {
-        view.setSelectionDrawable(drawable!!)
-    }
-
-    init {
-        // You can set background for Decorator via drawable here
-        drawable = ContextCompat.getDrawable(context, R.drawable.calendar_selector)
-    }
-}
-
-class EventDecorator() : DayViewDecorator {
-
-    private lateinit var dates : HashSet<CalendarDay>
-    private lateinit var drawableValue: Drawable
-    private var color = 0
-
-    constructor(context: Context, color: Int, dates: Collection<CalendarDay>) : this() {
-        drawableValue = ContextCompat.getDrawable(context, R.drawable.calendar_background)!!
-        this.color = color
-        this.dates = HashSet(dates)
-    }
-
-    override fun shouldDecorate(day: CalendarDay?): Boolean {
-        return dates.contains(day)
-    }
-
-    override fun decorate(view: DayViewFacade?) {
-        view?.addSpan(DotSpan(10F, color))
-        view?.setSelectionDrawable(drawableValue)
     }
 }
