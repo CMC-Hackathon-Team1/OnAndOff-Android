@@ -7,29 +7,28 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.data.model.MyProfile
-import com.onandoff.onandoff_android.data.model.RelevantUser
+import com.onandoff.onandoff_android.data.model.RelevantUserData
 import com.onandoff.onandoff_android.databinding.ItemRelevantUserBinding
 
 class RelevantUserListAdapter(
-    private val userProfileClick: (RelevantUser) -> Unit
-): ListAdapter<RelevantUser, RelevantUserListAdapter.RelatedUserViewHolder>(RelatedUserDiffUtil) {
+    private val userProfileClick: (RelevantUserData) -> Unit
+): ListAdapter<RelevantUserData, RelevantUserListAdapter.RelatedUserViewHolder>(RelatedUserDiffUtil) {
 
     class RelatedUserViewHolder(
         private val binding: ItemRelevantUserBinding,
-        private val userProfileClick: (RelevantUser) -> Unit
+        private val userProfileClick: (RelevantUserData) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(relevantUser: RelevantUser, position: Int) {
-            binding.tvRelatedUserProfile.text = relevantUser.name
+        fun bind(relevantUserData: RelevantUserData, position: Int) {
+            binding.tvRelatedUserProfile.text = relevantUserData.name
             binding.viewLeft.isVisible = position == 0
 
             Glide.with(binding.root.context)
-                .load(relevantUser.profileImageUrl)
+                .load(relevantUserData.profileImageUrl)
                 .into(binding.ivRelevantUserProfile)
 
             binding.root.setOnClickListener {
-                userProfileClick(relevantUser)
+                userProfileClick(relevantUserData)
             }
         }
     }
@@ -44,12 +43,12 @@ class RelevantUserListAdapter(
         holder.bind(getItem(position), position)
     }
 
-    companion object RelatedUserDiffUtil : DiffUtil.ItemCallback<RelevantUser>() {
-        override fun areItemsTheSame(oldItem: RelevantUser, newItem: RelevantUser): Boolean {
+    companion object RelatedUserDiffUtil : DiffUtil.ItemCallback<RelevantUserData>() {
+        override fun areItemsTheSame(oldItem: RelevantUserData, newItem: RelevantUserData): Boolean {
             return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: RelevantUser, newItem: RelevantUser): Boolean {
+        override fun areContentsTheSame(oldItem: RelevantUserData, newItem: RelevantUserData): Boolean {
             return oldItem == newItem
         }
     }
