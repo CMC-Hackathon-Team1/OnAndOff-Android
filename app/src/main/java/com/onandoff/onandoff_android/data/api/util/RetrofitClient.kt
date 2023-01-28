@@ -24,6 +24,8 @@ object RetrofitClient {
                 })
                 .build()
         }
+//        okHttpClient.interceptors.add(AddCookiesInterceptor())
+//        okHttpClient.interceptors().add(ReceivedCookiesInterceptor())
         //아직 retrofit 객체가 생성되지않았다면
         if(retrofitClient == null){
             //생성해준다
