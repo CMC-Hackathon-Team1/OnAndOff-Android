@@ -40,10 +40,10 @@ class PostingModifyActivity : AppCompatActivity() {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
-                    0 -> binding.posting.category = "문화 및 예술"
-                    1 -> binding.posting.category = "스포츠"
-                    2 -> binding.posting.category = "자기계발"
-                    3 -> binding.posting.category = "기타"
+                    0 -> binding.posting?.category = "문화 및 예술"
+                    1 -> binding.posting?.category = "스포츠"
+                    2 -> binding.posting?.category = "자기계발"
+                    3 -> binding.posting?.category = "기타"
                 }
             }
             bottomPostingCategoryFragment.show(supportFragmentManager,bottomPostingCategoryFragment.tag)
