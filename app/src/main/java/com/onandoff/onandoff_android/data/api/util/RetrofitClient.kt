@@ -2,7 +2,9 @@ package com.onandoff.onandoff_android.data.api.util
 
 import android.util.Log
 import com.onandoff.onandoff_android.data.api.util.API_CONSTANTS.BASE_URL
+import com.onandoff.onandoff_android.util.AddCookiesInterceptor
 import com.onandoff.onandoff_android.util.Constants.TAG
+import com.onandoff.onandoff_android.util.ReceivedCookiesInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,11 +24,11 @@ object RetrofitClient {
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
-//                .addInterceptor(cookie)
+                .addInterceptor(AddCookiesInterceptor())
+                .addInterceptor(ReceivedCookiesInterceptor())
                 .build()
         }
-//        okHttpClient.interceptors.add(AddCookiesInterceptor())
-//        okHttpClient.interceptors().add(ReceivedCookiesInterceptor())
+
         //아직 retrofit 객체가 생성되지않았다면
         if(retrofitClient == null){
             //생성해준다
