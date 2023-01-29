@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.SignRequest
-import com.onandoff.onandoff_android.data.model.SignUpResponse
+import com.onandoff.onandoff_android.data.model.SignResponse
 import com.onandoff.onandoff_android.databinding.ActivitySignupBinding
 import retrofit2.*
 
@@ -39,14 +39,14 @@ class SignupActivity:AppCompatActivity() {
                 val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
                 val user = SignRequest(email,password)
                 val call = userInterface?.signUp(user)
-                call?.enqueue(object :Callback<SignUpResponse> {
+                call?.enqueue(object :Callback<SignResponse> {
                     override fun onResponse(
-                        call: Call<SignUpResponse>,
-                        response: Response<SignUpResponse>
+                        call: Call<SignResponse>,
+                        response: Response<SignResponse>
                     ) {
                         val body = response.body()
                         when (body?.statusCode) {
-                        1010 -> {
+                        1100 -> {
                             Log.d(
                             "Post",
                             "retrofit manager called, onSucess called but already join!"
@@ -64,7 +64,7 @@ class SignupActivity:AppCompatActivity() {
                         }
                         }
                         }
-                    override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<SignResponse>, t: Throwable) {
                         Log.d(
                             "Post",
                             "retrofit manager called, onSucess called but already join!"

@@ -22,6 +22,7 @@ object RetrofitClient {
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
+//                .addInterceptor(cookie)
                 .build()
         }
 //        okHttpClient.interceptors.add(AddCookiesInterceptor())

@@ -8,11 +8,12 @@ data class SignRequest(
     @SerializedName("password")val password:String
 )
 //signUp response data 클래스
-data class SignUpResponse(
+data class SignResponse(
     @SerializedName("statusCode")val statusCode:Int,
     @SerializedName("message")val message:String,
-    @SerializedName("result")val result: SignUpResponseResult,
+    @SerializedName("result")val result: SignResponseResult,
 )
-data class SignUpResponseResult(
+data class SignResponseResult(
     @SerializedName("userId")val userId:Int
 )
+
