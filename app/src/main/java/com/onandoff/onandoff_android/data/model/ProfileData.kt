@@ -1,12 +1,13 @@
 package com.onandoff.onandoff_android.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.File
 
 data class ProfileRequest(
     @SerializedName("userId")val userId:Int,
     @SerializedName("profileName")val profileName: String,
     @SerializedName("personaName")val personaName:String,
-    @SerializedName("profileImgUrl")val profileImgUrl: String,
+    @SerializedName("profileImgUrl")val profileImgUrl: File,
     @SerializedName("statusMesage")val statusMesage: String,
 )
 data class ProfileResponse(

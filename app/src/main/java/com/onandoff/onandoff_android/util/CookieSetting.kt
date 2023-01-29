@@ -36,7 +36,9 @@ class AddCookiesInterceptor : Interceptor {
             HashSet<String>()
         )
         for (cookie in preferences) {
-            builder.addHeader("Cookie", cookie)
+            var tmp_cookie = cookie.split("=")?.get(1)?.split(";")?.get(0)
+            Log.d("Interceptor","Bearer ${tmp_cookie}")
+            builder.addHeader("Authorization", "Bearer ${tmp_cookie}")
         }
 
         // Web,Android,iOS 구분을 위해 User-Agent세팅

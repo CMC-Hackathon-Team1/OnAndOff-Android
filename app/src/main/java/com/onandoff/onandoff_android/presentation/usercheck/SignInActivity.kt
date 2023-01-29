@@ -60,8 +60,8 @@ class SignInActivity:AppCompatActivity() {
                                 prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,
                                     response.body()?.result?.userId!!
                                 );
+                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,email)
                                 Toast.makeText(this@SignInActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
-                                saveDate(email)
                                 val Intent = Intent(this@SignInActivity, ProfileCreateActivity::class.java)
                                 startActivity(Intent)
 
@@ -87,10 +87,7 @@ class SignInActivity:AppCompatActivity() {
         }
     }
 
-    //자동로그인을 위한 함수
-    fun saveDate( loginEmail :String ){
-        val preference = prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,loginEmail)
-    }
+
     fun dialog( type:String){
         val dialog = AlertDialog.Builder(this);
         if (type.equals("success")){
