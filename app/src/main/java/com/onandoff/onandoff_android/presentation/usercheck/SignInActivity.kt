@@ -13,6 +13,7 @@ import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.data.model.SignResponse
 import com.onandoff.onandoff_android.databinding.ActivitySigninBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
@@ -56,11 +57,14 @@ class SignInActivity:AppCompatActivity() {
                                     "Post",
                                     "retrofit manager called, onSucess called with ${response.body()}"
                                 );
+                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,
+                                    response.body()?.result?.userId!!
+                                );
                                 Toast.makeText(this@SignInActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
                                 saveDate(email)
-                                val Intent = Intent(this@SignInActivity, MainActivity::class.java)
+                                val Intent = Intent(this@SignInActivity, ProfileCreateActivity::class.java)
                                 startActivity(Intent)
-                                finish()
+
                             }
                         }
 
@@ -77,7 +81,13 @@ class SignInActivity:AppCompatActivity() {
                 dialog("blank")
             }
 }
+        binding.tvSignupLink.setOnClickListener{
+            val Intent = Intent(this@SignInActivity, SignupActivity::class.java)
+            startActivity(Intent)
+        }
     }
+
+    //자동로그인을 위한 함수
     fun saveDate( loginEmail :String ){
         val preference = prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,loginEmail)
     }

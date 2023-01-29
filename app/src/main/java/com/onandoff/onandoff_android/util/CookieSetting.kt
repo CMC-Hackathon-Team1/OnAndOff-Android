@@ -8,7 +8,8 @@ import okhttp3.Response
 import okhttp3.internal.cookieToString
 import okio.IOException
 
-
+// 헤더에 자동으로 jwt 값을 넣어주는 함수
+// 제가 테스트는 안해봐서 제대로 작동이 안될까봐 일단 주석처리해두었습니다
 class ReceivedCookiesInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -21,7 +22,6 @@ class ReceivedCookiesInterceptor : Interceptor {
             // Preference에 cookies를 넣어주는 작업을 수행
             prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_COOKIE,cookies);
         }
-
         return originalResponse
     }
 }
