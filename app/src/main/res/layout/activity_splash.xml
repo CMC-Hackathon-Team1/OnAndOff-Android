@@ -11,10 +11,12 @@
         android:layout_height="match_parent"
         android:background="@color/color_main"
         android:scaleType="fitXY"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_splash_introduce"
@@ -45,45 +47,102 @@
         app:layout_constraintTop_toBottomOf="@id/iv_splash_logo"
         android:orientation="vertical"
         android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="60dp"
-        >
-        <TextView
-            android:textAlignment="center"
-            android:paddingVertical="10dp"
-            android:layout_gravity="center"
+        android:layout_marginTop="60dp">
+        <LinearLayout
             android:id="@+id/bt_service_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="회원가입"
-            android:background="@drawable/signup_bt_background"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_main"
-            android:layout_marginBottom="15dp"
-            />
-        <ImageView
             android:layout_gravity="center"
-            android:id="@+id/bt_login_kakao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_kakao_button"
-            android:textColor="@color/color_main"
-            android:layout_marginBottom="15dp"
-            />
+            android:background="@drawable/signup_bt_background"
+            android:paddingVertical="9dp">
+            <ImageView
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:src="@drawable/app_logo"
+                android:layout_marginStart="15dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="64dp">
+                <ImageView
+                    android:layout_width="71dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/app_text_logo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:text="로그인"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_main"
+                    />
+            </LinearLayout>
 
+        </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bt_kakao_login"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/signup_bt_kakao_background"
+        android:paddingVertical="9dp"
+        android:layout_marginTop="15dp">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/kakao_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="20dp"
+            />
         <TextView
-            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:id="@+id/bt_login_google"
+            android:text="카카오 로그인"
+            android:textFontWeight="500"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bt_google_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="구글로그인"
             android:background="@drawable/signup_bt_background"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_main"
-            />
+            android:paddingVertical="9dp"
+            android:layout_marginTop="15dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/google_logo"
+                android:layout_marginStart="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:text="Google 로그인"
+                android:textFontWeight="500"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 
