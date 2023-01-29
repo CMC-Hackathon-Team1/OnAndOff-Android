@@ -61,6 +61,7 @@ class SignupActivity:AppCompatActivity() {
                             Toast.makeText(this@SignupActivity,"회원가입 성공! 로그인해주세요:)",Toast.LENGTH_SHORT).show()
                             val Intent = Intent(this@SignupActivity, SignInActivity::class.java)
                             startActivity(Intent)
+                            finish()
                         }
                         }
                         }

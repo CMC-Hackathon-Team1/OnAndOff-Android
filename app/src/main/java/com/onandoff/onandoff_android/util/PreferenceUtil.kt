@@ -46,8 +46,8 @@ class PreferenceUtil(context: Context) {
         return prefs.getBoolean(key, defaultValue)
     }
 
-    fun getSharedPreference(key: String?, defaultValue: String?): String? {
-        return prefs.getString(key, defaultValue)
+    fun getSharedPreference(key: String, defaultValue: String): String {
+        return prefs.getString(key, defaultValue)!!
     }
 
     fun getSharedPreference(key: String, defaultValue: HashSet<String>): Set<String> {
@@ -58,4 +58,5 @@ class PreferenceUtil(context: Context) {
 }
 object APIPreferences{
     val SHARED_PREFERENCE_NAME_COOKIE:String = "cookie"
+    val SHARED_PREFERENCE_NAME_EMAIL:String = "email"
 }

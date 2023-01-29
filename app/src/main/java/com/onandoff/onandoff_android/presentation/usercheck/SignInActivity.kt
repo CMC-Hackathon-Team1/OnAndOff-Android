@@ -13,6 +13,8 @@ import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.data.model.SignResponse
 import com.onandoff.onandoff_android.databinding.ActivitySigninBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,11 +56,14 @@ class SignInActivity:AppCompatActivity() {
                                     "Post",
                                     "retrofit manager called, onSucess called with ${response.body()}"
                                 );
-                                Toast.makeText(this@SignInActivity,"회원가입 성공! 로그인해주세요:)", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@SignInActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
+                                saveDate(email)
                                 val Intent = Intent(this@SignInActivity, MainActivity::class.java)
                                 startActivity(Intent)
+                                finish()
                             }
                         }
+
                     }
                     override fun onFailure(call: Call<SignResponse>, t: Throwable) {
                         Log.d(
@@ -72,6 +77,9 @@ class SignInActivity:AppCompatActivity() {
                 dialog("blank")
             }
 }
+    }
+    fun saveDate( loginEmail :String ){
+        val preference = prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,loginEmail)
     }
     fun dialog( type:String){
         val dialog = AlertDialog.Builder(this);
