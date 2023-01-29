@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
         setContentView(view)
 
-
         setupFragmentAdapter()
         setupBottomNavigationView()
 

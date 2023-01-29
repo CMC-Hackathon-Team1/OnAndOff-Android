@@ -35,6 +35,4 @@
     <string name="tv_title_look_around">둘러보기</string>
     <string name="tab_item_search">탐색</string>
     <string name="tab_item_following">팔로잉</string>
-    <string name="signUp_msg"><u>아직 아이디가 없다면?</u></string>
-    <string name="signUp_msg_btn"><u>회원가입</u></string>
 </resources>

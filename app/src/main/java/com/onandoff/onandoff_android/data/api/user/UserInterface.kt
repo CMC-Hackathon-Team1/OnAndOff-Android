@@ -2,7 +2,7 @@ package com.onandoff.onandoff_android.data.api.user
 
 import com.google.gson.JsonElement
 import com.onandoff.onandoff_android.data.model.SignRequest
-import com.onandoff.onandoff_android.data.model.SignResponse
+import com.onandoff.onandoff_android.data.model.SignUpResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -13,10 +13,10 @@ interface UserInterface {
     @POST("/auth/signup")
     fun signUp(
         @Body body:SignRequest
-    ): Call<SignResponse>
+    ): Call<SignUpResponse>
 
     @POST("/auth/login")
-    fun signIn(@Body userSignUp: SignRequest): Call<SignResponse>
+    fun logIn(@Body userSignUp: SignRequest): Call<JsonElement>
 
 //    @POST("/auth/logout")
 //    @Header ({'Authorization', jwt:string})
