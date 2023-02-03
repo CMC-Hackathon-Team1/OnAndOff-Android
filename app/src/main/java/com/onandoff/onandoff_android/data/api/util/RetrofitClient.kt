@@ -4,7 +4,6 @@ import android.util.Log
 import com.onandoff.onandoff_android.data.api.util.API_CONSTANTS.BASE_URL
 import com.onandoff.onandoff_android.util.AddCookiesInterceptor
 import com.onandoff.onandoff_android.util.Constants.TAG
-import com.onandoff.onandoff_android.util.ReceivedCookiesInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,7 +24,7 @@ object RetrofitClient {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
                 .addInterceptor(AddCookiesInterceptor())
-                .addInterceptor(ReceivedCookiesInterceptor())
+//                .addInterceptor(ReceivedCookiesInterceptor())
                 .build()
         }
 

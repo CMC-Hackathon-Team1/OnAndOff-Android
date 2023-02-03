@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.SignRequest
-import com.onandoff.onandoff_android.data.model.SignResponse
+import com.onandoff.onandoff_android.data.model.SignUpResponse
 import com.onandoff.onandoff_android.databinding.ActivitySignupBinding
 import retrofit2.*
 
@@ -20,10 +20,14 @@ class SignupActivity:AppCompatActivity() {
     val TAG : String = "회원가입"
     var isExistBlank = false
     var isPWSame = false
+    val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.ivArrow.setOnClickListener{
+            finish()
+        }
         binding.btSingup.setOnClickListener {
             val email = binding.etSignupEmail.text.toString()
             val password = binding.etSignupPassword.text.toString()
@@ -36,13 +40,13 @@ class SignupActivity:AppCompatActivity() {
                 }
             }
             if (!isExistBlank && isPWSame) {
-                val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
+
                 val user = SignRequest(email,password)
                 val call = userInterface?.signUp(user)
-                call?.enqueue(object :Callback<SignResponse> {
+                call?.enqueue(object :Callback<SignUpResponse> {
                     override fun onResponse(
-                        call: Call<SignResponse>,
-                        response: Response<SignResponse>
+                        call: Call<SignUpResponse>,
+                        response: Response<SignUpResponse>
                     ) {
                         val body = response.body()
                         when (body?.statusCode) {
@@ -65,7 +69,7 @@ class SignupActivity:AppCompatActivity() {
                         }
                         }
                         }
-                    override fun onFailure(call: Call<SignResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                         Log.d(
                             "Post",
                             "retrofit manager called, onSucess called but already join!"
