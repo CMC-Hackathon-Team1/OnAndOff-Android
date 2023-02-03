@@ -9,10 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.SignInResponse
 import com.onandoff.onandoff_android.data.model.SignRequest
-import com.onandoff.onandoff_android.data.model.SignResponse
 import com.onandoff.onandoff_android.databinding.ActivitySigninBinding
-import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
@@ -27,6 +26,9 @@ class SignInActivity:AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.ivArrow.setOnClickListener{
+            finish()
+        }
         binding.btSignin.setOnClickListener {
             val email = binding.etSigninEmail.text.toString()
             val password = binding.etSigninPassword.text.toString()
@@ -37,10 +39,10 @@ class SignInActivity:AppCompatActivity() {
                 val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
                 val user = SignRequest(email,password)
                 val call = userInterface?.signIn(user)
-                call?.enqueue(object : Callback<SignResponse> {
+                call?.enqueue(object : Callback<SignInResponse> {
                     override fun onResponse(
-                        call: Call<SignResponse>,
-                        response: Response<SignResponse>
+                        call: Call<SignInResponse>,
+                        response: Response<SignInResponse>
                     ) {
 //                        val header = response.headers()
 //                        val cookie = header.get("Set-Cookie")?.split("=")?.get(1)?.split(";")?.get(0)
@@ -57,8 +59,8 @@ class SignInActivity:AppCompatActivity() {
                                     "Post",
                                     "retrofit manager called, onSucess called with ${response.body()}"
                                 );
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,
-                                    response.body()?.result?.userId!!
+                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_JWT,
+                                    "Bearer "+response.body()?.result?.jwt!!
                                 );
                                 prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,email)
                                 Toast.makeText(this@SignInActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
@@ -69,7 +71,7 @@ class SignInActivity:AppCompatActivity() {
                         }
 
                     }
-                    override fun onFailure(call: Call<SignResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
                         Log.d(
                             "Post",
                             "retrofit manager called, onSucess called but already join!"

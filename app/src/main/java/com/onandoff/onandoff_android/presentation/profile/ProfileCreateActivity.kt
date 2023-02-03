@@ -70,11 +70,11 @@ class ProfileCreateActivity:AppCompatActivity() {
             val userId = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,0)
             if(binding.etPersonas.length() ==0){
                 binding.viewPersonas.setBackgroundColor(this.getColor(R.color.errorColor))
-                binding.tvPersonasError.setBackgroundColor(this.getColor(R.color.errorColor))
+                binding.tvPersonasError.setTextColor(this.getColor(R.color.errorColor))
 
             }else if(binding.etNickname.length() ==0){
                     binding.viewNickname.setBackgroundColor(this.getColor(R.color.errorColor))
-                    binding.tvPersonasError.setBackgroundColor(this.getColor(R.color.errorColor))
+                    binding.tvPersonasError.setTextColor(this.getColor(R.color.errorColor))
             }
             else{
 //                val call = createProfile(userId,nickname,personas,img,statusmsg)
@@ -90,6 +90,7 @@ class ProfileCreateActivity:AppCompatActivity() {
                                     "Profile Create",
                                     "retrofit manager called, onSucess called but already join!"
                                 );
+                                Toast.makeText(this@ProfileCreateActivity,"프로필은 3개까지 생성 가능합니다", Toast.LENGTH_LONG).show()
                             }
                             else->{
                                 Log.d(
@@ -102,6 +103,7 @@ class ProfileCreateActivity:AppCompatActivity() {
                                 Toast.makeText(this@ProfileCreateActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
                                 val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
                                 startActivity(Intent)
+                                finish()
                             }
 
                         }
