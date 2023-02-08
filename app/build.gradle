@@ -80,6 +80,8 @@ dependencies {
 //    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
     // 카카오 로그인 모듈
     implementation "com.kakao.sdk:v2-user:$kakao_version"
+//    //permission 관리 모듈
+//    implementation "gun0912.ted:tedpermission:2.2.3"
 }
 
 kapt {
