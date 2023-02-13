@@ -97,9 +97,9 @@ class ProfileCreateActivity:AppCompatActivity() {
                                     "Profile Create",
                                     "retrofit manager called, onSucess called!"
                                 );
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
-                                    response.body()?.result?.profileId!!
-                                );
+//                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
+//                                    response.body()?.result?.profileId!!
+//                                );
                                 Toast.makeText(this@ProfileCreateActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
                                 val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
                                 startActivity(Intent)
