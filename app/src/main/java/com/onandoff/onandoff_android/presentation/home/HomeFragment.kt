@@ -6,21 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.data.model.MyPersonaData
 import com.onandoff.onandoff_android.data.model.RelevantUserData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
+import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
+import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
+import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding
             get() = _binding!!
 
     private lateinit var myProfileListAdapter: MyProfileListAdapter
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
+    private lateinit var calendarAdapter: CalendarAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,11 +109,28 @@ class HomeFragment: Fragment() {
     }
 
     private fun setupCalendar() {
-        binding.calendarView.setTitleFormatter { day -> "${day!!.year}년 ${day.month}월" }
-        val calendarMin = Calendar.getInstance()
-        calendarMin.add(Calendar.DAY_OF_MONTH, -30)
-        val calendarMax = Calendar.getInstance()
-        calendarMax.add(Calendar.DAY_OF_MONTH, +30)
+        val baseCalendar = BaseCalendar()
+
+        calendarAdapter = CalendarAdapter(this)
+        binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
+        binding.fgCalDay.adapter = calendarAdapter
+
+        binding.fgCalPre.setOnClickListener {
+            calendarAdapter.changeToPrevMonth()
+        }
+        binding.fgCalNext.setOnClickListener {
+            calendarAdapter.changeToNextMonth()
+        }
+
+        baseCalendar.initBaseCalendar {
+            onMonthChanged(it)
+        }
+
+
+//        val calendarMin = Calendar.getInstance()
+//        calendarMin.add(Calendar.DAY_OF_MONTH, -30)
+//        val calendarMax = Calendar.getInstance()
+//        calendarMax.add(Calendar.DAY_OF_MONTH, +30)
 //        binding.calendarView.setOnSampleReceivedEvent(this)
 //        binding.calendarView.setMinimumDate(calendarMin)
 //        binding.calendarView.setMaximumDate(calendarMax)
@@ -176,5 +198,10 @@ class HomeFragment: Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onMonthChanged(calendar: Calendar) {
+        val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
+        binding.fgCalMonth.text = sdf.format(calendar.time)
     }
 }
