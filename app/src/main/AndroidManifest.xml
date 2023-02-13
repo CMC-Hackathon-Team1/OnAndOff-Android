@@ -24,25 +24,25 @@
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN"/>-->
+<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data
-                    android:host="oauth"
-                    android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" />
-            </intent-filter>
+<!--                &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt;-->
+<!--                <data-->
+<!--                    android:host="oauth"-->
+<!--                    android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".presentation.usercheck.SignupActivity"
@@ -55,11 +55,11 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".presentation.profile.ProfileCreateActivity"
             android:exported="true">

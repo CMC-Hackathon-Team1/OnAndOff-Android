@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.onandoff.onandoff_android.data.model.CalendarData
 import com.onandoff.onandoff_android.databinding.ItemCalendarBinding
 import java.util.*
 
@@ -12,13 +13,12 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
 
     private val baseCalendar = BaseCalendar()
     private lateinit var itemClickListener: OnItemClickListener
-    private lateinit var dateMap: MutableMap<String, List<String>>
+    private lateinit var feedList: List<CalendarData>
 
     init {
         baseCalendar.initBaseCalendar {
             onMonthChangeListener?.onMonthChanged(it)
         }
-        dateMap = mutableMapOf()
         notifyDataSetChanged()
     }
 
@@ -59,7 +59,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
     }
 
     inner class CalendarItemViewHolder(private val binding: ItemCalendarBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(date: Int, map: MutableMap<String, List<String>>, position: Int) {
+        fun bind(date: Int, feed: CalendarData, position: Int) {
             binding.tvDate.text = date.toString()
 
             if (position < baseCalendar.preMonth
@@ -79,14 +79,13 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
         }
     }
 
-    fun setItems(item: Map<String, List<String>>) {
-        dateMap.clear()
-        dateMap.putAll(item)
+    fun setItems(item: List<CalendarData>) {
+        feedList = item
     }
 
     override fun onBindViewHolder(holder: CalendarItemViewHolder, position: Int) {
         if (holder is CalendarItemViewHolder) {
-            holder.bind(baseCalendar.data[position], dateMap, position)
+            holder.bind(baseCalendar.data[position], feedList.get(position), position)
         }
     }
 }

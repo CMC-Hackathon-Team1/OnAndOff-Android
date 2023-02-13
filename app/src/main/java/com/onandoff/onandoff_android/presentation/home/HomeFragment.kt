@@ -2,6 +2,7 @@ package com.onandoff.onandoff_android.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.onandoff.onandoff_android.data.api.feed.CalendarService
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.CalendarData
 import com.onandoff.onandoff_android.data.model.MyPersonaData
 import com.onandoff.onandoff_android.data.model.RelevantUserData
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -125,15 +134,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
         baseCalendar.initBaseCalendar {
             onMonthChanged(it)
         }
-
-
-//        val calendarMin = Calendar.getInstance()
-//        calendarMin.add(Calendar.DAY_OF_MONTH, -30)
-//        val calendarMax = Calendar.getInstance()
-//        calendarMax.add(Calendar.DAY_OF_MONTH, +30)
-//        binding.calendarView.setOnSampleReceivedEvent(this)
-//        binding.calendarView.setMinimumDate(calendarMin)
-//        binding.calendarView.setMaximumDate(calendarMax)
     }
 
     private fun initRelevantUserListRecyclerView(recyclerView: RecyclerView) {
@@ -201,7 +201,33 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
 
     override fun onMonthChanged(calendar: Calendar) {
+        val userId = SharePreference.prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,0)
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         binding.fgCalMonth.text = sdf.format(calendar.time)
+
+        val calendarInterface: CalendarService? = RetrofitClient.getClient()?.create(CalendarService::class.java)
+        val call = calendarInterface?.getCalendarList(userId, year, month)
+        call?.enqueue(object : Callback<List<CalendarData>> {
+            override fun onResponse(
+                call: Call<List<CalendarData>>,
+                response: Response<List<CalendarData>>
+            ) {
+                when(response.code()) {
+                    200 -> {
+                        val feedList = response.body()
+                        calendarAdapter.setItems(feedList!!)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<CalendarData>>, t: Throwable) {
+                TODO("Not yet implemented")
+                Log.d("TAG", "onFailure: caledar error")
+            }
+
+        })
     }
 }
