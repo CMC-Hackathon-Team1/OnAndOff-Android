@@ -1,4 +1,4 @@
-package com.onandoff.onandoff_android.data.api
+package com.onandoff.onandoff_android.data.api.feed
 
 import retrofit2.Response
 import retrofit2.http.GET
