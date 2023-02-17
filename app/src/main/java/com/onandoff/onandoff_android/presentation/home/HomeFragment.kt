@@ -120,6 +120,10 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     private fun setupCalendar() {
         val baseCalendar = BaseCalendar()
 
+        baseCalendar.initBaseCalendar {
+            onMonthChanged(it)
+        }
+
         calendarAdapter = CalendarAdapter(this)
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         binding.fgCalDay.adapter = calendarAdapter
@@ -129,10 +133,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
         }
         binding.fgCalNext.setOnClickListener {
             calendarAdapter.changeToNextMonth()
-        }
-
-        baseCalendar.initBaseCalendar {
-            onMonthChanged(it)
         }
     }
 
@@ -201,15 +201,19 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
 
     override fun onMonthChanged(calendar: Calendar) {
-        val userId = SharePreference.prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,0)
+        val userId = 27
         val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
+        var month = calendar.get(Calendar.MONTH) + 1
+        var month_format = month.toString()
+        if (month < 10) {
+            month_format = "0${month_format}"
+        }
 
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         binding.fgCalMonth.text = sdf.format(calendar.time)
 
         val calendarInterface: CalendarService? = RetrofitClient.getClient()?.create(CalendarService::class.java)
-        val call = calendarInterface?.getCalendarList(userId, year, month)
+        val call = calendarInterface?.getCalendarList(userId, year, month_format)
         call?.enqueue(object : Callback<List<CalendarData>> {
             override fun onResponse(
                 call: Call<List<CalendarData>>,
@@ -218,6 +222,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
                 when(response.code()) {
                     200 -> {
                         val feedList = response.body()
+                        Log.d("feedList", "onResponse: ${feedList?.size}")
                         calendarAdapter.setItems(feedList!!)
                     }
                 }

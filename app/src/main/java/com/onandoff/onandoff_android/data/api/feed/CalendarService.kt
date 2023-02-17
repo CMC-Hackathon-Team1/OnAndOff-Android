@@ -8,8 +8,8 @@ import retrofit2.http.Query
 interface CalendarService {
     @GET("/feeds/my-feeds/in-calendar")
     fun getCalendarList(
-        @Query("profileld") profiled: Int,
+        @Query("profileId") profileId: Int,
         @Query("year") year: Int,
-        @Query("month") month: Int
+        @Query("month") month: String
     ): Call<List<CalendarData>>
 }

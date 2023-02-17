@@ -1,10 +1,13 @@
 package com.onandoff.onandoff_android.presentation.home.calendar
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CalendarData
 import com.onandoff.onandoff_android.databinding.ItemCalendarBinding
 import java.util.*
@@ -13,13 +16,15 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
 
     private val baseCalendar = BaseCalendar()
     private lateinit var itemClickListener: OnItemClickListener
-    private lateinit var feedList: List<CalendarData>
+    private var feedList: List<CalendarData>? = null
+
 
     init {
         baseCalendar.initBaseCalendar {
             onMonthChangeListener?.onMonthChanged(it)
         }
         notifyDataSetChanged()
+        Log.d("CalenderAdapter", "init")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarItemViewHolder {
@@ -59,7 +64,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
     }
 
     inner class CalendarItemViewHolder(private val binding: ItemCalendarBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(date: Int, feed: CalendarData, position: Int) {
+        fun bind(date: Int, position: Int) {
             binding.tvDate.text = date.toString()
 
             if (position < baseCalendar.preMonth
@@ -69,23 +74,41 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                 binding.item.visibility = View.VISIBLE
             }
 
-            val pos = adapterPosition
-            if(pos!= RecyclerView.NO_POSITION)
-            {
-                itemView.setOnClickListener {
-//                    itemClickListener.onClick(itemView,pos)
+            if (feedList != null) {
+                for (feed in feedList!!) {
+                    Log.d("CalenderAdapter", "feed day : ${feed.day}, date : ${date} ")
+                    if(feed.day.toInt() == date) {
+                        binding.sivCalendar.visibility = View.VISIBLE
+                        if (feed.feedImgUrl != null && feed.feedImgUrl.isNotEmpty()) {
+                            Glide.with(itemView)
+                                .load(feed.feedImgUrl[0])
+                                .into(binding.sivCalendar)
+                        } else {
+                            Glide.with(itemView)
+                                .load("https://onandoff-image.s3.amazonaws.com/defaultProfileImg/defaultProfileImg.png")
+                                .into(binding.sivCalendar)
+                        }
+                    }
                 }
             }
+
+//            val pos = adapterPosition
+//            if(pos!= RecyclerView.NO_POSITION)
+//            {
+//                itemView.setOnClickListener {
+////                    itemClickListener.onClick(itemView,pos)
+//                }
+//            }
         }
     }
-
     fun setItems(item: List<CalendarData>) {
         feedList = item
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CalendarItemViewHolder, position: Int) {
         if (holder is CalendarItemViewHolder) {
-            holder.bind(baseCalendar.data[position], feedList.get(position), position)
+            holder.bind(baseCalendar.data[position], position)
         }
     }
 }
