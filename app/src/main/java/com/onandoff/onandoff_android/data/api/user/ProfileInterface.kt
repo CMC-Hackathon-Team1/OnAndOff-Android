@@ -9,12 +9,11 @@ import retrofit2.http.*
 
 interface ProfileInterface {
     @Multipart
-    @POST("/profiles/create")
+    @POST("/profiles")
     fun profileCreate(
-//        @Part profileImgUrl : MultipartBody.Part,
         @Part userId:  MultipartBody.Part,
         @Part profileName : MultipartBody.Part,
         @Part personaName:  MultipartBody.Part,
-        @Part statusMesage:  MultipartBody.Part,
+        @Part statusMessage:  MultipartBody.Part
     ): Call<ProfileResponse>
 }
