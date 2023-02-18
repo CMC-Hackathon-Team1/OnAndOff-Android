@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.data.api.user
 
+import com.onandoff.onandoff_android.data.model.ProfileListResponse
 import com.onandoff.onandoff_android.data.model.ProfileRequest
 import com.onandoff.onandoff_android.data.model.ProfileResponse
 import okhttp3.MultipartBody
@@ -16,4 +17,7 @@ interface ProfileInterface {
         @Part personaName:  MultipartBody.Part,
         @Part statusMessage:  MultipartBody.Part
     ): Call<ProfileResponse>
+
+    @GET("/profiles/my-profiles")
+    fun profileCheck(): Call<ProfileListResponse>
 }
