@@ -11,8 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-
 import androidx.fragment.app.viewModels
+
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +31,11 @@ import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 
 import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.HomeViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
-import com.onandoff.onandoff_android.util.APIPreferences
-import com.onandoff.onandoff_android.util.SharePreference
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
