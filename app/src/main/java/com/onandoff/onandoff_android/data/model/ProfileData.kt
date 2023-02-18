@@ -4,20 +4,21 @@ import com.google.gson.annotations.SerializedName
 import java.io.File
 
 data class ProfileRequest(
-    @SerializedName("userId")val userId:Int,
-    @SerializedName("profileName")val profileName: String,
-    @SerializedName("personaName")val personaName:String,
-    @SerializedName("profileImgUrl")val profileImgUrl: File,
-    @SerializedName("statusMesage")val statusMesage: String,
+    @SerializedName("userId") val userId: Int,
+    @SerializedName("profileName") val profileName: String,
+    @SerializedName("personaName") val personaName: String,
+    @SerializedName("profileImgUrl") val profileImgUrl: File,
+    @SerializedName("statusMessage") val statusMessage: String,
 )
 
 data class ProfileResponse(
-    @SerializedName("statusCode")val statusCode :Int,
-    @SerializedName("message")val message:String,
-    @SerializedName("result")val result:ProfileResponseResult
+    @SerializedName("statusCode") val statusCode: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ProfileResponseResult
 )
+
 data class ProfileResponseResult(
-    @SerializedName("profileId")val profileId:Int
+    @SerializedName("profileId") val profileId: Int
 )
 data class ProfileListResponse(
     @SerializedName("statusCode")val statusCode :Int,

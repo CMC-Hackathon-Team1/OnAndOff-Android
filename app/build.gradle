@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.onandoff.onandoff_android"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')

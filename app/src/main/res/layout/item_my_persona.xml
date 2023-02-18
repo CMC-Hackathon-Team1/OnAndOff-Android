@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="com.onandoff.onandoff_android.R" />
+
+        <variable
+            name="myPersona"
+            type="com.onandoff.onandoff_android.data.model.MyProfileResponse" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <View
+            android:id="@+id/view_left"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_right"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/outer_cv_my_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/Circle">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_my_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:shapeAppearanceOverlay="@style/Circle">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_my_profile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerCrop"
+                    app:fallbackImage="@{R.drawable.persona_profile}"
+                    app:imageUrl="@{myPersona.profileImgUrl}" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_my_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{myPersona.personaName}"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="@id/outer_cv_my_profile"
+            app:layout_constraintStart_toStartOf="@id/outer_cv_my_profile"
+            app:layout_constraintTop_toBottomOf="@id/outer_cv_my_profile" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
