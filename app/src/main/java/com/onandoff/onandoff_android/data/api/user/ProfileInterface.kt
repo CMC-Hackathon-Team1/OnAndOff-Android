@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.data.api.user
 
+import com.onandoff.onandoff_android.data.model.ProfileListResponse
 import com.onandoff.onandoff_android.data.model.ProfileRequest
 import com.onandoff.onandoff_android.data.model.ProfileResponse
 import okhttp3.MultipartBody
@@ -9,7 +10,7 @@ import retrofit2.http.*
 
 interface ProfileInterface {
     @Multipart
-    @POST("/profiles/create")
+    @POST("/profiles")
     fun profileCreate(
 //        @Part profileImgUrl : MultipartBody.Part,
         @Part userId:  MultipartBody.Part,
@@ -17,4 +18,7 @@ interface ProfileInterface {
         @Part personaName:  MultipartBody.Part,
         @Part statusMesage:  MultipartBody.Part,
     ): Call<ProfileResponse>
+
+    @GET("/profiles/my-profiles")
+    fun profileCheck(): Call<ProfileListResponse>
 }
