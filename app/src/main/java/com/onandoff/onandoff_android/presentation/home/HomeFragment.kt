@@ -24,14 +24,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.onandoff.onandoff_android.data.api.feed.CalendarService
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.CalendarData
-import com.onandoff.onandoff_android.data.model.MyPersonaData
 
 import com.onandoff.onandoff_android.data.model.RelevantUserData
 import com.onandoff.onandoff_android.data.model.StatisticsResponse
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 
 import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaActivity
-import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
