@@ -7,11 +7,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.ProfileListResponse
+import com.onandoff.onandoff_android.data.model.ProfileListResultResponse
 import com.onandoff.onandoff_android.data.model.SignInResponse
 import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.databinding.ActivitySigninBinding
+import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
@@ -22,6 +26,8 @@ import retrofit2.Response
 class SignInActivity:AppCompatActivity() {
     private lateinit var binding : ActivitySigninBinding
     var isExistBlank = false
+    val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
+    val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySigninBinding.inflate(layoutInflater)
@@ -35,8 +41,8 @@ class SignInActivity:AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 isExistBlank = true
             }
+
             if(!isExistBlank){
-                val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
                 val user = SignRequest(email,password)
                 val call = userInterface?.signIn(user)
                 call?.enqueue(object : Callback<SignInResponse> {
@@ -44,32 +50,77 @@ class SignInActivity:AppCompatActivity() {
                         call: Call<SignInResponse>,
                         response: Response<SignInResponse>
                     ) {
-//                        val header = response.headers()
-//                        val cookie = header.get("Set-Cookie")?.split("=")?.get(1)?.split(";")?.get(0)
-                        when(response.body()?.statusCode){
+                        val signInResponse = response.body()
+
+                        when(signInResponse?.statusCode){
                             1101 -> {
                                 Log.d(
                                     "Post",
-                                    "retrofit manager called, onSucess called but already join!"
+                                    "retrofit manager called, onSucess called but not signIn"
                                 );
-                                dialog("pw error")
+                                Toast.makeText(this@SignInActivity,"회원 정보를 찾을수없습니다. 다시 확인해주세요",Toast.LENGTH_LONG).show()
                             }
+                            1102->{
+                                Toast.makeText(this@SignInActivity,"${signInResponse.message}",Toast.LENGTH_LONG).show()}
+
                             else -> {
                                 Log.d(
                                     "Post",
-                                    "retrofit manager called, onSucess called with ${response.body()}"
+                                    "retrofit manager called, onSucess called with ${signInResponse?.result?.jwt}"
                                 );
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_JWT,
-                                    "Bearer "+response.body()?.result?.jwt!!
-                                );
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,email)
-                                Toast.makeText(this@SignInActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
-                                val Intent = Intent(this@SignInActivity, ProfileCreateActivity::class.java)
-                                startActivity(Intent)
+                                signInResponse?.result?.let { it1 ->
+                                    prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_JWT,
+                                        it1.jwt)
+                                };
+                                val call2 = profileInterface?.profileCheck()
+                                call2?.enqueue(object : Callback<ProfileListResponse> {
+                                    override fun onResponse(
+                                        call: Call<ProfileListResponse>,
+                                        response: Response<ProfileListResponse>
+                                    ) {
+                                        val profileResponse = response.body()
+                                        when(profileResponse?.statusCode){
+                                            1503 -> {
+                                                Log.d(
+                                                    "Get",
+                                                    "retrofit manager called, onSucess called but profile not exits"
+                                                );
+                                                val profileIntent = Intent(this@SignInActivity, ProfileCreateActivity::class.java)
+                                                startActivity(profileIntent)
 
+                                            }
+                                            else -> {
+                                                Log.d(
+                                                    "Get",
+                                                    "retrofit manager called, onSucess called with ${response.body()}"
+                                                );
+                                                val list = mutableSetOf<String>()
+                                                for(i in profileResponse?.result!!){
+                                                    list.add(i.profileId.toString())
+                                                }
+                                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
+
+                                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,email)
+                                                val mainIntent = Intent(this@SignInActivity, MainActivity::class.java)
+                                                startActivity(mainIntent)
+                                            }
+                                        }
+                                    }
+
+                                    override fun onFailure(
+                                        call: Call<ProfileListResponse>,
+                                        t: Throwable
+                                    ) {
+                                        Log.d(
+                                            "Get",
+                                            "retrofit manager called, onFailure called with ${t}"
+                                        );
+                                    }
+
+
+                            })
                             }
                         }
-
                     }
                     override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
                         Log.d(

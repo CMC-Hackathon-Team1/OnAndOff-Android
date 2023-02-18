@@ -1,42 +1,25 @@
 package com.onandoff.onandoff_android.presentation.profile
 
-import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.BuildConfig
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.FormDataUtil
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.ProfileRequest
 import com.onandoff.onandoff_android.data.model.ProfileResponse
 import com.onandoff.onandoff_android.databinding.ActivityProfileCreateBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.APIPreferences
-import com.onandoff.onandoff_android.util.Camera
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class ProfileCreateActivity:AppCompatActivity() {
     private lateinit var binding: ActivityProfileCreateBinding
@@ -97,10 +80,12 @@ class ProfileCreateActivity:AppCompatActivity() {
                                     "Profile Create",
                                     "retrofit manager called, onSucess called!"
                                 );
-//                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
-//                                    response.body()?.result?.profileId!!
-//                                );
-                                Toast.makeText(this@ProfileCreateActivity,"로그인성공! 프로필 생성해주세요:)", Toast.LENGTH_SHORT).show()
+
+
+                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
+                                    mutableSetOf<String>(response.body()?.result?.profileId!!.toString())
+                                );
+                                Toast.makeText(this@ProfileCreateActivity,"프로필 생성 성공! 메인화면으로 이동합니다", Toast.LENGTH_SHORT).show()
                                 val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
                                 startActivity(Intent)
                                 finish()

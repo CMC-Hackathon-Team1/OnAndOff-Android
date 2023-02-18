@@ -2,10 +2,17 @@ package com.onandoff.onandoff_android.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.onandoff.onandoff_android.data.model.ProfileListResultResponse
+import org.json.JSONArray
+import org.json.JSONException
+
 
 class PreferenceUtil(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("prefs_name", Context.MODE_PRIVATE)
+    fun putSharedPreference(key: String?, value: String) {
+        prefs.edit().putString(key, value).apply()
+    }
 
     fun putSharedPreference(key: String?, value: Int) {
         prefs.edit().putInt(key, value).apply()
@@ -23,13 +30,18 @@ class PreferenceUtil(context: Context) {
         prefs.edit().putBoolean(key, value).apply()
     }
 
-    fun putSharedPreference(key: String?, value: String?) {
-        prefs.edit().putString(key, value).apply()
+    fun putSharedPreference( key: String?, values: MutableSet<String>) {
+        val mutableList = mutableSetOf<String>()
+        for(value in values){
+        mutableList.add(value)
+        }
+        prefs.edit().putStringSet(key,mutableList)
     }
 
-    fun putSharedPreference(key: String, value: HashSet<String>) {
-        prefs.edit().putStringSet(key, value).apply()
-    }
+
+//    fun putSharedPreference(key: String?, value: HashSet<String>) {
+//        prefs.edit().putStringSet(key, value).apply()
+//    }
     fun getSharedPreference(key: String?, defaultValue: Int): Int {
         return prefs.getInt(key, defaultValue)
     }
@@ -48,6 +60,10 @@ class PreferenceUtil(context: Context) {
 
     fun getSharedPreference(key: String, defaultValue: String): String {
         return prefs.getString(key, defaultValue)!!
+    }
+    fun getSharedPreference(key: String): MutableSet<String>? {
+        val mutableList = mutableSetOf<String>()
+        return prefs.getStringSet(key,mutableList)
     }
 
     fun getSharedPreference(key: String, defaultValue: HashSet<String>): Set<String> {

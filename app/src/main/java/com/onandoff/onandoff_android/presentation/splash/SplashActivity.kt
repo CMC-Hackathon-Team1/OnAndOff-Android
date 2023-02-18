@@ -98,7 +98,7 @@ class SplashActivity:AppCompatActivity() {
                 Log.d("성공!", response.body()?.result?.accessToken.toString());
                 prefs.putSharedPreference(
                     SHARED_PREFERENCE_NAME_JWT,
-                    response.body()?.result?.accessToken
+                    response.body()?.result?.accessToken!!
                 )
 //                    dialog.setContentView(R.layout.bottomsheet_check_permission)
                 val Intent = Intent(this@SplashActivity, MainActivity::class.java)
