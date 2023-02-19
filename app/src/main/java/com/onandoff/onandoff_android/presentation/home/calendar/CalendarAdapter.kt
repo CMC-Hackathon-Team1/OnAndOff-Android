@@ -85,7 +85,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                                 .into(binding.sivCalendar)
                         } else {
                             Glide.with(itemView)
-                                .load("https://onandoff-image.s3.amazonaws.com/defaultProfileImg/defaultProfileImg.png")
+                                .load("feed.feedImgUrl[0]")
                                 .into(binding.sivCalendar)
                         }
                     }
