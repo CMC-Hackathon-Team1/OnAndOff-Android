@@ -1,56 +1,85 @@
 package com.onandoff.onandoff_android.presentation.home
 
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.MyProfileData
-import com.onandoff.onandoff_android.databinding.ItemMyProfileBinding
+import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.model.MyProfileResponse
+import com.onandoff.onandoff_android.databinding.ItemMyPersonaBinding
 
-class MyProfileListAdapter: ListAdapter<MyProfileData, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
+class MyProfileListAdapter(
+    private val onClick: (MyProfileResponse) -> Unit
+): ListAdapter<MyProfileResponse, MyProfileListAdapter.MyProfileViewHolder>(MyProfileDiffUtil) {
 
     class MyProfileViewHolder(
-        private val binding: ItemMyProfileBinding
+        private val binding: ItemMyPersonaBinding,
+        private val onClick: (MyProfileResponse) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(myProfileData: MyProfileData, position: Int) {
-            binding.tvMyProfile.text = myProfileData.name
-            binding.viewLeft.isVisible = position == 0
+        private var isApplied = false
 
-            Glide.with(binding.root.context)
-                .load(myProfileData.profileImageUrl)
-                .into(binding.ivMyProfile)
+        fun bind(myProfileResponse: MyProfileResponse, position: Int) {
+//            binding.viewLeft.isVisible = position == 0
+
+//            Glide.with(binding.root.context)
+//                .load(myProfileResponse.profileImgUrl)
+//                .into(binding.ivMyProfile)
+
+            binding.root.setOnClickListener {
+                if (isApplied) {
+                    binding.outerCvMyProfile.setCardBackgroundColor(Color.BLUE)
+                    binding.outerCvMyProfile.setContentPadding(0, 0, 0, 0)
+                    isApplied = false
+                } else {
+                    binding.outerCvMyProfile.setCardBackgroundColor(Color.CYAN)
+                    binding.outerCvMyProfile.setContentPadding(7, 7, 7, 7)
+                    isApplied = true
+                }
+                onClick(myProfileResponse)
+            }
+
+            binding.myPersona = myProfileResponse
+            binding.executePendingBindings()
+        }
+
+        fun makeRoundedRectangleDrawable(
+            radius: Float = 24f,
+            strokeWidth: Int = 1,
+            strokeColor: Int,
+            backgroundColor: Int? = null
+        ): Drawable = GradientDrawable().apply {
+            shape = GradientDrawable.RING
+            setStroke(strokeWidth, strokeColor)
+            backgroundColor?.run { setColor(backgroundColor) }
+            cornerRadii = floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyProfileViewHolder {
-        val binding = ItemMyProfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return MyProfileViewHolder(binding)
+        val binding = ItemMyPersonaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyProfileViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(holder: MyProfileViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        val myProfileResponse = getItem(position)
+        holder.bind(myProfileResponse, position)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (currentList[position].isAlreadyAdded) {
-            1
-        } else {
-            0
-        }
-    }
-
-    companion object MyProfileDiffUtil : DiffUtil.ItemCallback<MyProfileData>() {
-        override fun areItemsTheSame(oldItem: MyProfileData, newItem: MyProfileData): Boolean {
-            return oldItem.name == newItem.name
+    companion object MyProfileDiffUtil : DiffUtil.ItemCallback<MyProfileResponse>() {
+        override fun areItemsTheSame(oldItem: MyProfileResponse, newItem: MyProfileResponse): Boolean {
+            return oldItem.profileName == newItem.profileName
         }
 
-        override fun areContentsTheSame(oldItem: MyProfileData, newItem: MyProfileData): Boolean {
+        override fun areContentsTheSame(oldItem: MyProfileResponse, newItem: MyProfileResponse): Boolean {
             return oldItem == newItem
         }
     }

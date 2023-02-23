@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             }
             R.id.menu_my_page -> {
                 fragmentTransaction.replace(binding.fcvMain.id, MypageFragment()).commit()
-
             }
             else -> {
                 throw IllegalArgumentException("Not found menu item")

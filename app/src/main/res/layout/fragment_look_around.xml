@@ -11,16 +11,16 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:contentInsetStart="0dp" >
+        app:contentInsetStart="0dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/tv_title_look_around"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size"
-            android:textStyle="bold"
-            android:layout_gravity="center" />
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -53,19 +53,22 @@
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="100dp"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="20dp"
+        android:dropDownWidth="200dp"
+        android:popupBackground="@drawable/spinner_background"
+        android:entries="@array/look_category_array" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_look_around"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_look_around"/>
+        tools:listitem="@layout/item_look_around" />
 
 </LinearLayout>

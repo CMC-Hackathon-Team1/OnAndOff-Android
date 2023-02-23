@@ -4,14 +4,14 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
 }
-
+//Properties properties = new Properties() properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
     compileSdk 33
 
     defaultConfig {
         applicationId "com.onandoff.onandoff_android"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')
@@ -78,6 +78,10 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 //    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
+    // 카카오 로그인 모듈
+    implementation "com.kakao.sdk:v2-user:$kakao_version"
+//    //permission 관리 모듈
+//    implementation "gun0912.ted:tedpermission:2.2.3"
 }
 
 kapt {
