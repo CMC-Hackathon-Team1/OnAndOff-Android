@@ -11,7 +11,7 @@ data class CreateMyProfileData(
     @SerializedName("statusMessage")
     val statusMessage: String,
     @SerializedName("profileImgUrl")
-    val image: File
+    val image: File?
 )
 
 data class CreateMyProfileResponse(
