@@ -81,7 +81,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@id/rv_my_profile_list"
                                 app:shapeAppearanceOverlay="@style/Circle"
-                                app:strokeColor="#DDDDDD"
+                                app:strokeColor="@color/black_fifth"
                                 app:strokeWidth="1dp">
 
                                 <com.google.android.material.imageview.ShapeableImageView
