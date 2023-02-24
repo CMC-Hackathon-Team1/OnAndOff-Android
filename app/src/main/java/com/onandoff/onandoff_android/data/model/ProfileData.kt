@@ -3,13 +3,6 @@ package com.onandoff.onandoff_android.data.model
 import com.google.gson.annotations.SerializedName
 import java.io.File
 
-data class ProfileRequest(
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("profileName") val profileName: String,
-    @SerializedName("personaName") val personaName: String,
-    @SerializedName("profileImgUrl") val profileImgUrl: File,
-    @SerializedName("statusMessage") val statusMessage: String,
-)
 
 data class ProfileResponse(
     @SerializedName("statusCode") val statusCode: Int,
