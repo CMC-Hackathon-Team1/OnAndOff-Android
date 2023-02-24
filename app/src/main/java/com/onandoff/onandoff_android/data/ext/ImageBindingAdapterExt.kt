@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.data.ext
 
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
@@ -10,6 +11,13 @@ import java.io.File
 fun ImageView.setImageUrl(url: String?) {
     Glide.with(context)
         .load(url)
+        .into(this)
+}
+
+@BindingAdapter("imageUrl")
+fun ImageView.setImageUrl(uri: Uri?) {
+    Glide.with(context)
+        .load(uri)
         .into(this)
 }
 
@@ -26,6 +34,23 @@ fun ImageView.setImageUrl(url: String?, @DrawableRes fallbackImage: Int = -1) {
         !url.isNullOrEmpty() -> {
             Glide.with(context)
                 .load(url)
+                .into(this)
+        }
+        fallbackImage != -1 -> {
+            Glide.with(context)
+                .load(fallbackImage)
+                .into(this)
+        }
+    }
+}
+
+
+@BindingAdapter(value = ["imageUrl", "fallbackImage"])
+fun ImageView.setImageUrl(uri: Uri?, @DrawableRes fallbackImage: Int = -1) {
+    when {
+        uri?.isAbsolute == true -> {
+            Glide.with(context)
+                .load(uri)
                 .into(this)
         }
         fallbackImage != -1 -> {
