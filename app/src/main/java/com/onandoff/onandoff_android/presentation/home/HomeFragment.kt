@@ -154,6 +154,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
                             Log.d("state.myProfileList", "${state.myProfileList}")
                             myProfileListAdapter.submitList(state.myProfileList.result)
 
+//                            val firstProfile = state.myProfileList.result?.getOrNull()
                             val firstProfile = state.myProfileList.result?.firstOrNull()
                             if (firstProfile != null) {
                                 onClickPersona(firstProfile)
@@ -199,7 +200,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     private fun initMyPersonaListRecyclerView(recyclerView: RecyclerView) {
         recyclerView.run {
             adapter = myProfileListAdapter
-            val spaceDecoration = HorizontalSpaceItemDecoration(30)
+            val spaceDecoration = HorizontalSpaceItemDecoration(25)
             removeItemDecoration(object : DividerItemDecoration(requireActivity(), HORIZONTAL) {
 
             })
