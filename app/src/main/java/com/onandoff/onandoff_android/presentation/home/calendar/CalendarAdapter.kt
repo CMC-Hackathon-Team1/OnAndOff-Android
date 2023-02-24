@@ -92,13 +92,13 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                 }
             }
 
-//            val pos = adapterPosition
-//            if(pos!= RecyclerView.NO_POSITION)
-//            {
-//                itemView.setOnClickListener {
-////                    itemClickListener.onClick(itemView,pos)
-//                }
-//            }
+            val pos = adapterPosition
+            if(pos!= RecyclerView.NO_POSITION)
+            {
+                itemView.setOnClickListener {
+                    itemClickListener.onClick(itemView,pos)
+                }
+            }
         }
     }
     fun setItems(item: List<CalendarData>) {
