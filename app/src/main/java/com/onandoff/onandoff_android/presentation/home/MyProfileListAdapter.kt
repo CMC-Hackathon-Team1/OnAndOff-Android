@@ -28,20 +28,14 @@ class MyProfileListAdapter(
         private var isApplied = false
 
         fun bind(myProfileResponse: MyProfileResponse, position: Int) {
-//            binding.viewLeft.isVisible = position == 0
-
-//            Glide.with(binding.root.context)
-//                .load(myProfileResponse.profileImgUrl)
-//                .into(binding.ivMyProfile)
-
+            binding.outerCvMyProfile.setContentPadding(7, 7, 7, 7)
             binding.root.setOnClickListener {
                 if (isApplied) {
-                    binding.outerCvMyProfile.setCardBackgroundColor(Color.BLUE)
-                    binding.outerCvMyProfile.setContentPadding(0, 0, 0, 0)
+                    binding.outerCvMyProfile.setCardBackgroundColor(Color.TRANSPARENT)
                     isApplied = false
                 } else {
                     binding.outerCvMyProfile.setCardBackgroundColor(Color.CYAN)
-                    binding.outerCvMyProfile.setContentPadding(7, 7, 7, 7)
+//                    binding.outerCvMyProfile.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color_main))
                     isApplied = true
                 }
                 onClick(myProfileResponse)
