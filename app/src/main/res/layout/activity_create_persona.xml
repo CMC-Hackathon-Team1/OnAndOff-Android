@@ -62,29 +62,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
-        <!-- android:src="@drawable/persona_profile" - 삭제해야 하나요? -->
+        <!-- android:src="@drawable/persona_profile" - 삭제? -->
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_add_background"
+            android:id="@+id/iv_camera"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_gravity="center"
             android:layout_marginTop="138dp"
-            android:src="#777777"
+            android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="@id/iv_persona_profile"
             app:layout_constraintEnd_toEndOf="@id/iv_persona_profile"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_add_avatar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_baseline_camera_alt_24"
-            app:layout_constraintBottom_toBottomOf="@id/iv_add_background"
-            app:layout_constraintEnd_toEndOf="@id/iv_add_background"
-            app:layout_constraintStart_toStartOf="@id/iv_add_background"
-            app:layout_constraintTop_toTopOf="@id/iv_add_background" />
 
         <LinearLayout
             android:id="@+id/layout_personas"
