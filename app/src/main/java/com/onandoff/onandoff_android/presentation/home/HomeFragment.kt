@@ -17,11 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.onandoff.onandoff_android.data.model.CreateMyProfileData
 import com.onandoff.onandoff_android.data.model.MyProfileResponse
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.onandoff.onandoff_android.data.api.feed.CalendarService
+import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.CalendarData
 
@@ -43,7 +42,7 @@ import java.text.SimpleDateFormat
 
 import java.util.*
 
-class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
+class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding
             get() = _binding!!
@@ -59,6 +58,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
     private lateinit var calendarAdapter: CalendarAdapter
+    private var profileId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -157,6 +157,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
                             val firstProfile = state.myProfileList.result?.firstOrNull()
                             if (firstProfile != null) {
                                 onClickPersona(firstProfile)
+                                profileId = firstProfile.profileId
                             }
                         }
                         is HomeViewModel.State.GetMonthlyCountSuccess -> {
@@ -293,8 +294,11 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
         }
 
         calendarAdapter = CalendarAdapter(this)
+        calendarAdapter.setItemClickListener(this)
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         binding.fgCalDay.adapter = calendarAdapter
+
+
 
         binding.fgCalPre.setOnClickListener {
             calendarAdapter.changeToPrevMonth()
@@ -369,19 +373,19 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
 
     override fun onMonthChanged(calendar: Calendar) {
-        val userId = 27
+        val userId = if(profileId != null) profileId!! else 0
         val year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) + 1
-        var month_format = month.toString()
+        val month = calendar.get(Calendar.MONTH) + 1
+        var monthFormat = month.toString()
         if (month < 10) {
-            month_format = "0${month_format}"
+            monthFormat = "0${monthFormat}"
         }
 
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         binding.fgCalMonth.text = sdf.format(calendar.time)
 
-        val calendarInterface: CalendarService? = RetrofitClient.getClient()?.create(CalendarService::class.java)
-        val call = calendarInterface?.getCalendarList(userId, year, month_format)
+        val calendarInterface: CalendarInterface? = RetrofitClient.getClient()?.create(CalendarInterface::class.java)
+        val call = calendarInterface?.getCalendarList(userId, year, monthFormat)
         call?.enqueue(object : Callback<List<CalendarData>> {
             override fun onResponse(
                 call: Call<List<CalendarData>>,
@@ -397,10 +401,13 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
             }
 
             override fun onFailure(call: Call<List<CalendarData>>, t: Throwable) {
-                TODO("Not yet implemented")
                 Log.d("TAG", "onFailure: caledar error")
             }
 
         })
+    }
+
+    override fun onClick(v: View, position: Int) {
+
     }
 }
