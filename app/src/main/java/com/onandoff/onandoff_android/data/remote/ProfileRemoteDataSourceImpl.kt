@@ -20,11 +20,13 @@ class ProfileRemoteDataSourceImpl(
     }
 
     override suspend fun createPersona(request: CreateProfileRequest): CreateMyProfileResponse {
-        // File 형태로 만들어야 될수도 있고.. 서버 스펙과 확인 필요
         val formProfileName = FormDataUtil.getBody("profileName", request.profileName)       // 2-way binding 되어 있는 LiveData
         val formPersonaName = FormDataUtil.getBody("personaName", request.personaName)    // 2-way binding 되어 있는 LiveData
         val formStatusMessage = FormDataUtil.getBody("statusMessage", request.statusMessage)    // 2-way binding 되어 있는 LiveData
-        val formImage = FormDataUtil.getBody("image", request.imagePath)
+        var formImage = FormDataUtil.getImageBody("image", request.imagePath)
+        if (request.imagePath.path.isEmpty()) {
+            formImage = FormDataUtil.getBody("image", request.imagePath)
+        }
 
         val createMyPersona = personaInterface.createMyPersona(
             formProfileName,

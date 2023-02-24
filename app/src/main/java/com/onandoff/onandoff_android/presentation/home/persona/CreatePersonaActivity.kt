@@ -35,12 +35,6 @@ class CreatePersonaActivity : AppCompatActivity() {
         CreatePersonaViewModel.Factory
     })
 
-    private val readImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        Glide.with(this)
-            .load(uri)
-            .into(binding.ivPersonaProfile)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatePersonaBinding.inflate(layoutInflater)
@@ -106,9 +100,7 @@ class CreatePersonaActivity : AppCompatActivity() {
             if (checkStoragePermission()) {
                 openGallery()
             }
-//            readImage.launch("image/*")
         }
-
         binding.tvFinish.setOnClickListener {
             viewModel.onCreatePersona()
         }
@@ -129,15 +121,31 @@ class CreatePersonaActivity : AppCompatActivity() {
                 val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("profile", file.name, requestFile)
 
-                viewModel.setPersonaImagePath(file.absolutePath)
+                viewModel.setPersonaImagePath(absolutelyPath(imagePath, this))
                 Log.d("viewModel.setPersonaImagePath", "viewModel.setPersonaImagePath: $file.absolutePath")
             }
         }
 
+    // 절대 경로 변환
+    private fun absolutelyPath(path: Uri?, context : Context): String {
+        val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
+        val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor?.moveToFirst()
+
+        val result = cursor?.getString(index!!)
+
+        return result!!
+    }
+
     private fun checkStoragePermission(): Boolean {
+        val cameraPermission = Manifest.permission.CAMERA
         val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
         val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        return if (ActivityCompat.checkSelfPermission(this, readPermission)
+
+        return if (ActivityCompat.checkSelfPermission(this, cameraPermission)
+            == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, readPermission)
             == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, writePermission)
             == PackageManager.PERMISSION_GRANTED
@@ -146,23 +154,22 @@ class CreatePersonaActivity : AppCompatActivity() {
         } else {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(readPermission, writePermission),
+                arrayOf(cameraPermission, readPermission, writePermission),
                 PERMISSION_REQ_CODE
             )
             false
         }
     }
 
-    // 절대경로 변환
-    fun absolutelyPath(path: Uri?, context : Context): String {
-        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        var cursor: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
-        var index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor?.moveToFirst()
-
-        var result = cursor?.getString(index!!)
-
-        return result!!
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openGallery()
+        }
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package com.onandoff.onandoff_android.presentation.home.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -50,20 +51,20 @@ class CreatePersonaViewModel(
     val profileName: MutableLiveData<String> = MutableLiveData()
     val introduce: MutableLiveData<String> = MutableLiveData()
 
-    private val _image: MutableLiveData<File> = MutableLiveData()
-    val image: LiveData<File>
+    private val _image: MutableLiveData<String> = MutableLiveData()
+    val image: LiveData<String>
         get() = _image
 
-    fun setPersonaImagePath(path: String) {
-        Log.d("setPersonaImagePath", "setPersonaImagePath: $path")
-//        _image.value.absolutePath = path
+    fun setPersonaImagePath(filePath: String) {
+        Log.d("setPersonaImagePath", "setPersonaImagePath: $filePath")
+        _image.value = filePath
     }
 
     fun onCreatePersona() {
         val personaName = personaName.value.orEmpty()
         val profileName = profileName.value.orEmpty()
         val statusMessage = introduce.value.orEmpty()
-        val imagePath = image.value?.absolutePath.orEmpty()
+        val imagePath = image.value.orEmpty()
 
         when {
             personaName.isEmpty() -> {
@@ -106,7 +107,9 @@ class CreatePersonaViewModel(
                                     is NetworkError.ServerError -> {
                                         _state.value = State.CreateFailed(State.CreateFailed.Reason.SERVER_ERROR)
                                     }
-                                    else -> {}
+                                    else -> {
+                                        it.printStackTrace()
+                                    }
                                 }
                             }
                         }

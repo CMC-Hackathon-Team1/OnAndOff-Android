@@ -81,7 +81,6 @@ class HomeViewModel(
     val myPersona: LiveData<CreateMyProfileData>
         get() = _myPersona
 
-    val profileImgUrl: MutableLiveData<File> = MutableLiveData() // 페르소나 프로필 이미지
     val personaName: MutableLiveData<String> = MutableLiveData() // 페르소나 이름
     val profileName: MutableLiveData<String> = MutableLiveData() // 사용자 이름
 
@@ -120,28 +119,6 @@ class HomeViewModel(
                     }
                 }
         }
-
-//        val userId = FormDataUtil.getBody("userId", userId)
-//        val call = myPersonaInterface?.getMyPersona(userId)
-//        call?.enqueue(object : Callback<MyPersonaResponse> {
-//            override fun onResponse(
-//                call: Call<MyPersonaResponse>,
-//                response: Response<MyPersonaResponse>,
-//            ) {
-//                Log.d("HomeViewModel", "${response.body()}")
-//
-//                val profilesResponse = response.body()
-//
-//                when (profilesResponse?.statusCode) {
-//
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<MyPersonaResponse>, t: Throwable) {
-//                Log.d("HomeViewModel", "$t")
-//                Log.e("get persona failed", "get persona onFailure: " + t.message)
-//            }
-//        })
     }
 
     // TODO: 나의 페르소나 목록이 보이게 하기
@@ -237,56 +214,6 @@ class HomeViewModel(
                     }
                 }
         }
-
-//        val call = statisticsInterface?.getMyStatistics(userId)
-//        call?.enqueue(object : Callback<StatisticsResponse> {
-//            override fun onResponse(
-//                call: Call<StatisticsResponse>,
-//                response: Response<StatisticsResponse>
-//            ) {
-//                Log.d("HomeViewModel", "${response.body()}")
-//
-//                val profilesResponse = response.body()
-//
-//                profilesResponse?.result
-//
-//                when (profilesResponse?.statusCode) {
-//                    400 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-//                        Log.d(
-//                            "no profile or invalid value error",
-//                            "Validation failed (numeric string is expected)"
-//                        )
-//                    }
-//                    401 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-//                        Log.d("jwt error", "Unauthorized")
-//                    }
-//                    500 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-//                        Log.d("server error", "Internal_Server_ERROR")
-//                    }
-//                    1506 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-//                        Log.d("jwt token and profile are not same", "사용자 계정과 프로필이 일치하지 않습니다.")
-//                    }
-//                    else -> {
-//                        Log.d("Get Monthly Likes Count", "onSuccess called!")
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StatisticsResponse>, t: Throwable) {
-//                Log.e(
-//                    "get monthly likes count failed",
-//                    "get monthly likes count onFailure: " + t.message
-//                )
-//            }
-//        })
     }
 
     // TODO: 페르소나 별 게시글 수가 보이게 하기
@@ -313,56 +240,6 @@ class HomeViewModel(
                     }
                 }
         }
-
-//        val call = statisticsInterface?.getMonthlyStatistics(userId)
-//        call?.enqueue(object : Callback<StatisticsResponse> {
-//            override fun onResponse(
-//                call: Call<StatisticsResponse>,
-//                response: Response<StatisticsResponse>
-//            ) {
-//                Log.d("HomeViewModel", "${response.body()}")
-//
-//                val profilesResponse = response.body()
-//
-//                profilesResponse?.result
-//
-//                when (profilesResponse?.statusCode) {
-//                    400 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-//                        Log.d(
-//                            "no profile or invalid value error",
-//                            "Validation failed (numeric string is expected)"
-//                        )
-//                    }
-//                    401 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-//                        Log.d("jwt error", "Unauthorized")
-//                    }
-//                    500 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-//                        Log.d("server error", "Internal_Server_ERROR")
-//                    }
-//                    1506 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-//                        Log.d("jwt token and profile are not same", "사용자 계정과 프로필이 일치하지 않습니다.")
-//                    }
-//                    else -> {
-//                        Log.d("Get Monthly My Feeds Count", "onSuccess called!")
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StatisticsResponse>, t: Throwable) {
-//                Log.e(
-//                    "get monthly my feeds count failed",
-//                    "get monthly my feeds count onFailure: " + t.message
-//                )
-//            }
-//        })
     }
 
     // TODO: 페르소나 별 팔로워 수가 보이게 하기
@@ -388,56 +265,6 @@ class HomeViewModel(
                     }
                 }
         }
-
-//        val call = statisticsInterface?.getMonthlyStatistics(userId)
-//        call?.enqueue(object : Callback<StatisticsResponse> {
-//            override fun onResponse(
-//                call: Call<StatisticsResponse>,
-//                response: Response<StatisticsResponse>
-//            ) {
-//                Log.d("HomeViewModel", "${response.body()}")
-//
-//                val profilesResponse = response.body()
-//
-//                profilesResponse?.result
-//
-//                when (profilesResponse?.statusCode) {
-//                    400 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-//                        Log.d(
-//                            "no profile or invalid value error",
-//                            "Validation failed (numeric string is expected)"
-//                        )
-//                    }
-//                    401 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-//                        Log.d("jwt error", "Unauthorized")
-//                    }
-//                    500 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-//                        Log.d("server error", "Internal_Server_ERROR")
-//                    }
-//                    1506 -> {
-//                        _state.value =
-//                            State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-//                        Log.d("jwt token and profile are not same", "사용자 계정과 프로필이 일치하지 않습니다.")
-//                    }
-//                    else -> {
-//                        Log.d("Get Followers Count", "onSuccess called!")
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StatisticsResponse>, t: Throwable) {
-//                Log.e(
-//                    "get monthly followers count failed",
-//                    "get monthly followers count onFailure: " + t.message
-//                )
-//            }
-//        })
     }
 
     override fun onCleared() {
@@ -475,3 +302,8 @@ class HomeViewModel(
         }
     }
 }
+
+data class MyProfileClicked(
+    val myProfile: MyProfileResponse,
+    val clicked: Boolean
+)
