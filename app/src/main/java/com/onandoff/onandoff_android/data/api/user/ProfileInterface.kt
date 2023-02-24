@@ -8,13 +8,13 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ProfileInterface {
-
+    @Multipart
     @POST("/profiles")
     fun profileCreate(
-        @Body profileName : MultipartBody.Part,
+        @Part profileName : MultipartBody.Part,
         @Part personaName:  MultipartBody.Part,
         @Part statusMessage:  MultipartBody.Part,
-        @Part image: MultipartBody.Part?=null,
+        @Part image: MultipartBody.Part,
     ): Call<ProfileResponse>
 
     @GET("/profiles/my-profiles")

@@ -1,13 +1,10 @@
 package com.onandoff.onandoff_android.presentation.profile
 
-import android.R.attr
 import android.app.Activity
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -33,11 +30,15 @@ import com.onandoff.onandoff_android.databinding.BottomsheetSelectProfileImageBi
 import com.onandoff.onandoff_android.databinding.DialogProfileCreateAlertBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.APIPreferences
-import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
 import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.create
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +51,7 @@ class ProfileCreateActivity:AppCompatActivity() {
     private lateinit var binding: ActivityProfileCreateBinding
 
     //권한 가져오기
-    var imgFile: File? = null
+    var imgFile: MultipartBody.Part? = null
     var isValid = false
     private val readImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         Glide.with(this)
@@ -116,7 +117,7 @@ class ProfileCreateActivity:AppCompatActivity() {
             val nickname = binding.etNickname.text.toString()
             val personas = binding.etPersonas.text.toString()
             val statusmsg = binding.etOneline.text.toString()
-            val call = createProfile(nickname, personas, statusmsg, imgFile)
+            val call = createProfile(nickname, personas, statusmsg,null)
             call?.let { it1 -> getData(it1) }
 //
         }
@@ -145,19 +146,20 @@ class ProfileCreateActivity:AppCompatActivity() {
 
     }
     //api에 보내기전 Multipart로 convert하는 함수
-    fun createProfile(profileName:String, personaName:String,statusMessage:String,img:File? ): Call<ProfileResponse>? {
+    fun createProfile(profileName:String, personaName:String,statusMessage:String,img:Uri?): Call<ProfileResponse>? {
         val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
         val formProfileName = FormDataUtil.getBody("profileName", profileName)       // 2-way binding 되어 있는 LiveData
         val formPersonaName = FormDataUtil.getBody("personaName", personaName)    // 2-way binding 되어 있는 LiveData
         val formStatusMsg = FormDataUtil.getBody("statusMessage", statusMessage)    // 2-way binding 되어 있는 LiveData
         val formImg:MultipartBody.Part
         val call:Call<ProfileResponse>?
-        if(img == null){
-            call = profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg)
-        }else{
-            formImg = FormDataUtil.getImageBody("image", img)
-            call = profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,formImg)
-        }
+            Log.d("gallery","$imgFile")
+            call = imgFile?.let {
+                profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,
+                    it
+                )
+            }
+
         return call
     }
     private fun createImageFile(): File {
@@ -221,6 +223,16 @@ class ProfileCreateActivity:AppCompatActivity() {
         }
         return true
     }
+    private fun getPathFromUri(uri: Uri): String {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, projection, null, null, null) ?: return uri.path ?: ""
+        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(columnIndex)
+        cursor.close()
+        return path
+    }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -231,16 +243,15 @@ class ProfileCreateActivity:AppCompatActivity() {
                 //Gallery- 저장소 권한 Flag일때
                 FLAG_PERM_STORAGE ->{
                     val uri = data?.data // 선택한 이미지의 Uri 객체
-                    uri?.let {
-                        val inputStream: InputStream? = contentResolver.openInputStream(it)
-                        val file = createImageFile()
-                        inputStream?.use { input ->
-                            FileOutputStream(file).use { output ->
-                                input.copyTo(output)
-                            }
-                        }
-                        imgFile = file
-                        Log.d("gallery","${imgFile}")
+                    binding.ivProfileBackground.setImageURI(uri)
+                    val filePath = uri?.let { getPathFromUri(it) }
+                    val file = File(filePath)
+                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                    imgFile = body
+
+                    Log.d("gallery","${imgFile}")
 
                     }
 
@@ -248,7 +259,7 @@ class ProfileCreateActivity:AppCompatActivity() {
 
             }
         }
-    }
+
 
     //api 받아오는 함수
     fun getData(call:Call<ProfileResponse>){
@@ -268,8 +279,12 @@ class ProfileCreateActivity:AppCompatActivity() {
                     else->{
                         Log.d(
                             "Profile Create",
-                            response.body()?.result?.profileId!!.toString()
+                            "${response.code()}"
                         );
+//                        Log.d(
+//                            "Profile Create",
+//                            response.body()?.result?.profileId!!.toString()
+//                        );
 
                         prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
                             mutableSetOf<String>(response.body()?.result?.profileId!!.toString())
