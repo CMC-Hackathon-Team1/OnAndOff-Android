@@ -1,14 +1,21 @@
 package com.onandoff.onandoff_android.presentation.profile
 
+import android.R.attr
 import android.app.Activity
+import android.app.Dialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -23,143 +30,189 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.ProfileResponse
 import com.onandoff.onandoff_android.databinding.ActivityProfileCreateBinding
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectProfileImageBinding
+import com.onandoff.onandoff_android.databinding.DialogProfileCreateAlertBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.APIPreferences
-import com.onandoff.onandoff_android.util.Camera.PERM_STORAGE
+import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
+import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
 import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class ProfileCreateActivity:AppCompatActivity() {
     private lateinit var binding: ActivityProfileCreateBinding
+
     //권한 가져오기
-    lateinit var imgFile:File
-    val isValid = false
+    var imgFile: File? = null
+    var isValid = false
     private val readImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         Glide.with(this)
             .load(uri)
             .into(binding.ivProfileAvatar)
     }
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            val imageUrl = it.data?.data
-            binding.ivProfileAvatar.setImageURI(imageUrl)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+               val imgUrl:Uri? = it.data?.data
+                binding.ivProfileAvatar.setImageURI(imgUrl)
+                Log.d("image", imgUrl.toString())
+                val imgPath = imgUrl?.path
+                imgPath?.let { it1 -> Log.d("image", it1) }
+//                imgFile = File(imgPath)
+            }
         }
-    }
+
+//    val nickname:String
+//    val personas:String
+//    val statusmsg:String
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityProfileCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        if (checkPermission(Camera.STORAGE_PERMISSION, Camera.PERM_STORAGE)) {
-//            setViews()
-//        }
+
         binding.ivArrow.setOnClickListener {
             finish()
         }
-        binding.ivProfileBackground.setOnClickListener{
+        binding.ivProfileBackground.setOnClickListener {
             showBottomSheet(context = this)
-        }
-        binding.ivProfileAvatar.setOnClickListener{
-            readImage.launch("image/*")
+
         }
 
+
         binding.tvFinish.setOnClickListener {
-            val nickname = binding.etNickname.text.toString()
-            val personas = binding.etPersonas.text.toString()
-            val statusmsg =binding.etOneline.text.toString()
-            val img:File
-            val userId = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID,0)
-            if(binding.etPersonas.length() ==0){
+            //dialog 띄워주기
+
+
+            val img: File
+            val userId = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_USERID, 0)
+            if (binding.etPersonas.length() == 0) {
                 binding.viewPersonas.setBackgroundColor(this.getColor(R.color.errorColor))
                 binding.tvPersonasError.setTextColor(this.getColor(R.color.errorColor))
 
-            }else if(binding.etNickname.length() ==0){
-                    binding.viewNickname.setBackgroundColor(this.getColor(R.color.errorColor))
-                    binding.tvPersonasError.setTextColor(this.getColor(R.color.errorColor))
+            } else if (binding.etNickname.length() == 0) {
+                binding.viewNickname.setBackgroundColor(this.getColor(R.color.errorColor))
+                binding.tvPersonasError.setTextColor(this.getColor(R.color.errorColor))
+            } else {
+                checkDialog()
+
+
             }
-            else{
-//                val call = createProfile(userId,nickname,personas,img,statusmsg)
-                val call = createProfile(userId,nickname,personas,statusmsg)
-                call?.enqueue(object: Callback<ProfileResponse>{
-                    override fun onResponse(
-                        call: Call<ProfileResponse>,
-                        response: Response<ProfileResponse>
-                    ){
-                        when(response.body()?.statusCode){
-                            1500->{
-                                Log.d(
-                                    "Profile Create",
-                                    "retrofit manager called, onSucess called but already join!"
-                                );
-                                Toast.makeText(this@ProfileCreateActivity,"프로필은 3개까지 생성 가능합니다", Toast.LENGTH_LONG).show()
-                            }
-                            else->{
-                                Log.d(
-                                    "Profile Create",
-                                    "retrofit manager called, onSucess called!"
-                                );
 
-
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
-                                    mutableSetOf<String>(response.body()?.result?.profileId!!.toString())
-                                );
-                                Toast.makeText(this@ProfileCreateActivity,"프로필 생성 성공! 메인화면으로 이동합니다", Toast.LENGTH_SHORT).show()
-                                val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
-                                startActivity(Intent)
-                                finish()
-                            }
-
-                        }
-
-                    }
-                    override fun onFailure(call: Call<ProfileResponse>, t: Throwable){
-
-                    }
-                })
-            }
         }
 
     }
+    //프로필 생성 확인 alert 창
+    fun checkDialog(){
+        val dialog = Dialog(this@ProfileCreateActivity)
+        val dialogView = DialogProfileCreateAlertBinding.inflate(LayoutInflater.from(this@ProfileCreateActivity))
+        dialog.setContentView(dialogView.root)
+        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
+        if (params != null) {
+            dialog.window?.setLayout(params.width,params.height)
+        }
+        dialog.show()
+        dialogView.btnYes.setOnClickListener{
+            Log.d("fddfffd","dsfsfs")
+            isValid = true
+            val nickname = binding.etNickname.text.toString()
+            val personas = binding.etPersonas.text.toString()
+            val statusmsg = binding.etOneline.text.toString()
+            val call = createProfile(nickname, personas, statusmsg, imgFile)
+            call?.let { it1 -> getData(it1) }
+//
+        }
+        dialogView.btnNo.setOnClickListener{
+
+            dialog.dismiss()
+        }
+    }
+    //api 받아오는 함수
+    fun getData(call:Call<ProfileResponse>){
+        call?.enqueue(object: Callback<ProfileResponse>{
+            override fun onResponse(
+                call: Call<ProfileResponse>,
+                response: Response<ProfileResponse>
+            ){
+                when(response.body()?.statusCode){
+                    1500->{
+                        Log.d(
+                            "Profile Create",
+                            "retrofit manager called, onSucess called but already join!"
+                        );
+                        Toast.makeText(this@ProfileCreateActivity,"프로필은 3개까지 생성 가능합니다", Toast.LENGTH_LONG).show()
+                    }
+                    else->{
+                        Log.d(
+                            "Profile Create",
+                            response.body()?.result?.profileId!!.toString()
+                        );
+
+                        prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
+                            mutableSetOf<String>(response.body()?.result?.profileId!!.toString())
+                        );
+                        Toast.makeText(this@ProfileCreateActivity,"프로필 생성 성공! 메인화면으로 이동합니다", Toast.LENGTH_SHORT).show()
+                        val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
+                        startActivity(Intent)
+                        finish()
+                    }
+
+                }
+
+            }
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable){
+                Toast.makeText(this@ProfileCreateActivity,"생성이 불가능합니다. 다시시도해주세요 ${t.toString()}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+    //갤러리, 기본이미지 변경여부 체크
     fun showBottomSheet(context: Context){
 
         val dialog = BottomSheetDialog(context)
         val dialogView = BottomsheetSelectProfileImageBinding.inflate(LayoutInflater.from(context))
 
         dialog.setContentView(dialogView.root)
-        checkPermission(STORAGE_PERMISSION, PERM_STORAGE)
-        dialogView.layoutCamera.setOnClickListener{
-            move_camera()
-        }
-        dialogView.layoutGallery.setOnClickListener{
-            move_gallery()
-        }
+
         dialog.show()
-
-    }
-
-    fun checkPermission(permissions: Array<out String>, flag: Int): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Log.d("permission","1")
-            for (permission in permissions) {
-                //만약 권한이 승인되어 있지 않다면 권한승인 요청을 사용에 화면에 호출합니다.
-                if (ContextCompat.checkSelfPermission(
-                        this@ProfileCreateActivity,
-                        permission
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    Log.d("permission","isGrandted?")
-                    ActivityCompat.requestPermissions(this, permissions, flag)
-                    Log.d("permission","isGrandted?")
-                    return false
-                }
+        dialogView.layoutGallery.setOnClickListener{
+            if(checkPermission(STORAGE_PERMISSION,FLAG_PERM_STORAGE) ){
+                move_gallery()
             }
+            dialog.dismiss()
         }
-        Log.d("permission","1.5")
-return true
+        dialogView.layoutBasic.setOnClickListener{
+            // TODO : 만약 갤러리에 선택된 사진이있었다면, 삭제하고 기본이미지로 변경
+            dialog.dismiss()
+        }
+
+
     }
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
+    }
+
+    fun move_gallery() {
+        var photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+        startActivityForResult(photoPickerIntent, FLAG_PERM_STORAGE)
+    }
+
+
     //checkPermission() 에서 ActivityCompat.requestPermissions 을 호출한 다음 사용자가 권한 허용여부를 선택하면 해당 메소드로 값이 전달 됩니다.
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -168,7 +221,7 @@ return true
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            PERM_STORAGE -> {
+            FLAG_PERM_STORAGE -> {
                 Log.d("permission","2")
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) {
@@ -178,62 +231,157 @@ return true
                         return
                     }
                 }
-
+                move_gallery()
             }
 
         }
     }
-    fun move_gallery() {
-        var photoPickerIntent = Intent(Intent.ACTION_PICK)
-        photoPickerIntent.type = "image/*"
-        startForResult.launch(photoPickerIntent)
-    }
-    fun move_camera() {
-        var cameraPickerIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraPickerIntent.type = "image/*"
 
+    var realUri:Uri?=null
+    fun checkPermission(permissions: Array<out String>, flag: Int): Boolean {
+        Log.d("permission", "실행됨?")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.d("permission", "1")
+            for (permission in permissions) {
+                //만약 권한이 승인되어 있지 않다면 권한승인 요청을 사용에 화면에 호출합니다.
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    ActivityCompat.requestPermissions(this, permissions, flag)
+                    return false
+                }
+            }
+        }
+        return true
     }
-    fun createProfile(userId: Int, profileName:String, personaName:String,statusMessage:String ): Call<ProfileResponse>? {
+    fun saveImgFile(filename:String, mimeType:String,bitmap: Bitmap):File?{
+        // 파일 선언 -> 경로는 파라미터에서 받는다
+        // 파일 선언 -> 경로는 파라미터에서 받는다
+        val file: File = File(filename)
+
+        // OutputStream 선언 -> bitmap데이터를 OutputStream에 받아 File에 넣어주는 용도
+
+        // OutputStream 선언 -> bitmap데이터를 OutputStream에 받아 File에 넣어주는 용도
+        var out: OutputStream? = null
+        try {
+            // 파일 초기화
+            file.createNewFile()
+
+            // OutputStream에 출력될 Stream에 파일을 넣어준다
+            out = FileOutputStream(file)
+
+            // bitmap 압축
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                out?.close()
+                return file
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+//        var values = ContentValues()
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME,filename)
+//        values.put(MediaStore.Images.Media.MIME_TYPE,mimeType)
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+//            values.put(MediaStore.Images.Media.IS_PENDING,1)
+//        }
+//        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values)
+//        try{
+//            if(uri !=null){
+//                var descriptor = contentResolver.openFileDescriptor(uri,"w")
+//                if(descriptor!=null){
+//                    val fos = FileOutputStream(descriptor.fileDescriptor)
+//                    bitmap.compress(Bitmap.CompressFormat.PNG,100,fos)
+//                    fos.close()
+//                    return uri
+//                }
+//
+//            }
+//
+//        }catch(e:Exception){
+//            Log.e("Camera","${e.localizedMessage}")
+//        }
+//
+        return null
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("gallery","req=$requestCode, result = $resultCode, data =$data")
+        if(resultCode== Activity.RESULT_OK){
+            when(requestCode){
+                FLAG_PERM_STORAGE ->{
+                    val uri = data?.data // 선택한 이미지의 Uri 객체
+                    uri?.let {
+                        val inputStream: InputStream? = contentResolver.openInputStream(it)
+                        val file = createImageFile()
+                        inputStream?.use { input ->
+                            FileOutputStream(file).use { output ->
+                                input.copyTo(output)
+                            }
+                        }
+                        imgFile = file
+                        Log.d("gallery","${imgFile}")
+
+                    }
+
+
+
+
+                }
+                //                    if( data?.extras?.get("data") != null){
+//                        val bitmap = data?.extras?.get("data") as Bitmap
+//                        binding.ivCamera.setImageBitmap(bitmap)
+//                        val filename = newFileName()
+//                        val file:File? = saveImgFile(filename,"image/*",bitmap)
+//                        Log.d("Camera","${file}")
+//                    }
+//                FLAG_PERM_STORAGE ->{
+//                    val bitmap = data?.extras?.get("data") as Bitmap
+//                    binding.ivCamera.setImageBitmap(bitmap)
+//                    val filename = newFileName()
+//                    val uri = saveImgFile(filename,"image/*",bitmap)
+//
+//                }
+            }
+        }
+    }
+//    fun createImageUri(filename:String, mimeType:String) : Uri? {
+//        val values = ContentValues()
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+//        values.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+//        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+//    }
+    fun createProfile(profileName:String, personaName:String,statusMessage:String,img:File? ): Call<ProfileResponse>? {
         val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
-        val formId = FormDataUtil.getBody("userId", userId)
         val formProfileName = FormDataUtil.getBody("profileName", profileName)       // 2-way binding 되어 있는 LiveData
         val formPersonaName = FormDataUtil.getBody("personaName", personaName)    // 2-way binding 되어 있는 LiveData
         val formStatusMsg = FormDataUtil.getBody("statusMessage", statusMessage)    // 2-way binding 되어 있는 LiveData
-//        val formImg = FormDataUtil.getImageBody("media", img)
-        val call = profileInterface?.profileCreate(formId,formProfileName,formPersonaName,formStatusMsg)
+        val formImg:MultipartBody.Part
+        val call:Call<ProfileResponse>?
+        if(img == null){
+            call = profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg)
+        }else{
+            formImg = FormDataUtil.getImageBody("media", img)
+            call = profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,formImg)
+        }
         return call
     }
-//    private fun selectCamera() {
-//        var permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//        if (permission == PackageManager.PERMISSION_DENIED) {
-//            // 권한 없어서 요청
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Camera.FLAG_REQ_CAMERA)
-//        } else {
-//            // 권한 있음
-//            var state = Environment.getExternalStorageState()
-//            if (TextUtils.equals(state, Environment.MEDIA_MOUNTED)) {
-//                var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//                intent.resolveActivity(packageManager)?.let {
-//
-//                    var photoFile: File? = createImageFile()
-//                    photoFile?.let {
-//                        var photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", it)
-//                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-//                        startActivityForResult(intent, REQ_IMAGE_CAPTURE)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    private fun createImageFile(): File {
-//        // 사진이 저장될 폴더 있는지 체크
-//        var file = File(Environment.getExternalStorageDirectory(), "/path/")
-//        if (!file.exists()) file.mkdir()
-//
-//        var imageName = "fileName.jpeg"
-//        var imageFile = File("${Environment.getExternalStorageDirectory().absoluteFile}/path/", "$imageName")
-//        imagePath = imageFile.absolutePath
-//        return imageFile
-//    }
+
+
+
+
 
 }
+//fun newFileName():String{
+//    val sdf = SimpleDateFormat("yyyyMMdd_HHmmss")
+//    val filename = sdf.format(System.currentTimeMillis())
+//    return filename
+//}
+

@@ -12,10 +12,10 @@ interface ProfileInterface {
     @Multipart
     @POST("/profiles")
     fun profileCreate(
-        @Part userId:  MultipartBody.Part,
         @Part profileName : MultipartBody.Part,
         @Part personaName:  MultipartBody.Part,
-        @Part statusMessage:  MultipartBody.Part
+        @Part statusMessage:  MultipartBody.Part,
+        @Part image: MultipartBody.Part?=null,
     ): Call<ProfileResponse>
 
     @GET("/profiles/my-profiles")

@@ -11,8 +11,8 @@ object Camera {
     )
 
     //권한 플래그값 정의
-    val PERM_CAMERA = 98
-    val PERM_STORAGE = 99
+    val FLAG_PERM_CAMERA = 98
+    val FLAG_PERM_STORAGE = 99
 
     //카메라와 갤러리를 호출하는 플래그
     val FLAG_REQ_CAMERA = 101

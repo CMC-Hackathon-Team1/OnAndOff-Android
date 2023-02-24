@@ -3,8 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/bottom_dialog_border">
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:context=".presentation.profile.ProfileCreateActivity"
+    android:background="@drawable/bottom_dialog_border"
+    android:elevation="20dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
@@ -34,7 +38,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/layout_camera"
+        android:id="@+id/layout_basic"
         android:paddingTop="30dp"
         android:paddingBottom="15dp"
         android:layout_width="match_parent"
