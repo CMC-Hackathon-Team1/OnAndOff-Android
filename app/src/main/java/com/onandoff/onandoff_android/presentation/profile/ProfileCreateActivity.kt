@@ -288,8 +288,8 @@ class ProfileCreateActivity:AppCompatActivity() {
 //                        );
 
                         prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
-                            mutableSetOf<String>(response.body()?.result?.profileId!!.toString())
-                        );
+                            response.body()?.result?.profileId!!.toString())
+
                         Toast.makeText(this@ProfileCreateActivity,"프로필 생성 성공! 메인화면으로 이동합니다", Toast.LENGTH_SHORT).show()
                         val Intent = Intent(this@ProfileCreateActivity, MainActivity::class.java)
                         startActivity(Intent)

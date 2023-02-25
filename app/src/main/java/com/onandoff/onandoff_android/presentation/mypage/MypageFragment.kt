@@ -43,9 +43,13 @@ class MypageFragment: Fragment(){
 //        setupListeners()
     }
     private fun setupView(){
-        binding.tvMypageEdit.setOnClickListener{
-
-        }
+//        binding.tvMypageEdit.setOnClickListener{
+//            val editFragemnt = ProfileEditFragment()
+//            supportFragmentManager()
+//                .beginTransaction()
+//                .add(R.id.framelayout, editFragemnt)
+//                .commit()
+//        }
         getData()
         onInitRecyclerView()
 
@@ -63,9 +67,7 @@ class MypageFragment: Fragment(){
                 call: Call<FeedResponseData>,
                 response: Response<FeedResponseData>
             ){
-//                response.body().apply {
-//                    it.
-//                }
+//                val size:Int = response.body()
 
             }
             override fun onFailure(call: Call<FeedResponseData>, t: Throwable){

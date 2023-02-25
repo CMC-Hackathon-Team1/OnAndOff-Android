@@ -36,6 +36,8 @@ import kotlinx.coroutines.launch
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
+import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -238,7 +240,8 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
 
         binding.tvUserPersona2.text = profileResponse.personaName
         binding.tvUserName2.text = profileResponse.profileName
-
+        var profileId = profileResponse.profileId
+        prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,profileId)
         viewModel.setSelectedProfile(profileResponse)
     }
 

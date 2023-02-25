@@ -71,6 +71,7 @@ class SignInActivity:AppCompatActivity() {
                                 signInResponse?.result?.let { it1 ->
                                     prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_JWT,
                                         it1.jwt)
+
                                 };
                                 val call2 = profileInterface?.profileCheck()
                                 call2?.enqueue(object : Callback<ProfileListResponse> {
