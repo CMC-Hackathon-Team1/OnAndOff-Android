@@ -362,6 +362,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
     private fun intentPostActivity() {
         val intent = Intent(requireActivity(), PostingAddActivity::class.java)
+        intent.putExtra("profileId", profileId)
         startActivity(intent)
     }
 
