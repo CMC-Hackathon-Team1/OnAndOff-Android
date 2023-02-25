@@ -43,6 +43,9 @@ class MypageFragment: Fragment(){
 //        setupListeners()
     }
     private fun setupView(){
+        binding.tvMypageEdit.setOnClickListener{
+
+        }
         getData()
         onInitRecyclerView()
 
@@ -60,7 +63,9 @@ class MypageFragment: Fragment(){
                 call: Call<FeedResponseData>,
                 response: Response<FeedResponseData>
             ){
-
+//                response.body().apply {
+//                    it.
+//                }
 
             }
             override fun onFailure(call: Call<FeedResponseData>, t: Throwable){

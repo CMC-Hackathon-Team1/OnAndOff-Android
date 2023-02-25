@@ -314,34 +314,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = relevantUserListAdapter
-//            relevantUserListAdapter.submitList(
-//                listOf(
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    ),
-//                    RelevantUserData(
-//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
-//                    )
-//                )
-//            )
+
         }
     }
 

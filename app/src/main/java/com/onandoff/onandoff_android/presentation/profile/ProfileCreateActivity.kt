@@ -140,7 +140,8 @@ class ProfileCreateActivity:AppCompatActivity() {
             dialog.dismiss()
         }
         dialogView.layoutBasic.setOnClickListener{
-            // TODO : 만약 갤러리에 선택된 사진이있었다면, 삭제하고 기본이미지로 변경
+            imgFile = null
+            binding.ivProfileBackground.setImageResource(R.drawable.default_image)
             dialog.dismiss()
         }
 
@@ -153,12 +154,12 @@ class ProfileCreateActivity:AppCompatActivity() {
         val formStatusMsg = FormDataUtil.getBody("statusMessage", statusMessage)    // 2-way binding 되어 있는 LiveData
         val formImg:MultipartBody.Part
         val call:Call<ProfileResponse>?
-            Log.d("gallery","$imgFile")
-            call = imgFile?.let {
-                profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,
-                    it
-                )
-            }
+        Log.d("gallery","$imgFile")
+        call = imgFile?.let {
+            profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,
+                it
+            )
+        }
 
         return call
     }

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,66 +15,31 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.onandoff.onandoff_android.BuildConfig
 import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectPostImageBinding
 import com.onandoff.onandoff_android.util.Camera.CAMERA_PERMISSION
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
 import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.*
+import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class PostingAddActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostingAddBinding
-//    private val startForResult =
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//            if (it.resultCode == Activity.RESULT_OK) {
-//                val imgUrl: Uri? = it.data?.data
-//                val file: File? = if (uri.scheme == "content") {
-//                    val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
-//                    cursor?.let {
-//                        val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//                        cursor.moveToFirst()
-//                        File(cursor.getString(columnIndex))
-//                    }
-//                } else {
-//                    File(uri.path!!)
-//                }
-////                binding.iv.setImageURI(imgUrl)
-//                Log.d("image", imgUrl.toString())
-//                val imgPath = imgUrl?.path
-//                imgPath?.let { it1 -> Log.d("image", it1) }
-////                imgFile = File(imgPath)
-//            }
-//        }
-    private val startCameraForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val imgUrl: Uri? = it.data?.data
-//                binding.iv.setImageURI(imgUrl)
-                Log.d("image", imgUrl.toString())
-                val imgPath = imgUrl?.path
-                imgPath?.let { it1 -> Log.d("image", it1) }
-//                imgFile = File(imgPath)
-                if( it.data?.extras?.get("data") != null){
-                    val bitmap =it.data?.extras?.get("data") as Bitmap
-                    binding.ivCamera.setImageBitmap(bitmap)
-                    val filename = newFileName()
-                    val file:File? = saveImgFile(filename,"image/*",bitmap)
-                    Log.d("Camera","${file}")
-                }
-            }
-        }
+    var imgFile: MultipartBody.Part? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -140,13 +106,30 @@ class PostingAddActivity : AppCompatActivity() {
 
 
     }
+    private fun createImageFile(context: Context): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
+    }
     fun move_camera() {
         var cameraPickerIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraPickerIntent.type = "image/*"
-        Log.d("camera","1")
-//        cameraPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
-//        launcher.launch(intent);
-        startCameraForResult.launch(cameraPickerIntent)
+        val photoFile: File = createImageFile(this)
+
+        if (photoFile != null) {
+            val photoURI = FileProvider.getUriForFile(
+                this,
+                "com.onandoff.onandoff_android.fileprovider",
+                photoFile
+            )
+            cameraPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            startActivityForResult(cameraPickerIntent, FLAG_PERM_CAMERA)
+        }
+
     }
 
     fun move_gallery() {
@@ -163,7 +146,6 @@ class PostingAddActivity : AppCompatActivity() {
                         permission
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-
                     ActivityCompat.requestPermissions(this, permissions, flag)
                     return false
                 }
@@ -171,90 +153,56 @@ class PostingAddActivity : AppCompatActivity() {
         }
         return true
     }
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        )
-    }
-    fun saveImgFile(filename:String, mimeType:String,bitmap: Bitmap): File? {
-        // 파일 선언 -> 경로는 파라미터에서 받는다
-        // 파일 선언 -> 경로는 파라미터에서 받는다
-        val file: File = File(filename)
 
-        // OutputStream 선언 -> bitmap데이터를 OutputStream에 받아 File에 넣어주는 용도
 
-        // OutputStream 선언 -> bitmap데이터를 OutputStream에 받아 File에 넣어주는 용도
-        var out: OutputStream? = null
+    private fun getMultipartFromUri(uri: Uri,context:Context): MultipartBody.Part? {
+        val filepath = uri.path
+        val file = File(filepath)
+        var inputStream: InputStream? = null
         try {
-            // 파일 초기화
-            file.createNewFile()
-
-            // OutputStream에 출력될 Stream에 파일을 넣어준다
-            out = FileOutputStream(file)
-
-            // bitmap 압축
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        } catch (e: java.lang.Exception) {
+            inputStream =  context.contentResolver.openInputStream(uri)
+        } catch (e: IOException) {
             e.printStackTrace()
-        } finally {
-            try {
-                out?.close()
-                Log.d("camera","file 변환 성공 ${file}")
-                return file
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
         }
-        return null
+        val bitmap:Bitmap = BitmapFactory.decodeStream(inputStream)
+        val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 20, byteArrayOutputStream)
+        var requestBody: RequestBody? = RequestBody.create("image/*".toMediaTypeOrNull(), byteArrayOutputStream.toByteArray())
+        val body = requestBody?.let { MultipartBody.Part.createFormData("image", file.name, it) }
+
+
+        return body
     }
-    fun newFileName():String{
-        val sdf = SimpleDateFormat("yyyyMMdd_HHmmss")
-        val filename = sdf.format(System.currentTimeMillis())
-        return filename
-    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("camera","req=$requestCode, result = $resultCode, data =$data")
+        Log.d("gallery","req=$requestCode, result = $resultCode, data =$data")
         if(resultCode== Activity.RESULT_OK){
             when(requestCode){
-                FLAG_PERM_CAMERA ->{
-                        val uri = data?.data // 선택한 이미지의 Uri 객체
-                        uri?.let {
-                            val inputStream: InputStream? = contentResolver.openInputStream(it)
-                            val file = createImageFile()
-                            inputStream?.use { input ->
-                                FileOutputStream(file).use { output ->
-                                    input.copyTo(output)
-                                }
-                            }
-
-                        }
-
-//                    if( data?.extras?.get("data") != null){
-//                        val bitmap = data?.extras?.get("data") as Bitmap
-//                        binding.ivCamera.setImageBitmap(bitmap)
-//                        val filename = newFileName()
-//                        val file:File? = saveImgFile(filename,"image/*",bitmap)
-//                        Log.d("Camera","${file}")
-//                    }
-
-
-                }
+                //Gallery- 저장소 권한 Flag일때
                 FLAG_PERM_STORAGE ->{
-                    val bitmap = data?.extras?.get("data") as Bitmap
-                    binding.ivCamera.setImageBitmap(bitmap)
-                    val filename = newFileName()
-                    val uri = saveImgFile(filename,"image/*",bitmap)
+                    val uri = data?.data // 선택한 이미지의 Uri 객체
+                    binding.ivCamera.setImageURI(uri)
+                    val body = uri?.let { getMultipartFromUri(it, context = this) }
+                    imgFile = body
+                    Log.d("gallery","${imgFile}")
+                }
+                FLAG_PERM_CAMERA ->{
+//                    val uri = data?.data // 선택한 이미지의 Uri 객체
+                    val uri = data?.data
+                    binding.ivCamera.setImageURI(uri)
+                    val body = uri?.let { getMultipartFromUri(it, context = this) }
+                    imgFile = body
+                    Log.d("gallery","${imgFile}")
 
                 }
+
             }
+
         }
     }
+
     //checkPermission() 에서 ActivityCompat.requestPermissions 을 호출한 다음 사용자가 권한 허용여부를 선택하면 해당 메소드로 값이 전달 됩니다.
     override fun onRequestPermissionsResult(
         requestCode: Int,
