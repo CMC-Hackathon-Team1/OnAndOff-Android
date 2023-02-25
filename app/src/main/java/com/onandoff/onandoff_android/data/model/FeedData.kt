@@ -16,7 +16,7 @@ data class FeedResponse(
 )
 
 data class FeedDeleteData(
-    val profiledId: Int,
+    val profileId: Int,
     val feedId:Int
 )
 

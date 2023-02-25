@@ -27,7 +27,7 @@ interface FeedInterface {
         @Body body: FeedData
     ): Call<FeedResponse>
 
-    @PATCH("/feed/status")
+    @PATCH("/feeds/status")
     fun deleteFeedResponse(
         @Body body:FeedDeleteData
     ): Call<FeedResponse>
