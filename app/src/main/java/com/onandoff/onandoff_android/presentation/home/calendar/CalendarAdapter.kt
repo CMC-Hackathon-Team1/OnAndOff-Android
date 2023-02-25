@@ -56,7 +56,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int)
+        fun onClick(v: View, position: Int, feedId: Int)
     }
 
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -79,6 +79,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                     Log.d("CalenderAdapter", "feed day : ${feed.day}, date : ${date} ")
                     if(feed.day.toInt() == date) {
                         binding.sivCalendar.visibility = View.VISIBLE
+                        feed.feedId
                         if (feed.feedImgUrl != null && feed.feedImgUrl.isNotEmpty()) {
                             Glide.with(itemView)
                                 .load(feed.feedImgUrl[0])
@@ -88,6 +89,10 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                                 .load("https://onandoff-image.s3.amazonaws.com/defaultProfileImg/defaultProfileImg.png")
                                 .into(binding.sivCalendar)
                         }
+
+                        itemView.setOnClickListener {
+                            itemClickListener.onClick(itemView,position,feed.feedId.toInt())
+                        }
                     }
                 }
             }
@@ -95,9 +100,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
 //            val pos = adapterPosition
 //            if(pos!= RecyclerView.NO_POSITION)
 //            {
-//                itemView.setOnClickListener {
-////                    itemClickListener.onClick(itemView,pos)
-//                }
+//
 //            }
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.onandoff.onandoff_android">
+    package="com.onandoff.onandoff_android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -21,54 +21,58 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OnAndOffAndroid"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".presentation.home.posting.PostingReadActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.home.persona.CreatePersonaActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="true" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
+            android:exported="true" >
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
 
-<!--                &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt;-->
-<!--                <data-->
-<!--                    android:host="oauth"-->
-<!--                    android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" />-->
-<!--            </intent-filter>-->
+
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+
+
+            <!-- &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt; -->
+            <!-- <data -->
+            <!-- android:host="oauth" -->
+            <!-- android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".presentation.usercheck.SignupActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".presentation.usercheck.SignInActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.profile.ProfileCreateActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".presentation.home.posting.PostingModifyActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".presentation.home.posting.PostingAddActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

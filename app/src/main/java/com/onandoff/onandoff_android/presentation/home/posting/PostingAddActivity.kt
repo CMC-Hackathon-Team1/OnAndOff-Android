@@ -1,13 +1,22 @@
 package com.onandoff.onandoff_android.presentation.home.posting
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.onandoff.onandoff_android.data.api.feed.FeedInterface
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PostingAddActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostingAddBinding
+    var categoryId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,10 +25,11 @@ class PostingAddActivity : AppCompatActivity() {
         val view = binding.root
 
         setContentView(view)
+        val profileId = intent.getIntExtra("profileId", -1)
 
         binding.btnPostingAdd.setOnClickListener{
             // 게시물 추가
-            addPosting()
+            addPosting(profileId)
         }
         binding.btnCamera.setOnClickListener{
             // 사진 추가
@@ -36,17 +46,52 @@ class PostingAddActivity : AppCompatActivity() {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
-                    0 -> binding.posting?.category = "문화 및 예술"
-                    1 -> binding.posting?.category = "스포츠"
-                    2 -> binding.posting?.category = "자기계발"
-                    3 -> binding.posting?.category = "기타"
+                    0 -> binding.textCategory.text = "문화 및 예술"
+                    1 -> binding.textCategory.text = "스포츠"
+                    2 -> binding.textCategory.text = "자기계발"
+                    3 -> binding.textCategory.text = "기타"
                 }
+                categoryId = it
             }
             bottomPostingCategoryFragment.show(supportFragmentManager,bottomPostingCategoryFragment.tag)
         }
     }
 
-    private fun addPosting(){
-        // TODO : 게시물 추가 API
+
+    /**
+     *  val profiledId: Int,
+        val categoryId: Int,
+        val hashTagList: List<String>,
+        val content: String,
+        val isSecret: String
+     */
+    private fun addPosting(profileId: Int){
+        val hashTag = binding.textHashtag.text.toString()
+        val hashTagList = hashTag.split(" #", " ", "#")
+
+        val content = binding.textContent.text.toString()
+        val isSecret = when(binding.checkboxSecret.isChecked) {
+            false -> "PUBLIC"
+            true -> "PRIVATE"
+        }
+
+        val data = FeedData(profileId, categoryId, hashTagList, content, isSecret)
+
+        val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
+        val call = feedInterface?.addFeedResponse(data)
+        call?.enqueue(object : Callback<FeedResponse> {
+            override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
+                when(response.code()) {
+                    200 -> {
+                        Log.d("addFeed", "onResponse: Success + ${response.body().toString()}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
+                Log.d("TAG", "onFailure: addFeed error")
+            }
+
+        })
     }
 }
