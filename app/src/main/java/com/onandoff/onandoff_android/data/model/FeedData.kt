@@ -19,3 +19,16 @@ data class FeedDeleteData(
     val profiledId: Int,
     val feedId:Int
 )
+
+data class FeedReadData(
+    val feedId: Int,
+    val categoryId: Int,
+    val feedImgList: List<String>,
+    val hashTagList: List<String>,
+    val personaName: String,
+    val profileName: String,
+    val feedContent: String,
+    val profileImg: String,
+    val createdAt: String,
+    val isLike: Boolean
+)

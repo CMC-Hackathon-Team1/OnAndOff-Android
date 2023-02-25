@@ -35,6 +35,8 @@ import kotlinx.coroutines.launch
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
+import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
+import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -157,7 +159,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                             val firstProfile = state.myProfileList.result?.firstOrNull()
                             if (firstProfile != null) {
                                 onClickPersona(firstProfile)
-                                profileId = firstProfile.profileId
                             }
                         }
                         is HomeViewModel.State.GetMonthlyCountSuccess -> {
@@ -239,6 +240,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         binding.tvUserPersona2.text = profileResponse.personaName
         binding.tvUserName2.text = profileResponse.profileName
 
+        profileId = profileResponse.profileId
         viewModel.setSelectedProfile(profileResponse)
     }
 
@@ -407,7 +409,15 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         })
     }
 
-    override fun onClick(v: View, position: Int) {
+    override fun onClick(v: View, position: Int, feedId: Int) {
+        intentPostReadActivity(feedId)
+    }
 
+    private fun intentPostReadActivity(feedId: Int) {
+        //intent로 profileId랑 feedId를 보내야함
+        val intent = Intent(requireActivity(), PostingReadActivity::class.java)
+        intent.putExtra("profileId", profileId)
+        intent.putExtra("feedId", feedId)
+        startActivity(intent)
     }
 }

@@ -13,8 +13,6 @@ import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
-import java.util.Objects
 
 class PostingAddActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostingAddBinding
@@ -27,10 +25,11 @@ class PostingAddActivity : AppCompatActivity() {
         val view = binding.root
 
         setContentView(view)
+        val profileId = intent.getIntExtra("profileId", -1)
 
         binding.btnPostingAdd.setOnClickListener{
             // 게시물 추가
-            addPosting()
+            addPosting(profileId)
         }
         binding.btnCamera.setOnClickListener{
             // 사진 추가
@@ -66,7 +65,7 @@ class PostingAddActivity : AppCompatActivity() {
         val content: String,
         val isSecret: String
      */
-    private fun addPosting(){
+    private fun addPosting(profileId: Int){
         val hashTag = binding.textHashtag.text.toString()
         val hashTagList = hashTag.split(" #", " ", "#")
 
@@ -76,7 +75,7 @@ class PostingAddActivity : AppCompatActivity() {
             true -> "PRIVATE"
         }
 
-        val data = FeedData(27, categoryId, hashTagList, content, isSecret)
+        val data = FeedData(profileId, categoryId, hashTagList, content, isSecret)
 
         val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
         val call = feedInterface?.addFeedResponse(data)
