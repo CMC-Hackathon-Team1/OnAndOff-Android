@@ -103,23 +103,23 @@ class PostingAddActivity : AppCompatActivity() {
      */
     private fun addPosting(profileId: Int){
         val hashTag = binding.textHashtag.text.toString()
-        val hashTagList = hashTag.split(" #", " ", "#")
-
+        var hashTagList = hashTag.split("#", " ")
+        hashTagList = hashTagList.filter { it.isNotEmpty() }
         val content = binding.textContent.text.toString()
         val isSecret = when(binding.checkboxSecret.isChecked) {
             false -> "PUBLIC"
             true -> "PRIVATE"
         }
 
+        val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
+        //TODO:CategoryId <- API List에서 가져와서 처리해야함
+        val formCategroyId = FormDataUtil.getBody("categoryId", 3)    // 2-way binding 되어 있는 LiveData
+        val formHasTagList = FormDataUtil.getBody("hashTagList", hashTagList)
+        val formContent = FormDataUtil.getBody("content", content)
+    // 2-way binding 되어 있는 LiveData
+        val formIsSecret = FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
 
-            val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
-            val formCategroyId = FormDataUtil.getBody("categoryId", categoryId)    // 2-way binding 되어 있는 LiveData
-            val formHasTagList = FormDataUtil.getBody("hashTagList", hashTagList)
-            val formContent = FormDataUtil.getBody("content", content)
-        // 2-way binding 되어 있는 LiveData
-            val formIsSecret = FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
-
-            Log.d("gallery","$imgFile")
+        Log.d("gallery","$imgFile")
 
 
         val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
@@ -198,8 +198,7 @@ class PostingAddActivity : AppCompatActivity() {
     }
     // 촬영한 사진을 파일로 저장
     fun saveImageToFile(bitmap: Bitmap): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val filename = "$timeStamp.png"
+        val filename = "image_${System.currentTimeMillis()}.png"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val imageFile = File.createTempFile(filename, null, storageDir)
         val outputStream = FileOutputStream(imageFile)
@@ -222,7 +221,7 @@ class PostingAddActivity : AppCompatActivity() {
         val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 20, byteArrayOutputStream)
         var requestBody: RequestBody? = RequestBody.create("image/*".toMediaTypeOrNull(), byteArrayOutputStream.toByteArray())
-        val body = requestBody?.let { MultipartBody.Part.createFormData("image", file.name, it) }
+        val body = requestBody?.let { MultipartBody.Part.createFormData("images", file.name, it) }
 
 
         return body

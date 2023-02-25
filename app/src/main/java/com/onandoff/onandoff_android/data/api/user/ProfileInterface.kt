@@ -11,7 +11,7 @@ interface ProfileInterface {
     @POST("/profiles")
     fun profileCreate(
         @Part profileName : MultipartBody.Part,
-        @Part personaName:  MultipartBody.Part,
+        @Part personaName: MultipartBody.Part,
         @Part statusMessage:  MultipartBody.Part,
         @Part image: MultipartBody.Part,
     ): Call<ProfileResponse>

@@ -101,18 +101,7 @@ class ProfileEditFragment: Fragment() {
                 call: Call<ProfileResult>,
                 response: Response<ProfileResult>
             ){
-                when(response.body()?.statusCode){
-                    1500->{
-                        Log.d(
-                            "Profile Delete",
-                            "retrofit manager called, onSucess called but already join!"
-                        );
-                    }
-                    else->{
-//
-                    }
 
-                }
 
             }
             override fun onFailure(call: Call<ProfileResult>, t: Throwable){
