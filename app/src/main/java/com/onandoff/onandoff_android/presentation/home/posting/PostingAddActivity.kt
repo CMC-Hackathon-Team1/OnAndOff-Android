@@ -17,15 +17,26 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.onandoff.onandoff_android.data.api.feed.FeedInterface
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.FeedResponse
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.onandoff.onandoff_android.data.api.user.ProfileInterface
+import com.onandoff.onandoff_android.data.api.util.FormDataUtil
+import com.onandoff.onandoff_android.data.model.ProfileResponse
 import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectPostImageBinding
 import com.onandoff.onandoff_android.util.Camera.CAMERA_PERMISSION
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
+import com.onandoff.onandoff_android.util.Camera.FLAG_REQ_CAMERA
 import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -39,6 +50,8 @@ import java.util.*
 
 class PostingAddActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostingAddBinding
+    var categoryId = 0
+
     var imgFile: MultipartBody.Part? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +60,11 @@ class PostingAddActivity : AppCompatActivity() {
         val view = binding.root
 
         setContentView(view)
+        val profileId = intent.getIntExtra("profileId", -1)
 
         binding.btnPostingAdd.setOnClickListener{
             // 게시물 추가
-            addPosting()
+            addPosting(profileId)
         }
         binding.ivCamera.setOnClickListener{
             showBottomSheet(this)
@@ -68,18 +82,66 @@ class PostingAddActivity : AppCompatActivity() {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
-                    0 -> binding.posting?.category = "문화 및 예술"
-                    1 -> binding.posting?.category = "스포츠"
-                    2 -> binding.posting?.category = "자기계발"
-                    3 -> binding.posting?.category = "기타"
+                    0 -> binding.textCategory.text = "문화 및 예술"
+                    1 -> binding.textCategory.text = "스포츠"
+                    2 -> binding.textCategory.text = "자기계발"
+                    3 -> binding.textCategory.text = "기타"
                 }
+                categoryId = it
             }
             bottomPostingCategoryFragment.show(supportFragmentManager,bottomPostingCategoryFragment.tag)
         }
     }
 
-    private fun addPosting(){
-        // TODO : 게시물 추가 API
+
+    /**
+     *  val profiledId: Int,
+        val categoryId: Int,
+        val hashTagList: List<String>,
+        val content: String,
+        val isSecret: String
+     */
+    private fun addPosting(profileId: Int){
+        val hashTag = binding.textHashtag.text.toString()
+        val hashTagList = hashTag.split(" #", " ", "#")
+
+        val content = binding.textContent.text.toString()
+        val isSecret = when(binding.checkboxSecret.isChecked) {
+            false -> "PUBLIC"
+            true -> "PRIVATE"
+        }
+
+
+            val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
+            val formCategroyId = FormDataUtil.getBody("categoryId", categoryId)    // 2-way binding 되어 있는 LiveData
+            val formHasTagList = FormDataUtil.getBody("hashTagList", hashTagList)
+            val formContent = FormDataUtil.getBody("content", content)
+        // 2-way binding 되어 있는 LiveData
+            val formIsSecret = FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
+
+            Log.d("gallery","$imgFile")
+
+
+        val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
+        val call = imgFile?.let {
+            feedInterface?.addFeedResponse(formProfileId,formCategroyId,formHasTagList,
+                it,formContent,formIsSecret)
+        }
+        call?.enqueue(object : Callback<FeedResponse> {
+            override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
+                when(response.code()) {
+                    200 -> {
+                        Log.d("addFeed", "onResponse: Success + ${response.body().toString()}")
+                    }
+                    else-> Log.d("addFeed","${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
+                Log.d("TAG", "onFailure: addFeed error")
+            }
+
+        })
     }
     //갤러리, 기본이미지 변경여부 체크
     fun showBottomSheet(context: Context){
@@ -106,30 +168,11 @@ class PostingAddActivity : AppCompatActivity() {
 
 
     }
-    private fun createImageFile(context: Context): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        )
-    }
+
     fun move_camera() {
         var cameraPickerIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraPickerIntent.type = "image/*"
-        val photoFile: File = createImageFile(this)
-
-        if (photoFile != null) {
-            val photoURI = FileProvider.getUriForFile(
-                this,
-                "com.onandoff.onandoff_android.fileprovider",
-                photoFile
-            )
-            cameraPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            startActivityForResult(cameraPickerIntent, FLAG_PERM_CAMERA)
-        }
-
+//        cameraPickerIntent.type = "image/*"
+        startActivityForResult(cameraPickerIntent, FLAG_REQ_CAMERA)
     }
 
     fun move_gallery() {
@@ -153,7 +196,18 @@ class PostingAddActivity : AppCompatActivity() {
         }
         return true
     }
-
+    // 촬영한 사진을 파일로 저장
+    fun saveImageToFile(bitmap: Bitmap): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val filename = "$timeStamp.png"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile = File.createTempFile(filename, null, storageDir)
+        val outputStream = FileOutputStream(imageFile)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        return imageFile
+    }
 
     private fun getMultipartFromUri(uri: Uri,context:Context): MultipartBody.Part? {
         val filepath = uri.path
@@ -188,13 +242,16 @@ class PostingAddActivity : AppCompatActivity() {
                     imgFile = body
                     Log.d("gallery","${imgFile}")
                 }
-                FLAG_PERM_CAMERA ->{
-//                    val uri = data?.data // 선택한 이미지의 Uri 객체
-                    val uri = data?.data
-                    binding.ivCamera.setImageURI(uri)
-                    val body = uri?.let { getMultipartFromUri(it, context = this) }
-                    imgFile = body
-                    Log.d("gallery","${imgFile}")
+                FLAG_REQ_CAMERA ->{
+                  if (data?.extras?.get("data") != null) {
+                        //카메라로 방금 촬영한 이미지를 미리 만들어 놓은 이미지뷰로 전달 합니다.
+                        val bitmap = data?.extras?.get("data") as Bitmap
+                        binding.ivCamera.setImageBitmap(bitmap)
+                      val file = saveImageToFile(bitmap)
+                      val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                      imgFile = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+                    }
 
                 }
 
@@ -221,7 +278,8 @@ class PostingAddActivity : AppCompatActivity() {
                         return
                     }
                 }
-                move_gallery()
+                move_camera()
+
             }
             FLAG_PERM_STORAGE -> {
                 Log.d("permission","2")
@@ -233,7 +291,8 @@ class PostingAddActivity : AppCompatActivity() {
                         return
                     }
                 }
-                move_camera()
+                move_gallery()
+
             }
         }
     }

@@ -168,5 +168,4 @@ class SignInActivity:AppCompatActivity() {
         dialog.setPositiveButton("확인",dialogListener)
         dialog.show()
     }
-
 }

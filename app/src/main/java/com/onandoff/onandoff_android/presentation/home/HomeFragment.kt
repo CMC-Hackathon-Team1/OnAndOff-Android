@@ -21,7 +21,7 @@ import com.onandoff.onandoff_android.data.model.CreateMyProfileData
 import com.onandoff.onandoff_android.data.model.MyProfileResponse
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.onandoff.onandoff_android.data.api.feed.CalendarService
+import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.CalendarData
 
@@ -36,6 +36,8 @@ import kotlinx.coroutines.launch
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
+import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
+import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragment
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
@@ -45,7 +47,7 @@ import java.text.SimpleDateFormat
 
 import java.util.*
 
-class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
+class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarAdapter.OnItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding
             get() = _binding!!
@@ -61,6 +63,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
     private lateinit var calendarAdapter: CalendarAdapter
+    private var profileId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -240,8 +243,8 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
 
         binding.tvUserPersona2.text = profileResponse.personaName
         binding.tvUserName2.text = profileResponse.profileName
-        var profileId = profileResponse.profileId
-        prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,profileId)
+        profileId = profileResponse.profileId
+        prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID, profileId!!)
         viewModel.setSelectedProfile(profileResponse)
     }
 
@@ -297,8 +300,11 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
         }
 
         calendarAdapter = CalendarAdapter(this)
+        calendarAdapter.setItemClickListener(this)
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         binding.fgCalDay.adapter = calendarAdapter
+
+
 
         binding.fgCalPre.setOnClickListener {
             calendarAdapter.changeToPrevMonth()
@@ -317,7 +323,34 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = relevantUserListAdapter
-
+//            relevantUserListAdapter.submitList(
+//                listOf(
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    ),
+//                    RelevantUserData(
+//                        profileImageUrl = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", name = "David"
+//                    )
+//                )
+//            )
         }
     }
 
@@ -333,6 +366,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
 
     private fun intentPostActivity() {
         val intent = Intent(requireActivity(), PostingAddActivity::class.java)
+        intent.putExtra("profileId", profileId)
         startActivity(intent)
     }
 
@@ -346,19 +380,19 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
     }
 
     override fun onMonthChanged(calendar: Calendar) {
-        val userId = 27
+        val userId = if(profileId != null) profileId!! else 0
         val year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) + 1
-        var month_format = month.toString()
+        val month = calendar.get(Calendar.MONTH) + 1
+        var monthFormat = month.toString()
         if (month < 10) {
-            month_format = "0${month_format}"
+            monthFormat = "0${monthFormat}"
         }
 
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         binding.fgCalMonth.text = sdf.format(calendar.time)
 
-        val calendarInterface: CalendarService? = RetrofitClient.getClient()?.create(CalendarService::class.java)
-        val call = calendarInterface?.getCalendarList(userId, year, month_format)
+        val calendarInterface: CalendarInterface? = RetrofitClient.getClient()?.create(CalendarInterface::class.java)
+        val call = calendarInterface?.getCalendarList(userId, year, monthFormat)
         call?.enqueue(object : Callback<List<CalendarData>> {
             override fun onResponse(
                 call: Call<List<CalendarData>>,
@@ -379,5 +413,17 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener {
             }
 
         })
+    }
+
+    override fun onClick(v: View, position: Int, feedId: Int) {
+        intentPostReadActivity(feedId)
+    }
+
+    private fun intentPostReadActivity(feedId: Int) {
+        //intent로 profileId랑 feedId를 보내야함
+        val intent = Intent(requireActivity(), PostingReadActivity::class.java)
+        intent.putExtra("profileId", profileId)
+        intent.putExtra("feedId", feedId)
+        startActivity(intent)
     }
 }
