@@ -17,34 +17,28 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.onandoff.onandoff_android.data.api.feed.FeedInterface
-import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.FeedData
-import com.onandoff.onandoff_android.data.model.FeedResponse
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.onandoff.onandoff_android.data.api.user.ProfileInterface
+import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.FormDataUtil
-import com.onandoff.onandoff_android.data.model.ProfileResponse
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectPostImageBinding
+import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.Camera.CAMERA_PERMISSION
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
 import com.onandoff.onandoff_android.util.Camera.FLAG_REQ_CAMERA
 import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.*
-import java.security.AccessController.getContext
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -134,7 +128,9 @@ class PostingAddActivity : AppCompatActivity() {
                         Log.d("addFeed", "onResponse: Success + ${response.body().toString()}")
                     }
                     else-> Log.d("addFeed","${response.code()}")
+
                 }
+                onBackPressed()
             }
 
             override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
@@ -142,6 +138,14 @@ class PostingAddActivity : AppCompatActivity() {
             }
 
         })
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show() //토스트 메시지
+        val intent =
+            Intent(this@PostingAddActivity, MainActivity::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+        startActivity(intent) //인텐트 이동
+        finish() //현재 액티비티 종료
     }
     //갤러리, 기본이미지 변경여부 체크
     fun showBottomSheet(context: Context){
@@ -248,7 +252,7 @@ class PostingAddActivity : AppCompatActivity() {
                         binding.ivCamera.setImageBitmap(bitmap)
                       val file = saveImageToFile(bitmap)
                       val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                      imgFile = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                      imgFile = MultipartBody.Part.createFormData("images", file.name, requestFile)
 
                     }
 
