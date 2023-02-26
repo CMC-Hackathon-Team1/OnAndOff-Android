@@ -15,7 +15,7 @@ interface FeedInterface {
         @Part profileId : MultipartBody.Part,
         @Part categoryId:  MultipartBody.Part,
         @Part hashTagList:  MultipartBody.Part,
-        @Part images: MultipartBody.Part,
+        @Part images: MultipartBody.Part?=null,
         @Part content: MultipartBody.Part,
         @Part isSecret: MultipartBody.Part,
     ): Call<FeedResponse>

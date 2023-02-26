@@ -117,10 +117,14 @@ class PostingAddActivity : AppCompatActivity() {
 
 
         val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
-        val call = imgFile?.let {
+        var call = imgFile?.let {
             feedInterface?.addFeedResponse(formProfileId,formCategroyId,formHasTagList,
                 it,formContent,formIsSecret)
+        }?: run {
+            feedInterface?.addFeedResponse(formProfileId,formCategroyId,formHasTagList,
+                null,formContent,formIsSecret)
         }
+
         call?.enqueue(object : Callback<FeedResponse> {
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
                 when(response.code()) {
