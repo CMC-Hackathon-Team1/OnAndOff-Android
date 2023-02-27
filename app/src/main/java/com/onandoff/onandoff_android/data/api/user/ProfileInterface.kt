@@ -17,15 +17,15 @@ interface ProfileInterface {
     ): Call<ProfileResponse>
 
     @GET("/profiles/{profileId}")
-    fun getMyProfile(@Path("profileId") profileId:String):Call<getMyProfileResponse>
+    fun getMyProfile(@Path("profileId") profileId:Int):Call<getMyProfileResponse>
 
     @GET("/profiles/my-profiles")
     fun profileCheck(): Call<ProfileListResponse>
     @PATCH("/profiles/{profileId}")
-    fun profileEidt(@Path("profileId")  profileId:String,
+    fun profileEidt(@Path("profileId")  profileId:Int,
         @Body profileEditRequest: ProfileEditRequest
     ):Call<ProfileListResultResponse>
 
     @DELETE("/profiles/{profileId}")
-    fun profileDelete(@Path("profileId") profileId:String):Call<ProfileResult>
+    fun profileDelete(@Path("profileId") profileId:Int):Call<ProfileResult>
 }

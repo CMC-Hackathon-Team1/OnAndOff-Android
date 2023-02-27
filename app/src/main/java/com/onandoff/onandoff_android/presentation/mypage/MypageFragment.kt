@@ -14,9 +14,7 @@ import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.MyFeedService
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.FeedResponseData
-import com.onandoff.onandoff_android.data.model.MyPosting
-import com.onandoff.onandoff_android.data.model.ProfileResponse
+import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.FragmentMypageBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.APIPreferences
@@ -30,12 +28,13 @@ import retrofit2.Response
 class MypageFragment: Fragment(){
     private lateinit var binding: FragmentMypageBinding
     private var writeList = ArrayList<MyPosting>()
+    private val TAG = "Mypage"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMypageBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,34 +43,55 @@ class MypageFragment: Fragment(){
 //        setupListeners()
     }
     private fun setupView(){
-//        binding.tvMypageEdit.setOnClickListener{
+//        binding.tvMypageEdit.setOnClickListenㅗer{
 //            val editFragemnt = ProfileEditFragment()
 //            supportFragmentManager()
 //                .beginTransaction()
 //                .add(R.id.framelayout, editFragemnt)
 //                .commit()
 //        }
-        getData()
+        getProfileData()
+        getFeedData()
         onInitRecyclerView()
 
 
 
     }
-    private fun getData(){
+    fun getProfileData(){
+        val profileService: ProfileInterface? = RetrofitClient.getClient()?.create(
+            ProfileInterface::class.java)
+        val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+        //날을 어떻게 넣을지 고민해봐야될듯
+        val call = profileService?.getMyProfile(profileId)
+        call?.enqueue(object: Callback<getMyProfileResponse> {
+            override fun onResponse(
+                call: Call<getMyProfileResponse>,
+                response: Response<getMyProfileResponse>
+            ){
+                Log.d(TAG,"api 호출")
+                binding.profile = response.body()?.result
+
+            }
+            override fun onFailure(call: Call<getMyProfileResponse>, t: Throwable){
+
+            }
+        })
+    }
+    private fun getFeedData(){
         val myfeedService: MyFeedService? = RetrofitClient.getClient()?.create(
             MyFeedService::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
         //날을 어떻게 넣을지 고민해봐야될듯
         val call = myfeedService?.getMyFeed(profileId,2023,1,0)
-        call?.enqueue(object: Callback<FeedResponseData> {
+        call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
-                call: Call<FeedResponseData>,
-                response: Response<FeedResponseData>
+                call: Call<getFeedResponeData>,
+                response: Response<getFeedResponeData>
             ){
-//                val size:Int = response.body()
+                val feedLength:Int = response.body()?.result?.size ?: 0
 
             }
-            override fun onFailure(call: Call<FeedResponseData>, t: Throwable){
+            override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
 
             }
         })

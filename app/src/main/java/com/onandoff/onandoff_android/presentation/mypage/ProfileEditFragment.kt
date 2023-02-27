@@ -29,7 +29,7 @@ class ProfileEditFragment: Fragment() {
     private lateinit var binding : FragmentProfileEditBinding
     val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(
         ProfileInterface::class.java)
-    val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,"")
+    val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
     var profileName = binding.etNickname
     var personaName = binding.etPersonas
     var statusMsg = binding.etOneline
@@ -78,7 +78,7 @@ class ProfileEditFragment: Fragment() {
             }
         })
     }
-    fun editPersona(){
+    fun getPersona(){
         val call = profileInterface?.profileEidt(profileId, ProfileEditRequest(profileName = profileName.text.toString(),statusMessage=statusMsg.text.toString(),image=profileImg.toString(),defaultImage=true))
         call?.enqueue(object: Callback<ProfileListResultResponse> {
             override fun onResponse(
