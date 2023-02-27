@@ -31,48 +31,56 @@
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true" >
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.VIEW" /> -->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-
-            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
-            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
-
-
-            <!-- &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt; -->
-            <!-- <data -->
-            <!-- android:host="oauth" -->
-            <!-- android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" /> -->
-            <!-- </intent-filter> -->
+<!--                &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt;-->
+<!--                <data-->
+<!--                    android:host="oauth"-->
+<!--                    android:scheme="kakao8faa3516520f4561c39f29f1b932eb44" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".presentation.usercheck.SignupActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.usercheck.SignInActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.profile.ProfileCreateActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
         <activity
             android:name=".presentation.home.posting.PostingModifyActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
         <activity
             android:name=".presentation.home.posting.PostingAddActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.onandoff.onandoff_android.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

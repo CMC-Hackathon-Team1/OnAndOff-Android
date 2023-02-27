@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialog_box"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <TextView
+        android:paddingTop="22dp"
+        android:paddingHorizontal="14dp"
+        android:id="@+id/tv_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_delete_default"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="22dp"
+        >
+        <TextView
+            android:paddingVertical="10dp"
+            android:id="@+id/btn_no"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textColor="@color/color_main"
+            android:textStyle="bold"
+            android:background="@drawable/dialog_button_cancel"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/btn_yes"
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="삭제"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/dialog_button_create"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+    </LinearLayout>
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

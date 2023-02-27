@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.onandoff.onandoff_android.data.model.CreateMyProfileData
 import com.onandoff.onandoff_android.data.model.MyProfileResponse
 
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,6 +38,8 @@ import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragment
+import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -240,8 +243,8 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
         binding.tvUserPersona2.text = profileResponse.personaName
         binding.tvUserName2.text = profileResponse.profileName
-
         profileId = profileResponse.profileId
+        prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID, profileId!!)
         viewModel.setSelectedProfile(profileResponse)
     }
 

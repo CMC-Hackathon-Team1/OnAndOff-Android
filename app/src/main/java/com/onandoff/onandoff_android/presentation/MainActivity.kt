@@ -8,8 +8,8 @@ import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
-import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
+import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener  {
     private lateinit var binding: ActivityMainBinding
@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         val view = binding.root
 
         setContentView(view)
-
 
         setupFragmentAdapter()
         setupBottomNavigationView()

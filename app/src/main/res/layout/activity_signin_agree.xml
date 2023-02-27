@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="31dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp">
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            android:layout_marginEnd="115dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="서비스 이용 동의"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp"
+        android:layout_marginTop="45dp"
+        >
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_circle"/>
+        <TextView
+            android:layout_marginStart="9dp"
+            android:id="@+id/tv_signup_email_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약관 전체 동의"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#9A9A9A"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp">
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_circle"/>
+        <TextView
+            android:layout_marginStart="9dp"
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(필수) 만 14세 이상입니다"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp">
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_circle"/>
+        <TextView
+            android:layout_marginStart="9dp"
+            android:id="@+id/tv_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(필수) 서비스 이용약관"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"/>
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginEnd="115dp"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp">
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/button_circle"/>
+        <TextView
+            android:layout_marginStart="9dp"
+            android:id="@+id/tv_policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(필수) 개인정보 처리방침"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"/>
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_marginEnd="115dp"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_singup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="동의"
+        android:paddingVertical="14dp"
+        android:textStyle="bold"
+        android:layout_marginTop="72dp"
+        />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

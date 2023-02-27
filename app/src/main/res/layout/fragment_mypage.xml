@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.mypage.MypageFragment">
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="myPageFragment"-->
+<!--            type="com.onandoff.onandoff_android.presentation.mypage.MypageFragment"/>-->
+<!--    </data>-->
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -62,7 +68,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="21dp"
-                    android:text="작가 키키"
+                    android:text="@{myPageFragment.}"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="14sp" />

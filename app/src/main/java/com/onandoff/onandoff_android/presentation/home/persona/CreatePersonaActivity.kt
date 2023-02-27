@@ -105,7 +105,6 @@ class CreatePersonaActivity : AppCompatActivity() {
             viewModel.onCreatePersona()
         }
     }
-
     private fun openGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK)
         pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")

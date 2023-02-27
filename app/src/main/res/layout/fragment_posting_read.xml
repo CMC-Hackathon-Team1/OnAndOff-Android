@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_posting_read_dots"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_posting_read_dots"
-        app:srcCompat="@drawable/x" />
+        app:srcCompat="@drawable/close" />
 
 
     <TextView

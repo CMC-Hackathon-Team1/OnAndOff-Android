@@ -4,17 +4,20 @@ import com.onandoff.onandoff_android.data.model.FeedData
 import com.onandoff.onandoff_android.data.model.FeedDeleteData
 import com.onandoff.onandoff_android.data.model.FeedReadData
 import com.onandoff.onandoff_android.data.model.FeedResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface FeedInterface {
+    @Multipart
     @POST("/feeds")
     fun addFeedResponse(
-        @Body body: FeedData
+        @Part profileId : MultipartBody.Part,
+        @Part categoryId:  MultipartBody.Part,
+        @Part hashTagList:  MultipartBody.Part,
+        @Part images: MultipartBody.Part?=null,
+        @Part content: MultipartBody.Part,
+        @Part isSecret: MultipartBody.Part,
     ): Call<FeedResponse>
 
     @GET("/feeds/{feedId}/profiles/{profileId}")
