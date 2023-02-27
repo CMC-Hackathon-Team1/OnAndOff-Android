@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.MyFeedService
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
@@ -26,8 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MypageFragment: Fragment(){
-
-    private lateinit var binding : FragmentMypageBinding
+    private lateinit var binding: FragmentMypageBinding
     private var writeList = ArrayList<MyPosting>()
     override fun onCreateView(
         inflater: LayoutInflater,

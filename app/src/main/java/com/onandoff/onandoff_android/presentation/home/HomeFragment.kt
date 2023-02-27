@@ -408,7 +408,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
             }
 
             override fun onFailure(call: Call<List<CalendarData>>, t: Throwable) {
-                TODO("Not yet implemented")
                 Log.d("TAG", "onFailure: caledar error")
             }
 

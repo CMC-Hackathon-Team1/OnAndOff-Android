@@ -106,7 +106,7 @@ class PostingAddActivity : AppCompatActivity() {
         }
 
         val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
-        //TODO:CategoryId <- API List에서 가져와서 처리해야함
+        // TODO:CategoryId <- API List에서 가져와서 처리해야함
         val formCategroyId = FormDataUtil.getBody("categoryId", 3)    // 2-way binding 되어 있는 LiveData
         val formHasTagList = FormDataUtil.getBody("hashTagList", hashTagList)
         val formContent = FormDataUtil.getBody("content", content)
