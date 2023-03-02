@@ -60,6 +60,8 @@
         <activity
             android:name=".presentation.splash.SignupPolicyActivity"
             android:exported="true"/>
+        <activity android:name=".presentation.splash.SignupEmailActivity"
+            android:exported="true"/>
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true" />

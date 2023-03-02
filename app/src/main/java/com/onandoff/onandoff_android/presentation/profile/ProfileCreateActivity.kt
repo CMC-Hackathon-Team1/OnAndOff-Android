@@ -128,7 +128,7 @@ class ProfileCreateActivity:AppCompatActivity() {
         }
         dialogView.layoutBasic.setOnClickListener{
             imgFile = null
-            binding.ivProfileBackground.setImageResource(R.drawable.default_image)
+            binding.ivProfileAvatar.setImageResource(R.drawable.icon_profile_default)
             dialog.dismiss()
         }
 

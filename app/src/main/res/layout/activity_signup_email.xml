@@ -38,7 +38,7 @@
         android:text=""
         />
     <TextView
-        android:id="@+id/btn_agree_service"
+        android:id="@+id/btn_email_verify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="인증하기"

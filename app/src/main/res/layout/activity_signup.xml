@@ -50,10 +50,12 @@
             android:background="@null"/>
     </LinearLayout>
     <View
+        android:id="@+id/tv_signin_email_error_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9A9A9A"/>
     <TextView
+        android:id="@+id/tv_signin_email_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_fifth"
@@ -82,10 +84,12 @@
             android:background="@null"/>
     </LinearLayout>
     <View
+        android:id="@+id/tv_signin_password_error_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9A9A9A"/>
     <TextView
+        android:id="@+id/tv_signin_password_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_fifth"
@@ -114,10 +118,12 @@
             android:background="@null"/>
     </LinearLayout>
     <View
+        android:id="@+id/tv_signin_password_same_error_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9A9A9A"/>
     <TextView
+        android:id="@+id/tv_signin_password_same_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black_fifth"

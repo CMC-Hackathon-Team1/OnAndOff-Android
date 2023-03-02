@@ -528,4 +528,5 @@ B. 계정 관련
     <string name="age_string"><font color ="#58B8A1">(필수)</font> 만 14세 이상입니다</string>
     <string name="string_service"><font color ="#58B8A1">(필수)</font> 서비스 이용약관</string>
     <string name="string_privacy"><font color ="#58B8A1">(필수)</font> 개인정보 처리방침</string>
+    <string name="password_update"><u><font color ="#58B8A1">비밀번호 재설정</font></u></string>
 </resources>
