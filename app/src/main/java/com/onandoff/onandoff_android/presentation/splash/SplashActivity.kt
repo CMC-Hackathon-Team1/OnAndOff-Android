@@ -104,20 +104,16 @@ class SplashActivity:AppCompatActivity() {
                 )
                 Log.d("Splash",body?.result.state)
                 if(body?.result.state == "로그인 완료"){
-                    Log.d("Splash","check")
-                    val intent  = Intent(this@SplashActivity,ProfileCreateActivity::class.java)
-//                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
 
                 }else{
-                    Log.d("Splash","check22")
-                    val intent  = Intent(this@SplashActivity,ProfileCreateActivity::class.java)
+                    val intent = Intent(this@SplashActivity, SignupPolicyActivity::class.java)
                     startActivity(intent)
-
-//                    val Intent = Intent(this@SplashActivity, SignupPolicyActivity::class.java)
+                    finish()
                 }
-//                Log.d("Splash","check22")
-//                finish()
+
             }
 
             override fun onFailure(call: Call<KakaoResponse>, t: Throwable) {
