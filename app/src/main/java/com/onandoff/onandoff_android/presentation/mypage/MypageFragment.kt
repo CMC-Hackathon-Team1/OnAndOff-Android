@@ -1,7 +1,9 @@
 package com.onandoff.onandoff_android.presentation.mypage
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,11 +26,16 @@ import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MypageFragment: Fragment(){
     private lateinit var binding: FragmentMypageBinding
     private var writeList = ArrayList<MyPosting>()
     private val TAG = "Mypage"
+    lateinit var profile:ProfileListResultResponse
+    lateinit var mainActivity: MainActivity
+    var feedList = ArrayList<FeedResponseData>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,20 +49,30 @@ class MypageFragment: Fragment(){
         setupView()
 //        setupListeners()
     }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        // 2. Context를 액티비티로 형변환해서 할당
+        mainActivity = context as MainActivity
+    }
     private fun setupView(){
-//        binding.tvMypageEdit.setOnClickListenㅗer{
-//            val editFragemnt = ProfileEditFragment()
-//            supportFragmentManager()
-//                .beginTransaction()
-//                .add(R.id.framelayout, editFragemnt)
-//                .commit()
-//        }
+
         getProfileData()
         getFeedData()
         onInitRecyclerView()
-
-
-
+        binding.tvMypageEdit.setOnClickListener{
+            val bundle = Bundle()
+            bundle.putString("nickName", profile.profileName)
+            bundle.putString("personaName", profile.personaName)
+            bundle.putString("profileImg", profile.profileImgUrl)
+            bundle.putString("statusMsg", profile.statusMessage)
+            val editFragemnt = ProfileEditFragment()
+            editFragemnt.arguments = bundle
+            mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcv_main,editFragemnt)
+                .commit()
+        }
     }
     fun getProfileData(){
         val profileService: ProfileInterface? = RetrofitClient.getClient()?.create(
@@ -69,7 +86,8 @@ class MypageFragment: Fragment(){
                 response: Response<getMyProfileResponse>
             ){
                 Log.d(TAG,"api 호출")
-                binding.profile = response.body()?.result
+                profile = response.body()?.result!!
+                binding.profile = profile
 
             }
             override fun onFailure(call: Call<getMyProfileResponse>, t: Throwable){
@@ -82,102 +100,28 @@ class MypageFragment: Fragment(){
             MyFeedService::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
         //날을 어떻게 넣을지 고민해봐야될듯
-        val call = myfeedService?.getMyFeed(profileId,2023,1,0)
+        val call = myfeedService?.getMyFeed(profileId,2023, Calendar.MONTH,1)
         call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
                 call: Call<getFeedResponeData>,
                 response: Response<getFeedResponeData>
             ){
-                val feedLength:Int = response.body()?.result?.size ?: 0
 
+                val tmpFeedList = response.body()?.result
+                if (tmpFeedList != null) {
+                    for(item in tmpFeedList){
+                        feedList.apply{add(item)}
+                    }
+                }
             }
             override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
 
             }
         })
     }
-
-
     private fun onInitRecyclerView(){
-        addDummy()
-        val mypageRVAdapter = MypageRVAdapter(writeList)
+        val mypageRVAdapter =MypageRVAdapter(feedList, mainActivity)
         binding.rvProfileList.adapter = mypageRVAdapter;
-        binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
-
+        binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true);
     }
-
-    private fun addDummy() {
-        writeList.apply {
-            add(
-                MyPosting(
-                    1,
-                    1,
-                    "4",
-                    1,
-                    2,
-                    "",
-                    "으악",
-                    "아크",
-                    "디자이너",
-                    "독서의 계절.. ㅎㅎ",
-                    0,
-                    "2022/09/25",
-                    "#개발 #기획 #디자인"
-                )
-            )
-            add(
-                MyPosting(
-                    2,
-                    1,
-                    "40",
-                    1,
-                    2,
-                    "",
-                    "으악",
-                    "아크",
-                    "디자이너",
-                    "너무 졸려요",
-                    0,
-                    "2022/09/24",
-                    "#개발 #기획 #디자인"
-                )
-            )
-            add(
-                MyPosting(
-                    1,
-                    1,
-                    "12",
-                    1,
-                    2,
-                    "",
-                    "으악",
-                    "아크",
-                    "디자이너",
-                    "안드로이드 화이팅",
-                    0,
-                    "2022/09/23",
-                    "#개발 #기획 #디자인"
-                )
-            )
-            add(
-                MyPosting(
-                    1,
-                    1,
-                    "8",
-                    1,
-                    2,
-                    "",
-                    "으악",
-                    "아크",
-                    "디자이너",
-                    "서버 화이팅",
-                    0,
-                    "2022/09/22",
-                    "#개발 #기획 #디자인"
-                )
-            )
-
-        }
-    }
-
 }

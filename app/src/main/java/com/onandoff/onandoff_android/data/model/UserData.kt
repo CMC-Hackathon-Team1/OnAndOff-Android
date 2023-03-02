@@ -24,14 +24,16 @@ data class SignInResponse(
 data class SignInResponseResult(
     @SerializedName("jwt")val jwt:String
 )
-
+data class KakaoRequest(
+    @SerializedName("access_token")val token:String
+)
 data class KakaoResponse(
     @SerializedName("isSuccess")val statusCode:String,
     @SerializedName("code")val message:Int,
     @SerializedName("result")val result: KakaoResponseResult,
 )
 data class KakaoResponseResult(
-    @SerializedName("accessToken")val accessToken:String,
-    @SerializedName("refreshToken")val refreshToken:Int
+    @SerializedName("state")val state:String,
+    @SerializedName("jwt")val jwt:String
 )
 

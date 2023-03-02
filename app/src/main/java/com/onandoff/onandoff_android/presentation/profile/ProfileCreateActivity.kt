@@ -53,21 +53,8 @@ class ProfileCreateActivity:AppCompatActivity() {
     //권한 가져오기
     var imgFile: MultipartBody.Part? = null
     var isValid = false
-    private val readImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        Glide.with(this)
-            .load(uri)
-            .into(binding.ivProfileAvatar)
-    }
-    private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-               val imgUrl:Uri? = it.data?.data
-                binding.ivProfileAvatar.setImageURI(imgUrl)
-                Log.d("image", imgUrl.toString())
-                val imgPath = imgUrl?.path
-                imgPath?.let { it1 -> Log.d("image", it1) }
-            }
-        }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,7 +146,7 @@ class ProfileCreateActivity:AppCompatActivity() {
             profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg,
                 it
             )
-        }
+        }?: profileInterface?.profileCreate(formProfileName,formPersonaName,formStatusMsg)
 
         return call
     }

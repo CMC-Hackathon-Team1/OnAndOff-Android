@@ -12,6 +12,7 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.data.model.SignUpResponse
 import com.onandoff.onandoff_android.databinding.ActivitySignupBinding
+import com.onandoff.onandoff_android.presentation.splash.SignupEmailActivity
 import retrofit2.*
 
 class SignupActivity:AppCompatActivity() {
@@ -42,7 +43,7 @@ class SignupActivity:AppCompatActivity() {
             if (!isExistBlank && isPWSame) {
 
                 val user = SignRequest(email,password)
-                val call = userInterface?.signUp(user)
+                val call = userInterface?.signUp(user,0)
                 call?.enqueue(object :Callback<SignUpResponse> {
                     override fun onResponse(
                         call: Call<SignUpResponse>,
@@ -62,8 +63,11 @@ class SignupActivity:AppCompatActivity() {
                                 "Post",
                                 "retrofit manager called, onSucess called with ${body}"
                             );
-                            Toast.makeText(this@SignupActivity,"회원가입 성공! 로그인해주세요:)",Toast.LENGTH_SHORT).show()
-                            val Intent = Intent(this@SignupActivity, SignInActivity::class.java)
+                            Toast.makeText(this@SignupActivity,"회원가입 성공! 이메일 인증단계로 넘어갑니다",Toast.LENGTH_SHORT).show()
+
+                            val Intent = Intent(this@SignupActivity, SignupEmailActivity::class.java)
+                            intent.putExtra("email",email)
+                            intent.putExtra("password",email)
                             startActivity(Intent)
                             finish()
                         }
