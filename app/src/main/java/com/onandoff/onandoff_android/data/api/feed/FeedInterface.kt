@@ -12,9 +12,9 @@ interface FeedInterface {
     @Multipart
     @POST("/feeds")
     fun addFeedResponse(
-        @Part profileId : MultipartBody.Part,
+        @Part profileId: MultipartBody.Part,
         @Part categoryId:  MultipartBody.Part,
-        @Part hashTagList:  MultipartBody.Part,
+        @Part hashTagList: List<MultipartBody.Part>,
         @Part images: MultipartBody.Part?=null,
         @Part content: MultipartBody.Part,
         @Part isSecret: MultipartBody.Part,

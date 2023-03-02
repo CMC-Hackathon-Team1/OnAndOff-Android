@@ -76,7 +76,12 @@ class PostingReadActivity : AppCompatActivity() {
                             } else {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
                             }
-                            binding.posting.textHashtag.text = response.body()!!.hashTagList.toString()
+                            val hashTagList = response.body()!!.hashTagList
+                            var tagText = ""
+                            for (tag in hashTagList) {
+                                tagText = "#$tag $tagText "
+                            }
+                            binding.posting.textHashtag.text = tagText
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName
                             if(response.body()!!.feedImgList.isEmpty()) {
@@ -123,8 +128,6 @@ class PostingReadActivity : AppCompatActivity() {
 
     private fun deleteFeed(){
         val feedDeleteData = FeedDeleteData(profileId, feedId)
-
-
 
         val call = feedInterface?.deleteFeedResponse(feedDeleteData)
         call?.enqueue(object : Callback<FeedResponse>{

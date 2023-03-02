@@ -26,7 +26,6 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.databinding.ActivityPostingAddBinding
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectPostImageBinding
-import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.Camera.CAMERA_PERMISSION
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_CAMERA
 import com.onandoff.onandoff_android.util.Camera.FLAG_PERM_STORAGE
@@ -39,7 +38,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
-import java.util.*
 
 
 class PostingAddActivity : AppCompatActivity() {
@@ -76,10 +74,10 @@ class PostingAddActivity : AppCompatActivity() {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
-                    0 -> binding.textCategory.text = "문화 및 예술"
-                    1 -> binding.textCategory.text = "스포츠"
-                    2 -> binding.textCategory.text = "자기계발"
-                    3 -> binding.textCategory.text = "기타"
+                    1 -> binding.textCategory.text = "문화 및 예술"
+                    2 -> binding.textCategory.text = "스포츠"
+                    3 -> binding.textCategory.text = "자기계발"
+                    4 -> binding.textCategory.text = "기타"
                 }
                 categoryId = it
             }
@@ -97,8 +95,9 @@ class PostingAddActivity : AppCompatActivity() {
      */
     private fun addPosting(profileId: Int){
         val hashTag = binding.textHashtag.text.toString()
-        var hashTagList = hashTag.split("#", " ")
+        var hashTagList = hashTag.split(" ", "#")
         hashTagList = hashTagList.filter { it.isNotEmpty() }
+
         val content = binding.textContent.text.toString()
         val isSecret = when(binding.checkboxSecret.isChecked) {
             false -> "PUBLIC"
@@ -108,7 +107,10 @@ class PostingAddActivity : AppCompatActivity() {
         val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
         // TODO:CategoryId <- API List에서 가져와서 처리해야함
         val formCategroyId = FormDataUtil.getBody("categoryId", 3)    // 2-way binding 되어 있는 LiveData
-        val formHasTagList = FormDataUtil.getBody("hashTagList", hashTagList)
+        val formHasTagList = ArrayList<MultipartBody.Part>()
+        for (item in hashTagList) {
+            formHasTagList.add(FormDataUtil.getBody("hashTagList", item))
+        }
         val formContent = FormDataUtil.getBody("content", content)
     // 2-way binding 되어 있는 LiveData
         val formIsSecret = FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
@@ -129,12 +131,18 @@ class PostingAddActivity : AppCompatActivity() {
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
                 when(response.code()) {
                     200 -> {
-                        Log.d("addFeed", "onResponse: Success + ${response.body().toString()}")
+                        Log.d("addFeed", "onResponse: Success + ${response.body()!!.message}")
+                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
-                    else-> Log.d("addFeed","${response.code()}")
+                    201 -> {
+                        Log.d("addFeed", "onResponse: Success + ${response.body()!!.message}")
+                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    else-> Log.d("addFeed", "${response.code()} , ${response.body()!!.message}")
 
                 }
-                onBackPressed()
             }
 
             override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
@@ -143,17 +151,8 @@ class PostingAddActivity : AppCompatActivity() {
 
         })
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show() //토스트 메시지
-        val intent =
-            Intent(this@PostingAddActivity, MainActivity::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-        startActivity(intent) //인텐트 이동
-        finish() //현재 액티비티 종료
-    }
     //갤러리, 기본이미지 변경여부 체크
-    fun showBottomSheet(context: Context){
-
+    private fun showBottomSheet(context: Context){
         val dialog = BottomSheetDialog(context)
         val dialogView = BottomsheetSelectPostImageBinding.inflate(LayoutInflater.from(context))
 
