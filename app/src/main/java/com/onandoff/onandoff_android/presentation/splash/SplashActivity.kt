@@ -10,14 +10,17 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.KakaoRequest
 import com.onandoff.onandoff_android.data.model.KakaoResponse
+import com.onandoff.onandoff_android.data.model.ProfileListResponse
 import com.onandoff.onandoff_android.databinding.ActivitySplashBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.presentation.usercheck.SignInActivity
+import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_JWT
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
@@ -27,7 +30,7 @@ import retrofit2.Response
 
 class SplashActivity:AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
-
+    val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
     // 카카오계정으로 로그인 공통 callback 구성
     // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -104,9 +107,56 @@ class SplashActivity:AppCompatActivity() {
                 )
                 Log.d("Splash",body?.result.state)
                 if(body?.result.state == "로그인 완료"){
-                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+
+
+                        val call2 = profileInterface?.profileCheck()
+                        call2?.enqueue(object : Callback<ProfileListResponse> {
+                            override fun onResponse(
+                                call: Call<ProfileListResponse>,
+                                response: Response<ProfileListResponse>
+                            ) {
+                                val profileResponse = response.body()
+                                when(profileResponse?.statusCode){
+                                    1503 -> {
+                                        Log.d(
+                                            "Get",
+                                            "retrofit manager called, onSucess called but profile not exits"
+                                        );
+                                        val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+
+                                    }
+                                    else -> {
+                                        Log.d(
+                                            "Get",
+                                            "retrofit manager called, onSucess called with ${response.body()}"
+                                        );
+                                        val list = mutableSetOf<String>()
+                                        for(i in profileResponse?.result!!){
+                                            list.add(i.profileId.toString())
+                                        }
+                                        prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
+
+                                        val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
+                                        startActivity(mainIntent)
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ProfileListResponse>,
+                                t: Throwable
+                            ) {
+                                Log.d(
+                                    "Get",
+                                    "retrofit manager called, onFailure called with ${t}"
+                                );
+                            }
+
+
+                        })
+
 
                 }else{
                     val intent = Intent(this@SplashActivity, SignupPolicyActivity::class.java)
