@@ -1,9 +1,11 @@
 package com.onandoff.onandoff_android.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.File
 
 data class FeedData(
     val profileId: Int,
+    val feedId: Int,
     val categoryId: Int,
     val hashTagList: List<String>,
     val content: String,
