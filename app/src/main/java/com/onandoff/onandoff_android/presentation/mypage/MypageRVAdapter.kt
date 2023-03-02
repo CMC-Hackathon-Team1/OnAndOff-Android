@@ -17,7 +17,8 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
             binding.tvMypageRvItemPostText.text = write.feedContent
 //            binding.tvMypageRvItemLike.text = write.
             binding.tvMypageRvItemDate.text = write.createdAt
-            Glide.with(context).asBitmap().load(Base64.decode(write.feedImgList[0],Base64.DEFAULT)).into(binding.ivMypageRvItemPostImg)
+            binding.tvMypageRvItemLike.text = write.likeNum.toString()
+//            Glide.with(context).load(write.feedImgList[0]).into(binding.ivMypageRvItemPostImg)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MypageViewHolder {

@@ -100,7 +100,7 @@ class MypageFragment: Fragment(){
             MyFeedService::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
         //날을 어떻게 넣을지 고민해봐야될듯
-        val call = myfeedService?.getMyFeed(profileId,2023, Calendar.MONTH,1)
+        val call = myfeedService?.getMyFeed(profileId,2023, "03",1)
         call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
                 call: Call<getFeedResponeData>,

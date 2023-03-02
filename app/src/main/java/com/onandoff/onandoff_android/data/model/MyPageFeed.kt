@@ -10,6 +10,8 @@ data class getFeedResponeData(
 
 data class FeedResponseData(
     @SerializedName("feedId") val feedId: Int,
+    @SerializedName("isLike") val isLike :Boolean,
+    @SerializedName("likeNum")val likeNum:Int,
     @SerializedName("feedContent") val feedContent: String,
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("feedImgList") val feedImgList: ArrayList<String>

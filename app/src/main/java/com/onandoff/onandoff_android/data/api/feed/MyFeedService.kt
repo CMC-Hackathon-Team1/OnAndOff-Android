@@ -11,7 +11,7 @@ interface MyFeedService {
     fun getMyFeed(
         @Query("profileId") profileId:Int,
         @Query("year")year:Int,
-        @Query("month")month:Int,
+        @Query("month")month:String,
         @Query("page")page:Int
     ): Call<getFeedResponeData>
 }

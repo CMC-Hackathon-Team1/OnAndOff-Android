@@ -167,7 +167,7 @@ class PostingAddActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialogView.layoutCamera.setOnClickListener{
-            Log.d("image","null 값 선택")
+            Log.d("image","Camera")
             if(checkPermission(CAMERA_PERMISSION, FLAG_PERM_CAMERA) ){
                 move_camera()
             }
@@ -208,31 +208,20 @@ class PostingAddActivity : AppCompatActivity() {
     fun saveImageToFile(bitmap: Bitmap): File {
         val filename = "image_${System.currentTimeMillis()}.png"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageFile = File.createTempFile(filename, null, storageDir)
+        val imageFile = File(storageDir, filename)
+        Log.d("camera","$filename ${imageFile.path}")
         val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream)
         outputStream.flush()
         outputStream.close()
         return imageFile
     }
 
-    private fun getMultipartFromUri(uri: Uri,context:Context): MultipartBody.Part? {
-        val filepath = uri.path
-        val file = File(filepath)
-        var inputStream: InputStream? = null
-        try {
-            inputStream =  context.contentResolver.openInputStream(uri)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        val bitmap:Bitmap = BitmapFactory.decodeStream(inputStream)
-        val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 20, byteArrayOutputStream)
-        var requestBody: RequestBody? = RequestBody.create("image/*".toMediaTypeOrNull(), byteArrayOutputStream.toByteArray())
-        val body = requestBody?.let { MultipartBody.Part.createFormData("images", file.name, it) }
-
-
-        return body
+    fun uriToMultipartBody(context: Context, uri: Uri): File {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+       val imgFile =  saveImageToFile(bitmap)
+        return imgFile
     }
 
 
@@ -245,9 +234,24 @@ class PostingAddActivity : AppCompatActivity() {
                 FLAG_PERM_STORAGE ->{
                     val uri = data?.data // 선택한 이미지의 Uri 객체
                     binding.ivCamera.setImageURI(uri)
-                    val body = uri?.let { getMultipartFromUri(it, context = this) }
-                    imgFile = body
+                    val file = uri?.let { uriToMultipartBody(this@PostingAddActivity,it) }
+                    Log.d("gallery","${File(file?.path).length()}")
+//                    val file = File(filePath)
+//
+//                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+//                    imgFile = body
+                    val requestFile =
+                        file?.let { RequestBody.create("image/*".toMediaTypeOrNull(), it) }
+                    imgFile =
+                        requestFile?.let {
+                            MultipartBody.Part.createFormData("images", file.name,
+                                it
+                            )
+                        }
                     Log.d("gallery","${imgFile}")
+
+
                 }
                 FLAG_REQ_CAMERA ->{
                   if (data?.extras?.get("data") != null) {
@@ -255,16 +259,22 @@ class PostingAddActivity : AppCompatActivity() {
                         val bitmap = data?.extras?.get("data") as Bitmap
                         binding.ivCamera.setImageBitmap(bitmap)
                       val file = saveImageToFile(bitmap)
+                      Log.d("Camera","${file::class.simpleName}")
                       val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                       imgFile = MultipartBody.Part.createFormData("images", file.name, requestFile)
-
                     }
-
                 }
-
             }
-
         }
+    }
+    private fun getPathFromUri(uri: Uri): String {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(uri, projection, null, null, null) ?: return uri.path ?: ""
+        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(columnIndex)
+        cursor.close()
+        return path
     }
 
     //checkPermission() 에서 ActivityCompat.requestPermissions 을 호출한 다음 사용자가 권한 허용여부를 선택하면 해당 메소드로 값이 전달 됩니다.
