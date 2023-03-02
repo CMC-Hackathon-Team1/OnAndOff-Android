@@ -1,9 +1,6 @@
 package com.onandoff.onandoff_android.data.api.feed
 
-import com.onandoff.onandoff_android.data.model.FeedData
-import com.onandoff.onandoff_android.data.model.FeedSimpleData
-import com.onandoff.onandoff_android.data.model.FeedReadData
-import com.onandoff.onandoff_android.data.model.FeedResponse
+import com.onandoff.onandoff_android.data.model.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -39,4 +36,7 @@ interface FeedInterface {
     fun likeFeedResponse(
         @Body body:FeedSimpleData
     ): Call<FeedResponse>
+
+    @GET("/categories/categories")
+    fun getFeedCategoryResponse(): Call<CategoryResponse>
 }

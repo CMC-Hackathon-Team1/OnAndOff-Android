@@ -21,6 +21,19 @@ data class FeedSimpleData(
     val feedId:Int
 )
 
+data class CategoryResponse(
+    @SerializedName("statusCode")
+    val statusCode: Int,
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("result")
+    val result: List<CategoryData>
+)
+
+data class CategoryData(
+    val categoryId: Int,
+    val categoryName:String
+)
 data class FeedReadData(
     val feedId: Int,
     val categoryId: Int,
