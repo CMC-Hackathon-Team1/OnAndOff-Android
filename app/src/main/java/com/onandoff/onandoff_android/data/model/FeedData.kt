@@ -1,7 +1,6 @@
 package com.onandoff.onandoff_android.data.model
 
 import com.google.gson.annotations.SerializedName
-import java.io.File
 
 data class FeedData(
     val profileId: Int,
@@ -17,7 +16,7 @@ data class FeedResponse(
     @SerializedName("message")val message:String
 )
 
-data class FeedDeleteData(
+data class FeedSimpleData(
     val profileId: Int,
     val feedId:Int
 )
