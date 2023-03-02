@@ -3,7 +3,6 @@ package com.onandoff.onandoff_android.presentation.splash
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Constraints
 import com.kakao.sdk.auth.model.OAuthToken
@@ -13,9 +12,11 @@ import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.KakaoRequest
 import com.onandoff.onandoff_android.data.model.KakaoResponse
 import com.onandoff.onandoff_android.databinding.ActivitySplashBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.presentation.usercheck.SignInActivity
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_JWT
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
@@ -89,20 +90,29 @@ class SplashActivity:AppCompatActivity() {
         Log.i(Constraints.TAG, "토큰반환 성공 ${token.accessToken}")
         val userInterface: UserInterface? =
             RetrofitClient.getClient()?.create(UserInterface::class.java)
-        val call = userInterface?.kakaoLogIn(kakaoToken = token.accessToken)
+        val call = userInterface?.kakaoLogIn(KakaoRequest(token.accessToken))
         call?.enqueue(object : Callback<KakaoResponse> {
             override fun onResponse(
                 call: Call<KakaoResponse>,
                 response: Response<KakaoResponse>
             ) {
-                Log.d("성공!", response.body()?.result?.accessToken.toString());
+                val body = response.body()
+                response.body()?.result?.jwt?.let { Log.d("성공!", it) };
                 prefs.putSharedPreference(
                     SHARED_PREFERENCE_NAME_JWT,
-                    response.body()?.result?.accessToken!!
+                    body?.result?.jwt!!
                 )
-//                    dialog.setContentView(R.layout.bottomsheet_check_permission)
-                val Intent = Intent(this@SplashActivity, MainActivity::class.java)
-                startActivity(Intent)
+                Log.d("Splash",body?.result.state)
+                if(body?.result.state == "로그인 완료"){
+                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+
+                }else{
+                    val intent = Intent(this@SplashActivity, SignupPolicyActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
 
             }
 

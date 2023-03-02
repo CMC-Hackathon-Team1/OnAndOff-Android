@@ -4,15 +4,21 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.data.model.SignUpResponse
 import com.onandoff.onandoff_android.databinding.ActivitySignupBinding
+import com.onandoff.onandoff_android.presentation.splash.SignupEmailActivity
 import retrofit2.*
+import java.util.regex.Pattern
 
 class SignupActivity:AppCompatActivity() {
     private lateinit var binding : ActivitySignupBinding
@@ -28,21 +34,55 @@ class SignupActivity:AppCompatActivity() {
         binding.ivArrow.setOnClickListener{
             finish()
         }
-        binding.btSingup.setOnClickListener {
+        binding.btSingup.setOnClickListener{
+            //1. email 입력값
             val email = binding.etSignupEmail.text.toString()
+            //2. password 입력값
             val password = binding.etSignupPassword.text.toString()
+            //3. password 확인 입력값
             val password_re = binding.etSignupPasswordRepeat.text.toString()
-            if (email.isEmpty() || password.isEmpty()) {
-                isExistBlank = true
-            } else {
-                if (password_re == password) {
-                    isPWSame = true
-                }
-            }
-            if (!isExistBlank && isPWSame) {
 
+
+            //조건1) 두 필드중 입력을 안했다면
+            if (email.isEmpty()) {
+                isExistBlank = true
+                setTextViewState(binding.tvSigninEmailError, binding.tvSigninEmailErrorLine, "이미 사용 중인 이메일 입니다.", true)
+            } else {
+                setTextViewState(binding.tvSigninEmailError, binding.tvSigninEmailErrorLine, "인증번호를 받기위해 정확한 이메일 주소를 입력해주세요.", false)
+            }
+
+            if (password.isEmpty()) {
+                isExistBlank = true
+                setTextViewState(binding.tvSigninPasswordError, binding.tvSigninPasswordErrorLine, "잘못된 입력입니다.(영문,특수문자 포함 8글자 이상)", true)
+            } else {
+                setTextViewState(binding.tvSigninPasswordError, binding.tvSigninPasswordErrorLine, "영문, 숫자, 특수문자 포함 8글자 이상", false)
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                setTextViewState(binding.tvSigninEmailError, binding.tvSigninEmailErrorLine, "잘못된 이메일입니다.", true)
+                return@setOnClickListener
+            }else{
+                setTextViewState(binding.tvSigninEmailError, binding.tvSigninEmailErrorLine, "인증번호를 받기위해 정확한 이메일 주소를 입력해주세요.", false)
+            }
+
+            if (!Pattern.matches("^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-zA-Z]).{8,20}$", password)) {
+                setTextViewState(binding.tvSigninPasswordError, binding.tvSigninPasswordErrorLine, "잘못된 입력입니다.(영문,특수문자 포함 8글자 이상)", true)
+                return@setOnClickListener
+            }else{
+                setTextViewState(binding.tvSigninPasswordError, binding.tvSigninPasswordErrorLine, "영문, 숫자, 특수문자 포함 8글자 이상", false)
+
+            }
+
+            if (password_re == password) {
+                isPWSame = true
+//                setTextViewState(binding.tvSigninPasswordError, binding.tvSigninPasswordErrorLine, "영문, 숫자, 특수문자 포함 8글자 이상", false)
+                setTextViewState(binding.tvSigninPasswordSameError, binding.tvSigninPasswordSameErrorLine, "영문, 숫자, 특수문자 포함 8글자 이상", false)
+            }else{
+                setTextViewState(binding.tvSigninPasswordSameError, binding.tvSigninPasswordSameErrorLine, "위의 비밀번호와 다릅니다.", true)
+            }
+
+            if (!isExistBlank && isPWSame) {
                 val user = SignRequest(email,password)
-                val call = userInterface?.signUp(user)
+                val call = userInterface?.signUp(user,0)
                 call?.enqueue(object :Callback<SignUpResponse> {
                     override fun onResponse(
                         call: Call<SignUpResponse>,
@@ -55,15 +95,19 @@ class SignupActivity:AppCompatActivity() {
                             "Post",
                             "retrofit manager called, onSucess called but already join!"
                             );
-                           dialog("user exist")
+                            setTextViewState(binding.tvSigninEmailError, binding.tvSigninEmailErrorLine, "이미 사용중인 이메일입니다.", true)
+
                         }
                         else -> {
                             Log.d(
                                 "Post",
                                 "retrofit manager called, onSucess called with ${body}"
                             );
-                            Toast.makeText(this@SignupActivity,"회원가입 성공! 로그인해주세요:)",Toast.LENGTH_SHORT).show()
-                            val Intent = Intent(this@SignupActivity, SignInActivity::class.java)
+                            Toast.makeText(this@SignupActivity,"회원가입 성공! 이메일 인증단계로 넘어갑니다",Toast.LENGTH_SHORT).show()
+
+                            val Intent = Intent(this@SignupActivity, SignupEmailActivity::class.java)
+                            Intent.putExtra("email",email)
+                            Intent.putExtra("password",password)
                             startActivity(Intent)
                             finish()
                         }
@@ -74,47 +118,24 @@ class SignupActivity:AppCompatActivity() {
                             "Post",
                             "retrofit manager called, onSucess called but already join!"
                         );
-                        dialog("server error")
+                        Toast.makeText(this@SignupActivity,"서버문제로 회원가입에 실패하였습니다.$t",Toast.LENGTH_SHORT).show()
                     }
                 })
-                } else {
-                if (isExistBlank) {
-                    dialog("blank")
-                } else if (!isPWSame) {
-                    dialog("pw error")
                 }
             }
         }
-    }
-    fun dialog( type:String){
-        val dialog = AlertDialog.Builder(this);
-        if (type.equals("success")){
-            dialog.setTitle("회원가입 성공!")
-            dialog.setMessage("프로필 생성 페이지로 이동합니다")
-        }else if (type.equals("user exist")){
-            dialog.setTitle("회원가입  실패")
-            dialog.setMessage("이미 가입된 계정이 있습니다")
-        }else if (type.equals("blank")){
-            dialog.setTitle("회원가입 실패")
-            dialog.setMessage("입력란을 모두 입력해주세요")
-        }else if (type.equals("pw error")){
-            dialog.setTitle("회원가입 실패")
-            dialog.setMessage("비밀번호가 다릅니다")
-        }else if(type.equals("server error")){
-            dialog.setTitle("회원가입 실패")
-            dialog.setMessage("서버 통신에 실패했습니다")
+    private fun setTextViewState(tv: TextView, view: View, errorMsg: String, isError: Boolean) {
+        if (isError) {
+            tv.text = errorMsg
+            tv.setTextColor(getColor(R.color.errorColor))
+            view.setBackgroundColor(getColor(R.color.errorColor))
+        } else {
+            tv.text = errorMsg
+            tv.setTextColor(getColor(R.color.black_fifth))
+            view.setBackgroundColor(getColor(R.color.black))
         }
-        val dialogListener = object: DialogInterface.OnClickListener{
-            override fun onClick(p0: DialogInterface?, p1: Int) {
-                when(p1){
-                    DialogInterface.BUTTON_POSITIVE ->
-                        Log.d(TAG,"다이얼로그 닫기!")
-                }
-            }
-        }
-        dialog.setPositiveButton("확인",dialogListener)
-        dialog.show()
     }
+
 
 
 

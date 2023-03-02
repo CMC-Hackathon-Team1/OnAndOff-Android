@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="31dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
@@ -14,7 +15,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_baseline_arrow_back_ios_24"
-            android:layout_marginLeft="25.97dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -22,7 +22,7 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="개인정보 처리방침"
+            android:text="이메일 인증"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -31,18 +31,23 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <ScrollView
-        android:layout_marginTop="16dp"
-        android:paddingHorizontal="31dp"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/private_policy"
-            android:textColor="@color/black"/>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text=""
+        />
+    <TextView
+        android:id="@+id/btn_email_verify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="인증하기"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:paddingVertical="14dp"
+        android:textStyle="bold"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/button_primary"
+        />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
