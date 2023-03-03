@@ -1,6 +1,7 @@
 package com.onandoff.onandoff_android.presentation.home.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.onandoff.onandoff_android.data.api.user.MyPersonaInterface
@@ -14,11 +15,12 @@ import com.onandoff.onandoff_android.data.repository.ProfileRepository
 import com.onandoff.onandoff_android.data.repository.ProfileRepositoryImpl
 import com.onandoff.onandoff_android.data.repository.StatisticsRepository
 import com.onandoff.onandoff_android.data.repository.StatisticsRepositoryImpl
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
 class HomeViewModel(
     application: Application,
@@ -55,10 +57,12 @@ class HomeViewModel(
             }
         }
 
-        object GetPersonaSuccess : State()
+        data class GetPersonaSuccess(
+            val myProfile: MyProfileItem
+        ) : State()
 
         data class GetPersonaListSuccess(
-            val myProfileList: MyProfileListResponse
+            val profileList: List<MyProfileItem>
         ) : State()
 
         data class GetMonthlyCountSuccess(
@@ -73,14 +77,6 @@ class HomeViewModel(
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _myPersonaList = MutableLiveData<List<CreateMyProfileData>>() // 나의 페르소나 목록
-    val myPersonaList: LiveData<List<CreateMyProfileData>>
-        get() = _myPersonaList
-
-    private val _myPersona = MutableLiveData<CreateMyProfileData>() // 나의 페르소나
-    val myPersona: LiveData<CreateMyProfileData>
-        get() = _myPersona
-
     val personaName: MutableLiveData<String> = MutableLiveData() // 페르소나 이름
     val profileName: MutableLiveData<String> = MutableLiveData() // 사용자 이름
 
@@ -88,8 +84,10 @@ class HomeViewModel(
     val monthlyMyFeedsCount: MutableLiveData<Int> = MutableLiveData() // 월 별 작성한 게시글 수
     val monthlyMyFollowersCount: MutableLiveData<Int> = MutableLiveData() // 월 별 팔로워 수
 
-    var selectedProfile: MyProfileResponse? = null
+    var selectedProfile: MyProfileItem? = null
         private set
+
+    private val profileList = mutableListOf<MyProfileItem>()
 
 
     // TODO: 홈 화면에 진입하면 페르소나 데이터와 공감(좋아요), 게시글, 팔로워 수가 보여야 함
@@ -125,7 +123,16 @@ class HomeViewModel(
     fun getMyPersonaList() {
         viewModelScope.launch {
             kotlin.runCatching { profileRepository.getMyProfileList() }
+                .map {
+                    it.result
+                        ?.mapIndexed { index, myProfileResponse ->
+                            MyProfileItem(myProfileResponse, index == 0)
+                        }
+                        .orEmpty()
+                }
                 .onSuccess {
+                    profileList.clear()
+                    profileList.addAll(it)
                     _state.value = State.GetPersonaListSuccess(it)
                 }
                 .onFailure {
@@ -149,12 +156,26 @@ class HomeViewModel(
     }
 
 
-    fun setSelectedProfile(profileResponse: MyProfileResponse) {
-        selectedProfile = profileResponse
-        val profileId = profileResponse.profileId
+    fun setSelectedProfile(item: MyProfileItem) {
+        selectedProfile = item
+        val profileId = item.myProfile.profileId
+
+        val newProfileList = profileList.map {
+            it.copy(it.myProfile, isSelected = it.myProfile.profileId == item.myProfile.profileId)
+        }
+        profileList.clear()
+        profileList.addAll(newProfileList)
+        Log.d("newProfileList", "$newProfileList")
+        _state.value = State.GetPersonaListSuccess(newProfileList)
 
         getMyPersona(profileId)
         getMonthlyStatistics(profileId) // like, my feed, follower
+
+        // 프로필 변경시마다 현재 Profile id를 등록
+        SharePreference.prefs.putSharedPreference(
+            APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
+            item.myProfile.profileId
+        )
 //        getMonthlyLikesCount(profileId)  // like 만
 //        getMonthlyMyFeedsCount(profileId) // my feed
 //        getMonthlyFollowersCount(profileId) // follower
@@ -221,8 +242,12 @@ class HomeViewModel(
         viewModelScope.launch {
             kotlin.runCatching { statisticsRepository.getMonthlyMyFeedsCount(profileId) }
                 .onSuccess {
-                    _state.value = State.GetMonthlyCountSuccess(monthlyLikesCount.value!!, monthlyMyFeedsCount.value!!, monthlyMyFollowersCount.value!!)
-                        //여기 이상함
+                    _state.value = State.GetMonthlyCountSuccess(
+                        monthlyLikesCount.value!!,
+                        monthlyMyFeedsCount.value!!,
+                        monthlyMyFollowersCount.value!!
+                    )
+                    //여기 이상함
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -247,7 +272,11 @@ class HomeViewModel(
         viewModelScope.launch {
             kotlin.runCatching { statisticsRepository.getMonthlyFollowersCount(profileId) }
                 .onSuccess {
-                    _state.value = State.GetMonthlyCountSuccess(monthlyLikesCount.value!!, monthlyMyFeedsCount.value!!, monthlyMyFollowersCount.value!!)
+                    _state.value = State.GetMonthlyCountSuccess(
+                        monthlyLikesCount.value!!,
+                        monthlyMyFeedsCount.value!!,
+                        monthlyMyFollowersCount.value!!
+                    )
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -303,7 +332,7 @@ class HomeViewModel(
     }
 }
 
-data class MyProfileClicked(
+data class MyProfileItem constructor(
     val myProfile: MyProfileResponse,
-    val clicked: Boolean
+    val isSelected: Boolean
 )
