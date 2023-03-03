@@ -64,40 +64,40 @@
             android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_fifth"/>
-    <LinearLayout
-        android:id="@+id/layout_setting_private"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="14dp">
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_setting_lock_30"/>
-        <TextView
-            android:layout_marginStart="17dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="개인정보 보호"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginRight="16dp"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <ImageView
-            android:layout_marginEnd="10dp"
-            
-            android:layout_width="16dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
-    </LinearLayout>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/black_fifth"/>-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_setting_private"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingVertical="14dp">-->
+<!--        <ImageView-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:src="@drawable/ic_setting_lock_30"/>-->
+<!--        <TextView-->
+<!--            android:layout_marginStart="17dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="개인정보 보호"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginRight="16dp"/>-->
+<!--        <View-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            />-->
+<!--        <ImageView-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            -->
+<!--            android:layout_width="16dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />-->
+<!--    </LinearLayout>-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -151,7 +151,7 @@
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알림"
+            android:text="피드백 / 문의하기"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>

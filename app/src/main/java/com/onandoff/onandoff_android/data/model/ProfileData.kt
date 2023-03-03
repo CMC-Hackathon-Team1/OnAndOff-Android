@@ -14,7 +14,7 @@ data class ProfileEditRequest(
     @SerializedName("statusMessage")val statusMessage: String,
     @SerializedName("image")val image:String,
     @SerializedName("defaultImage")val defaultImage:Boolean,
-    )
+)
 
 data class ProfileResponseResult(
     @SerializedName("profileId") val profileId: Int

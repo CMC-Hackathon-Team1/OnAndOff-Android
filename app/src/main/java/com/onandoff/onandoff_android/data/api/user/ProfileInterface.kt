@@ -34,4 +34,11 @@ interface ProfileInterface {
 
     @DELETE("/profiles/{profileId}")
     fun profileDelete(@Path("profileId") profileId:Int):Call<ProfileResult>
+
+    @POST("/users/send-email")
+    fun sendFeedBack(@Body):Call<ProfileResult>
+
+    @DELETE("/users/account")
+    fun exitAccount(@Body):Call<ProfileResult>
+
 }
