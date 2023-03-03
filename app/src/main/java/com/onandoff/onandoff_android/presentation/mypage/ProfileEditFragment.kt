@@ -35,6 +35,7 @@ import com.onandoff.onandoff_android.databinding.DialogProfileDeleteBinding
 import com.onandoff.onandoff_android.databinding.DialogProfileDeleteDefaultBinding
 import com.onandoff.onandoff_android.databinding.FragmentProfileEditBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.presentation.home.HomeFragment
 import com.onandoff.onandoff_android.presentation.usercheck.SignInActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
@@ -54,11 +55,12 @@ class ProfileEditFragment: Fragment() {
     var imgFile: MultipartBody.Part? = null
     var isBasicImage:Boolean = false
     val TAG:String = "MYPAGE"
-    var feedLength:Int = 0
+    var profileCount:Int = 0
     private lateinit var binding : FragmentProfileEditBinding
     val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(
         ProfileInterface::class.java)
     val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+    var profileIdList = ArrayList<Int>()
     lateinit var mainActivity: MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +82,15 @@ class ProfileEditFragment: Fragment() {
 //        binding.tvNickname.text = nickName.toString()
 //        binding.ivProfileAvatar.setImageUrl(profileImg.toString())
 //        binding.tvOneline.text = statusMsg.toString()
+        binding.ivArrow.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this@ProfileEditFragment).commit()
+        }
         binding.ivProfileAvatar.setOnClickListener{
             showBottomSheet(mainActivity)
         }
         binding.tvMypageDelete.setOnClickListener{
-            if (feedLength <=1){
+            if (profileCount <=1){
                 showDialog()
             }else{
                 showDefaultDialog()
@@ -213,8 +219,12 @@ class ProfileEditFragment: Fragment() {
                 response: Response<ProfileListResponse>
             ){
                 Log.d(TAG,"${response.code()}")
-                feedLength = response.body()?.result?.size ?: 0
+                profileCount = response.body()?.result?.size ?: 0
 
+                for (i in 0 until profileCount ){
+                    response.body()?.result?.get(i)?.profileId?.let { profileIdList.add(it) }
+                }
+                for(index in profileIdList.indices) println("fruits[$index] : ${profileIdList[index]}")
             }
             override fun onFailure(call: Call<ProfileListResponse>, t: Throwable){
 
@@ -255,18 +265,17 @@ class ProfileEditFragment: Fragment() {
                 call: Call<ProfileResult>,
                 response: Response<ProfileResult>
             ){
-                if(feedLength<=1){
-                   //TODO : showDialog()
-                   //start Intent to createActivity
-
+                if(response.code() ==1504){
+                    Toast.makeText(mainActivity,"이미 해당 프로필이 삭제되었습니다!",Toast.LENGTH_SHORT).show()
                 }else{
-                    //TODO : showDialog()
-                    //start Intent to mainActivity
+                    Toast.makeText(mainActivity,"프로필을 성공적으로 삭제했습니다!",Toast.LENGTH_SHORT).show()
+                    getMyProfile()
+                    prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,profileIdList[0])
                 }
 
             }
             override fun onFailure(call: Call<ProfileResult>, t: Throwable){
-
+                Toast.makeText(mainActivity,"프로필 삭제가 실패했습니다${t}",Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -286,6 +295,14 @@ class ProfileEditFragment: Fragment() {
         }
         dialogView.btnYes.setOnClickListener{
             deletePersona()
+            // TODO : sharedPreference에 저장된 현재 profileId 바꿔주기
+//            prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID, profileId!!)
+            val homeFragment = HomeFragment()
+            mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcv_main,homeFragment)
+                .commit()
+            dialog.dismiss()
         }
     }
     fun showDialog(){
@@ -300,11 +317,12 @@ class ProfileEditFragment: Fragment() {
         }
         dialog.show()
         dialogView.btnYes.setOnClickListener{
-            val homeFragment = ProfileEditFragment()
+            val homeFragment = HomeFragment()
             mainActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fcv_main,homeFragment)
                 .commit()
+            dialog.dismiss()
         }
         dialogView.btnNo.setOnClickListener{
             dialog.dismiss()

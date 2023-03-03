@@ -23,7 +23,7 @@ interface ProfileInterface {
     @GET("/profiles/my-profiles")
     fun profileCheck(): Call<ProfileListResponse>
 
-
+    @Multipart
     @PATCH("/profiles/{profileId}")
     fun profileEdit(@Path("profileId")  profileId:Int,
         @Part profileName: MultipartBody.Part,
