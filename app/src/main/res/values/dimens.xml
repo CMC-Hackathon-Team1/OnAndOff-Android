@@ -6,6 +6,7 @@
     <dimen name="title_text_size">17sp</dimen>
     <dimen name="head_text_size">20sp</dimen>
     <dimen name="big_text_size">30sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="normal_dp_size">16dp</dimen>
 </resources>

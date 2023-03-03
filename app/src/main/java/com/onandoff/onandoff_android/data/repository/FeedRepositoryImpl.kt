@@ -20,7 +20,7 @@ data class FeedRequest(
 class FeedRepositoryImpl(
     private val feedRemoteDataSource: FeedRemoteDataSource
 ) : FeedRepository {
-    override suspend fun getFeedListSource(request: FeedRequest): Flow<PagingData<FeedData>> {
+    override suspend fun getFeedListSource(request: FeedRequest): Flow<PagingData<LookAroundFeedData>> {
 
         return Pager(
             config = PagingConfig(
@@ -61,8 +61,8 @@ class FeedRepositoryImpl(
     }
 }
 
-fun FeedResponse.toEntity(): FeedData {
-    return FeedData(
+fun LookAroundFeedResponse.toEntity(): LookAroundFeedData {
+    return LookAroundFeedData(
         feedId = feedId,
         profileId = profileId,
         profileImg = "",

@@ -1,9 +1,9 @@
 package com.onandoff.onandoff_android.presentation
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.navigation.NavigationBarView
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         val view = binding.root
 
         setContentView(view)
-
 
         setupFragmentAdapter()
         setupBottomNavigationView()
@@ -93,6 +92,4 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
         return true
     }
-
-
 }

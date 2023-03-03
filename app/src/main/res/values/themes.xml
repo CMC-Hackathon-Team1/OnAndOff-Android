@@ -85,4 +85,11 @@
     <style name="SpinnerTheme" parent="Theme.OnAndOffAndroid">
         <item name="android:dropDownListViewStyle">@style/SpinnerDivideStyle</item>
     </style>
+    <style name="Theme.OnAndOffAndroid.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.OnAndOffAndroid.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.OnAndOffAndroid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

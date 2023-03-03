@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:context=".presentation.profile.ProfileCreateActivity"
+    android:background="@drawable/bottom_dialog_border"
+    android:elevation="20dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_marginStart="27dp"
+            android:id="@+id/iv_close_dialog"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/close"
+           app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <TextView
+
+            android:text="프로필 사진 업로드"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_basic"
+        android:paddingTop="30dp"
+        android:paddingBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_marginStart="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/default_image"/>
+        <TextView
+            android:layout_marginStart="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기본 이미지로 변경"
+            android:includeFontPadding="false"
+            android:textFontWeight="400"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#D9D9D9" />
+    <LinearLayout
+        android:id="@+id/layout_gallery"
+        android:paddingBottom="30dp"
+        android:paddingTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_marginStart="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gallery"/>
+        <TextView
+            android:layout_marginStart="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="앨범에서 찾기"
+            android:includeFontPadding="false"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

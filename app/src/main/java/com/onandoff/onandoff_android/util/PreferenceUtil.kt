@@ -75,6 +75,6 @@ class PreferenceUtil(context: Context) {
 object APIPreferences{
     val SHARED_PREFERENCE_NAME_JWT:String = "jwt"
     val SHARED_PREFERENCE_NAME_EMAIL:String = "email"
-    val SHARED_PREFERENCE_NAME_USERID :String = "userId"
-    val SHARED_PREFERENCE_NAME_PROFILEID :String = "profileId"
+    val SHARED_PREFERENCE_NAME_USERID :String = "profileId"
+    val SHARED_PREFERENCE_NAME_PROFILEID :String = "currentPersonaId"
 }

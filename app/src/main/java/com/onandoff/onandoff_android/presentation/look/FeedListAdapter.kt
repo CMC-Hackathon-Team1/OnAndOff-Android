@@ -9,26 +9,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.ItemFeedListBinding
 
 class FeedListAdapter(
-    private val onProfileClick: (FeedData) -> Unit,
-    private val onFollowClick: (FeedData) -> Unit,
-    private val onLikeClick: (FeedData) -> Unit,
-    private val onOptionClick: (FeedData) -> Unit
-) : PagingDataAdapter<FeedData, FeedListAdapter.FeedListViewHolder>(FeedListDiffUtil) {
+    private val onProfileClick: (LookAroundFeedData) -> Unit,
+    private val onFollowClick: (LookAroundFeedData) -> Unit,
+    private val onLikeClick: (LookAroundFeedData) -> Unit,
+    private val onOptionClick: (LookAroundFeedData) -> Unit
+) : PagingDataAdapter<LookAroundFeedData, FeedListAdapter.FeedListViewHolder>(FeedListDiffUtil) {
 
-    private val feedDataList = mutableListOf<FeedData>()
+    private val feedDataList = mutableListOf<LookAroundFeedData>()
 
     class FeedListViewHolder(
         private val binding: ItemFeedListBinding,
-        private val onProfileClick: (FeedData) -> Unit,
-        private val onFollowClick: (FeedData) -> Unit,
-        private val onLikeClick: (FeedData) -> Unit,
-        private val onOptionClick: (FeedData) -> Unit
+        private val onProfileClick: (LookAroundFeedData) -> Unit,
+        private val onFollowClick: (LookAroundFeedData) -> Unit,
+        private val onLikeClick: (LookAroundFeedData) -> Unit,
+        private val onOptionClick: (LookAroundFeedData) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(feedData: FeedData) {
+        fun bind(feedData: LookAroundFeedData) {
             binding.tvPersonaName.text = feedData.personaName
             Glide.with(binding.root.context)
                 .load(feedData.profileImg)
@@ -97,34 +98,34 @@ class FeedListAdapter(
         }
     }
 
-    fun setLookAroundListOnTab(feedDataList: List<FeedData>) {
+    fun setLookAroundListOnTab(feedDataList: List<LookAroundFeedData>) {
         this.feedDataList.clear()
         this.feedDataList.addAll(feedDataList)
         notifyDataSetChanged()
     }
 
-    fun add(position: Int, feedData: FeedData) {
+    fun add(position: Int, feedData: LookAroundFeedData) {
         feedDataList.add(position, feedData)
         notifyItemInserted(position)
     }
 
-    fun replaceItem(feedData: FeedData) {
+    fun replaceItem(feedData: LookAroundFeedData) {
         val index = feedDataList.indexOf(feedData)
         feedDataList[index] = feedData
         notifyItemChanged(index)
     }
 
-    fun delete(position: Int, feedData: FeedData) {
+    fun delete(position: Int, feedData: LookAroundFeedData) {
         feedDataList.remove(feedData)
         notifyItemRemoved(position)
     }
 
-    companion object FeedListDiffUtil : DiffUtil.ItemCallback<FeedData>() {
-        override fun areItemsTheSame(oldItem: FeedData, newItem: FeedData): Boolean {
+    companion object FeedListDiffUtil : DiffUtil.ItemCallback<LookAroundFeedData>() {
+        override fun areItemsTheSame(oldItem: LookAroundFeedData, newItem: LookAroundFeedData): Boolean {
             return oldItem.profileId == newItem.profileId
         }
 
-        override fun areContentsTheSame(oldItem: FeedData, newItem: FeedData): Boolean {
+        override fun areContentsTheSame(oldItem: LookAroundFeedData, newItem: LookAroundFeedData): Boolean {
             return oldItem == newItem
         }
     }

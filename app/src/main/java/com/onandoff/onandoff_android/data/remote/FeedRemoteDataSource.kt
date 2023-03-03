@@ -12,7 +12,7 @@ interface FeedRemoteDataSource {
         categoryId: Int,
         fResult: Boolean,
         query: String
-    ): FeedListResponse
+    ): GetFeedListResponse
 
     suspend fun getFeedDetailResult(feedId: Int, profileId: Int): FeedDetailResponse
 

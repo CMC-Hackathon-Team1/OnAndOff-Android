@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface CalendarService {
+interface CalendarInterface {
     @GET("/feeds/my-feeds/in-calendar")
     fun getCalendarList(
         @Query("profileId") profileId: Int,

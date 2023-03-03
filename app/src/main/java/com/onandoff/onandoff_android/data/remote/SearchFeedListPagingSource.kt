@@ -4,20 +4,21 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.onandoff.onandoff_android.data.model.FeedResponse
+import com.onandoff.onandoff_android.data.model.LookAroundFeedResponse
 import com.onandoff.onandoff_android.data.repository.FeedRequest
 
 class SearchFeedListPagingSource(
     private val feedRemoteDataSource: FeedRemoteDataSource,
     private val request: FeedRequest
-) : PagingSource<Int, FeedResponse>() {
+) : PagingSource<Int, LookAroundFeedResponse>() {
     init {
         Log.d("feedRequest", "${hashCode()}")
     }
-    override fun getRefreshKey(state: PagingState<Int, FeedResponse>): Int {
+    override fun getRefreshKey(state: PagingState<Int, LookAroundFeedResponse>): Int {
         return INITIAL_KEY
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedResponse> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LookAroundFeedResponse> {
         val page = params.key ?: 1
         Log.d("feedRequest page", "$page")
 

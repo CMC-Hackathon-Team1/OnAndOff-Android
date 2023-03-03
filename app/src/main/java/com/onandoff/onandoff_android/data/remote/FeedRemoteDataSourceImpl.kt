@@ -15,7 +15,7 @@ class FeedRemoteDataSourceImpl(
         categoryId: Int,
         fResult: Boolean,
         query: String
-    ): FeedListResponse {
+    ): GetFeedListResponse {
         if (query.isNotEmpty()) {
             return feedInterface.getSearchFeedResult(
                 profileId,
@@ -53,5 +53,4 @@ class FeedRemoteDataSourceImpl(
     override suspend fun getCategories(): CategoryListResponse {
         return feedInterface.getCategories()
     }
-
 }

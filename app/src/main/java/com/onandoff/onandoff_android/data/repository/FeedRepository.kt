@@ -8,7 +8,7 @@ import com.onandoff.onandoff_android.data.request.ReportFeedRequest
 import kotlinx.coroutines.flow.Flow
 
 interface FeedRepository {
-    suspend fun getFeedListSource(request: FeedRequest): Flow<PagingData<FeedData>>
+    suspend fun getFeedListSource(request: FeedRequest): Flow<PagingData<LookAroundFeedData>>
 
     suspend fun getFeedDetailResult(feedId: Int, profileId: Int): FeedDetailResponse
 

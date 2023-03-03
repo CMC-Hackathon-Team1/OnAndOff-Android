@@ -10,6 +10,7 @@ import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.CategoryResponse
 import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.data.model.error.NetworkError
 import com.onandoff.onandoff_android.data.remote.FeedRemoteDataSourceImpl
 import com.onandoff.onandoff_android.data.repository.*
@@ -37,7 +38,7 @@ class FeedListViewModel(
             }
         }
 
-        data class GetFeedListSuccess(val feedList: Flow<PagingData<FeedData>>) : State()
+        data class GetFeedListSuccess(val feedList: Flow<PagingData<LookAroundFeedData>>) : State()
 
         data class GetFeedFailed(val reason: Reason) : State() {
 
@@ -144,8 +145,8 @@ class FeedListViewModel(
     private val feedRequest = Channel<FeedRequest>()
     private val feedLoadEvent = feedRequest.receiveAsFlow()
 
-    private val _feedList = MutableLiveData<Flow<PagingData<FeedData>>>()
-    val feedList: LiveData<Flow<PagingData<FeedData>>> = _feedList
+    private val _feedList = MutableLiveData<Flow<PagingData<LookAroundFeedData>>>()
+    val feedList: LiveData<Flow<PagingData<LookAroundFeedData>>> = _feedList
 
     private var currentExploreType: ExploreType = ExploreType.Normal
     private val fResult: Boolean

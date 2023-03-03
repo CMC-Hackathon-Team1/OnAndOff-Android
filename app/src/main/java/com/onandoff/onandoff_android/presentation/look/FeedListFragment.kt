@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CategoryResponse
 import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.FragmentFeedListBinding
 import com.onandoff.onandoff_android.presentation.look.viewmodel.FeedListViewModel
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
@@ -444,24 +445,24 @@ class FeedListFragment : Fragment() {
         }
     }
 
-    private fun openOptionMenuBottomSheet(feedData: FeedData) {
+    private fun openOptionMenuBottomSheet(feedData: LookAroundFeedData) {
         val bottomSheetDialogFragment = BottomSheetFeedListOptionMenu.newInstance(feedId = feedData.feedId)
         bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
     }
 
-    private fun intentPost(feedData: FeedData) {
+    private fun intentPost(feedData: LookAroundFeedData) {
         // TODO: 해당 데이터의 상세 페이지로 이동하기
 //        val intent = PostingReadActivity.getIntent(requireActivity(), feedData.feedId)
 //        startActivity(intent)
     }
 
-    private fun onClickFollow(feedData: FeedData) {
+    private fun onClickFollow(feedData: LookAroundFeedData) {
         viewModel.follow(feedData.profileId)
         feedData.isFollowing = !feedData.isFollowing
         feedListAdapter.notifyDataSetChanged()
     }
 
-    private fun onClickLike(feedData: FeedData) {
+    private fun onClickLike(feedData: LookAroundFeedData) {
         viewModel.like(feedData.feedId)
         feedData.isLike = !feedData.isLike
         feedListAdapter.notifyDataSetChanged()
