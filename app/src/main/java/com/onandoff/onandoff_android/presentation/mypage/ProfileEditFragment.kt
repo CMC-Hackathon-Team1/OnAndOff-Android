@@ -256,7 +256,7 @@ class ProfileEditFragment: Fragment() {
 
             }
             override fun onFailure(call: Call<ProfileListResultResponse>, t: Throwable){
-                Toast.makeText(mainActivity,"프로필 편집이 실패했습니다${t}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(mainActivity,"프로필 실패했습니다${t}",Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -522,6 +522,7 @@ B. 계정 관련
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="email_verification">%1s로 전송되었습니다.\n이메일 링크에 접속한 후,아래 인증하기 버튼을 눌러주세요.</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
