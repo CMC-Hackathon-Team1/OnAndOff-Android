@@ -530,4 +530,5 @@ B. 계정 관련
     <string name="string_service"><font color ="#58B8A1">(필수)</font> 서비스 이용약관</string>
     <string name="string_privacy"><font color ="#58B8A1">(필수)</font> 개인정보 처리방침</string>
     <string name="password_update"><u><font color ="#58B8A1">비밀번호 재설정</font></u></string>
+    <string name="dialog_delete_account">계정을 정말로 <font color ="#ff6767">삭제</font>하시겠습니까?</string>
 </resources>

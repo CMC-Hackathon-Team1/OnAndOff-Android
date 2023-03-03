@@ -74,6 +74,13 @@
         <activity
             android:name=".presentation.home.posting.PostingAddActivity"
             android:exported="true"/>
+        <activity
+            android:name=".presentation.splash.PrivatePolicyActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".presentation.splash.ServicePolicyActivity"
+            android:exported="true"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.onandoff.onandoff_android.fileprovider"
