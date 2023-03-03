@@ -8,7 +8,7 @@
 
         <variable
             name="myPersona"
-            type="com.onandoff.onandoff_android.data.model.MyProfileResponse" />
+            type="com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,14 +41,14 @@
             app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/Circle">
+            app:cardCornerRadius="30dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_my_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardElevation="0dp"
-                app:shapeAppearanceOverlay="@style/Circle">
+                app:cardCornerRadius="30dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_my_profile"
@@ -56,7 +56,7 @@
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
                     app:fallbackImage="@{R.drawable.persona_profile}"
-                    app:imageUrl="@{myPersona.profileImgUrl}" />
+                    app:imageUrl="@{myPersona.myProfile.profileImgUrl}" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -69,7 +69,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="@{myPersona.personaName}"
+            android:text="@{myPersona.myProfile.personaName}"
             android:textColor="@color/black"
             android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="@id/outer_cv_my_profile"
