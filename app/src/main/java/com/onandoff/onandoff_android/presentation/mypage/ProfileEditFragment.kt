@@ -1,8 +1,11 @@
 package com.onandoff.onandoff_android.presentation.mypage
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,17 +31,23 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.ext.setImageUrl
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.BottomsheetSelectProfileImageBinding
+import com.onandoff.onandoff_android.databinding.DialogProfileDeleteBinding
+import com.onandoff.onandoff_android.databinding.DialogProfileDeleteDefaultBinding
 import com.onandoff.onandoff_android.databinding.FragmentProfileEditBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.presentation.usercheck.SignInActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.Camera
 import com.onandoff.onandoff_android.util.SharePreference
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class ProfileEditFragment: Fragment() {
     //권한 가져오기
@@ -52,27 +62,33 @@ class ProfileEditFragment: Fragment() {
     lateinit var mainActivity: MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getMyProfile()
     }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        var personaName = arguments?.getString("personaName")
+        var nickName = arguments?.getString("nickName")
+        var profileImg = arguments?.getString("profileImg")
+        var statusMsg = arguments?.getString("statusMsg")
+        Log.d("profilEdit","$personaName $nickName $profileImg $statusMsg")
         binding = FragmentProfileEditBinding.inflate(layoutInflater)
-
-        var personaName = arguments?.getBundle("personaName")
-        var nickName = arguments?.getBundle("nickName")
-        var profileImg = arguments?.getBundle("profileImg")
-        var statusMsg = arguments?.getBundle("statusMsg")
-        binding.tvPersonas.text = personaName.toString()
-        binding.tvNickname.text = nickName.toString()
-        binding.ivProfileAvatar.setImageUrl(profileImg.toString())
-        binding.tvOneline.text = statusMsg.toString()
+        binding.profile = ProfileEditData(personaName = personaName!!, profileName = nickName!!, profileImgUrl = profileImg!!, statusMessage = statusMsg!!)
+//        binding.etPersonas.text = personaName.toString()
+//        binding.tvNickname.text = nickName.toString()
+//        binding.ivProfileAvatar.setImageUrl(profileImg.toString())
+//        binding.tvOneline.text = statusMsg.toString()
         binding.ivProfileAvatar.setOnClickListener{
             showBottomSheet(mainActivity)
         }
         binding.tvMypageDelete.setOnClickListener{
-            deletePersona()
+            if (feedLength <=1){
+                showDialog()
+            }else{
+                showDefaultDialog()
+            }
         }
         binding.btSingup.setOnClickListener{
             editPersona()
@@ -111,6 +127,40 @@ class ProfileEditFragment: Fragment() {
         photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
         startActivityForResult(photoPickerIntent, Camera.FLAG_PERM_STORAGE)
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("gallery","req=$requestCode, result = $resultCode, data =$data")
+        if(resultCode== Activity.RESULT_OK){
+            when(requestCode){
+                //Gallery- 저장소 권한 Flag일때
+                Camera.FLAG_PERM_STORAGE ->{
+                    val uri = data?.data // 선택한 이미지의 Uri 객체
+                    binding.ivProfileAvatar.setImageURI(uri)
+                    val filePath = uri?.let { getPathFromUri(it,mainActivity) }
+                    val file = File(filePath)
+                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                    imgFile = body
+
+                    Log.d("gallery","${imgFile}")
+
+                }
+
+            }
+
+        }
+    }
+    private fun getPathFromUri(uri: Uri, context: Context): String {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null) ?: return uri.path ?: ""
+        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(columnIndex)
+        cursor.close()
+        return path
+    }
+
     fun checkPermission(permissions: Array<out String>, flag: Int): Boolean {
         Log.d("permission", "실행됨?")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -174,8 +224,7 @@ class ProfileEditFragment: Fragment() {
     fun editPersona(){
         var etProfileName = binding.etNickname.text
         var etStatusMsg = binding.etOneline.text
-        var etProfileImg = binding.ivProfileAvatar
-    // TODO : call lateinit 시 초기홥아법
+        // TODO : call lateinit 시 초기홥아법
         lateinit var call :Call<ProfileListResultResponse>
         if(imgFile !=null) {
             call = profileInterface?.profileEdit(profileId,
@@ -221,7 +270,48 @@ class ProfileEditFragment: Fragment() {
             }
         })
     }
+    fun showDefaultDialog(){
+        val dialog = Dialog(mainActivity)
+        val dialogView = DialogProfileDeleteDefaultBinding.inflate(LayoutInflater.from(mainActivity))
+        dialog.setContentView(dialogView.root)
+        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
+        if (params != null) {
+            dialog.window?.setLayout(params.width,params.height)
+        }
+        dialog.show()
+        dialogView.btnNo.setOnClickListener{
+            dialog.dismiss()
+        }
+        dialogView.btnYes.setOnClickListener{
+            deletePersona()
+        }
     }
+    fun showDialog(){
+        val dialog = Dialog(mainActivity)
+        val dialogView = DialogProfileDeleteBinding.inflate(LayoutInflater.from(mainActivity))
+        dialog.setContentView(dialogView.root)
+        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
+        if (params != null) {
+            dialog.window?.setLayout(params.width,params.height)
+        }
+        dialog.show()
+        dialogView.btnYes.setOnClickListener{
+            val homeFragment = ProfileEditFragment()
+            mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcv_main,homeFragment)
+                .commit()
+        }
+        dialogView.btnNo.setOnClickListener{
+            dialog.dismiss()
+        }
+    }
+
+}
 
 
 

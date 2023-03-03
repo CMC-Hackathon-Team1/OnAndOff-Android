@@ -41,3 +41,9 @@ data class ProfileListResultResponse(
     @SerializedName("statusMessage")val statusMessage: String,
     @SerializedName("createdAt")val createdAt: String,
 )
+data class ProfileEditData(
+    @SerializedName("personaName")val personaName:String,
+    @SerializedName("profileName")val profileName: String,
+    @SerializedName("profileImgUrl")val profileImgUrl: String,
+    @SerializedName("statusMessage")val statusMessage: String
+)

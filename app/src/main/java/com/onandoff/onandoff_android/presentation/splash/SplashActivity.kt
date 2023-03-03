@@ -86,6 +86,9 @@ class SplashActivity:AppCompatActivity() {
 
 
         }
+        binding.btGoogleLogin.setOnClickListener{
+            //TODO : Google Login code 작성
+        }
     }
 
     //카카오에서 반환해준 토큰을 우리쪽 서버와 통신하여 jwt를 얻는 함수
