@@ -33,6 +33,9 @@ data class ProfileResult(
     @SerializedName("statusCode")val statusCode :Int,
     @SerializedName("message")val message:String,
 )
+data class FeedbackRequest(
+    @SerializedName("content")val content:String
+)
 data class ProfileListResultResponse(
     @SerializedName("profileId")val profileId:Int,
     @SerializedName("personaName")val personaName:String,

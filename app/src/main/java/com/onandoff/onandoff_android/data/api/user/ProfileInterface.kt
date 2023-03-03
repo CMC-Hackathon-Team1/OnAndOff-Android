@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.data.api.user
 
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import com.onandoff.onandoff_android.data.model.*
 import okhttp3.MultipartBody
@@ -35,10 +36,13 @@ interface ProfileInterface {
     @DELETE("/profiles/{profileId}")
     fun profileDelete(@Path("profileId") profileId:Int):Call<ProfileResult>
 
-    @POST("/users/send-email")
-    fun sendFeedBack(@Body):Call<ProfileResult>
+    @POST("/users/send-mail")
+    fun sendFeedBack(@Body feedback: FeedbackRequest):Call<ProfileResult>
 
     @DELETE("/users/account")
-    fun exitAccount(@Body):Call<ProfileResult>
+    fun exitAccount():Call<ProfileResult>
+
+    @POST("/auth/logout")
+    fun logout():Call<JsonElement>
 
 }

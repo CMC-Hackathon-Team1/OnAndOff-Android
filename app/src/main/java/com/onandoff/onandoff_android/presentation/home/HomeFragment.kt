@@ -194,14 +194,14 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
 
         binding.ivAlarm.setOnClickListener {
+
+        }
+
+        binding.ivSetting.setOnClickListener {
             mainActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fcv_main, SettingFragment())
                 .commit()
-        }
-
-        binding.ivSetting.setOnClickListener {
-
         }
 
         binding.btnPost.setOnClickListener {

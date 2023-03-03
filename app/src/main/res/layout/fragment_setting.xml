@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingVertical="14dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="20dp"
         >
         <ImageView
             android:layout_width="23dp"

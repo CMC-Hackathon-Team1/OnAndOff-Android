@@ -93,6 +93,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_weight = "1"
+            android:inputType="textPassword"
             />
         <ImageView
             android:id="@+id/btn_password_hide"

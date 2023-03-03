@@ -59,7 +59,7 @@
             android:id="@+id/et_feedback_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="null"
+            android:background="@null"
             android:hint="(최대 400자까지 작성할수있습니다)"
             android:gravity="top"
             android:textSize="12sp" />

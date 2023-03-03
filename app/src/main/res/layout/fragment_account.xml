@@ -73,7 +73,9 @@
             android:layout_height="match_parent"
             android:text="비밀번호 재설정"
             android:textColor="@color/black"
-            android:textSize="14sp"/>
+            android:gravity="center"
+            android:textSize="14sp"
+            />
 
     </LinearLayout>
     <View
@@ -98,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="회원 탈퇴"
+            android:gravity="center"
             android:textColor="@color/errorColor"
             android:textSize="14sp"/>
 
