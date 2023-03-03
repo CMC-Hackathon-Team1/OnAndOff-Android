@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.CategoryResponse
+import com.onandoff.onandoff_android.data.model.FeedCategoryResponse
 import com.onandoff.onandoff_android.databinding.FragmentPostingCategoryBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,15 +62,15 @@ class PostingCategoryFragment(val itemClick: (Int) -> Unit) : BottomSheetDialogF
 
     private fun getCategoryList() {
         val call = RetrofitClient.getClient()?.create(FeedInterface::class.java)?.getFeedCategoryResponse()
-        call?.enqueue(object : Callback<CategoryResponse> {
-            override fun onResponse(call: Call<CategoryResponse>, response: Response<CategoryResponse>) {
+        call?.enqueue(object : Callback<FeedCategoryResponse> {
+            override fun onResponse(call: Call<FeedCategoryResponse>, response: Response<FeedCategoryResponse>) {
                 if (!response.body()?.result.isNullOrEmpty()){
                     categoryAdapter.setItems(response.body()!!.result)
                     categoryAdapter.notifyDataSetChanged()
                 }
             }
 
-            override fun onFailure(call: Call<CategoryResponse>, t: Throwable) {
+            override fun onFailure(call: Call<FeedCategoryResponse>, t: Throwable) {
                 //TODO("Not yet implemented")
             }
         })

@@ -44,6 +44,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     //Coroutines
@@ -73,6 +74,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'com.google.android.material:material:1.7.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
@@ -80,10 +82,15 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 //    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
+
+    // Paging
+    implementation 'androidx.paging:paging-runtime:3.1.1'
+
     // 카카오 로그인 모듈
     implementation "com.kakao.sdk:v2-user:$kakao_version"
 //    //permission 관리 모듈
 //    implementation "gun0912.ted:tedpermission:2.2.3"
+    implementation 'io.github.ParkSangGwon:tedkeyboardobserver:1.0.1'
 }
 
 kapt {

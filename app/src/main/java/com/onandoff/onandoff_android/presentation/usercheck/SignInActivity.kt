@@ -1,9 +1,13 @@
 package com.onandoff.onandoff_android.presentation.usercheck
 
+import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +19,7 @@ import com.onandoff.onandoff_android.data.model.ProfileListResultResponse
 import com.onandoff.onandoff_android.data.model.SignInResponse
 import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.databinding.ActivitySigninBinding
+import com.onandoff.onandoff_android.databinding.DialogPasswordBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.util.APIPreferences
@@ -34,6 +39,9 @@ class SignInActivity:AppCompatActivity() {
         setContentView(binding.root)
         binding.ivArrow.setOnClickListener{
             finish()
+        }
+        binding.tvPasswordUpdate.setOnClickListener {
+            showDialog()
         }
         binding.btSignin.setOnClickListener {
             val email = binding.etSigninEmail.text.toString()
@@ -140,7 +148,21 @@ class SignInActivity:AppCompatActivity() {
             startActivity(Intent)
         }
     }
-
+fun showDialog(){
+        val dialog = Dialog(this@SignInActivity)
+        val dialogView = DialogPasswordBinding.inflate(LayoutInflater.from(this@SignInActivity))
+        dialog.setContentView(dialogView.root)
+        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
+        if (params != null) {
+            dialog.window?.setLayout(params.width,params.height)
+        }
+        dialog.show()
+        dialogView.btnYes.setOnClickListener{
+            dialog.dismiss()
+        }
+}
 
     fun dialog( type:String){
         val dialog = AlertDialog.Builder(this);
