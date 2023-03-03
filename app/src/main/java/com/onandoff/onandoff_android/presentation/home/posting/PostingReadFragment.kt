@@ -61,13 +61,13 @@ class PostingReadFragment() : BottomSheetDialogFragment() {
                             }
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + response.body()!!.profileName
-                            if(response.body()!!.feedImgList.isNullOrEmpty()) {
-                                binding.posting.imagePhoto.visibility = View.GONE
-                            } else {
-                                Glide.with(binding.root.context)
-                                    .load(response.body()!!.feedImgList[0])
-                                    .into(binding.posting.imagePhoto)
-                            }
+//                            if(response.body()!!.feedImgList.isNullOrEmpty()) {
+////                                binding.posting.imagePhoto.visibility = View.GONE
+//                            } else {
+//                                Glide.with(binding.root.context)
+//                                    .load(response.body()!!.feedImgList[0])
+//                                    .into(binding.posting.imagePhoto)
+//                            }
                         }
                     }
                 }

@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CategoryResponse
-import com.onandoff.onandoff_android.data.model.FeedData
+import com.onandoff.onandoff_android.data.model.FeedCategoryResponse
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.FragmentFeedListBinding
 import com.onandoff.onandoff_android.presentation.look.viewmodel.FeedListViewModel
