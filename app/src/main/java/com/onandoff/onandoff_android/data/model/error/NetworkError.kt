@@ -10,7 +10,14 @@ sealed class NetworkError(message: String) : Throwable(message = message) {
     class AlreadyExistProfileError(message: String) : NetworkError(message)
     class NoProfileError(message: String) : NetworkError(message)
     class NotMyProfileError(message: String) : NetworkError(message)
+    class NoProfileIdError(message: String) : NetworkError(message)
     class JwtTokenAndProfileNotSame(message: String) : NetworkError(message)
+    class InvalidFromProfileId(message: String) : NetworkError(message)
+    class InvalidToProfileId(message: String) : NetworkError(message)
+    class InvalidFeedDataError(message: String) : NetworkError(message)
+    class AlreadyReportedFeedError(message: String) : NetworkError(message)
+    class InvalidReportCategoryIdError(message: String) : NetworkError(message)
+    class NoReportReasonError(message: String) : NetworkError(message)
 
 
     companion object {
@@ -24,7 +31,14 @@ sealed class NetworkError(message: String) : Throwable(message = message) {
                 1501 -> AlreadyExistProfileError(message)
                 1503 -> NoProfileError(message)
                 1504 -> NotMyProfileError(message)
+                1505 -> NoProfileIdError(message)
                 1506 -> JwtTokenAndProfileNotSame(message)
+                2103 -> InvalidFromProfileId(message)
+                2104 -> InvalidToProfileId(message)
+                2200 -> InvalidFeedDataError(message)
+                3000 -> AlreadyReportedFeedError(message)
+                3001 -> InvalidReportCategoryIdError(message)
+                3002 -> NoReportReasonError(message)
                 else -> null
             }
     }

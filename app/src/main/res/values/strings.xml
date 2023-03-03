@@ -10,6 +10,7 @@
     <string name="modify">수정</string>
     <string name="delete">삭제</string>
     <string name="category">카테고리</string>
+    <string name="category_all">카테고리 전체</string>
     <string name="secret">비공개</string>
     <string name="art">문화/예술</string>
     <string name="sports">스포츠</string>
@@ -530,5 +531,9 @@ B. 계정 관련
     <string name="string_service"><font color ="#58B8A1">(필수)</font> 서비스 이용약관</string>
     <string name="string_privacy"><font color ="#58B8A1">(필수)</font> 개인정보 처리방침</string>
     <string name="password_update"><u><font color ="#58B8A1">비밀번호 재설정</font></u></string>
+    <string name="search_hashtag">해시태그 검색</string>
+    <string name="report">신고하기</string>
+    <string name="report_feed">게시글 신고하기</string>
+    <string name="nothing_found">검색 결과가 없습니다.</string>
     <string name="dialog_delete_account">계정을 정말로 <font color ="#ff6767">삭제</font>하시겠습니까?</string>
 </resources>

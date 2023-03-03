@@ -1,5 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+<!--    <style name="Theme.OnAndOffAndroid" parent="Theme.AppCompat.DayNight.NoActionBar">-->
     <style name="Theme.OnAndOffAndroid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/color_main</item>
@@ -73,6 +74,16 @@
     <style name="CalendarWidgetHeader">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="SpinnerDivideStyle" parent="android:style/Widget.ListView.DropDown">
+        <item name="android:divider">@color/black_fifth</item> <!-- divider 색 -->
+        <item name="android:dividerHeight">1dp</item> <!-- divider 높이 -->
+        <item name="android:contentInsetStart">15dp</item>
+    </style>
+
+    <style name="SpinnerTheme" parent="Theme.OnAndOffAndroid">
+        <item name="android:dropDownListViewStyle">@style/SpinnerDivideStyle</item>
     </style>
     <style name="Theme.OnAndOffAndroid.NoActionBar">
         <item name="windowActionBar">false</item>

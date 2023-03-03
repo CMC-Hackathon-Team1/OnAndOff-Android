@@ -18,8 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.onandoff.onandoff_android.data.model.CreateMyProfileData
-import com.onandoff.onandoff_android.data.model.MyProfileResponse
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.onandoff.onandoff_android.R
@@ -44,6 +42,7 @@ import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragme
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -159,18 +158,17 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                         }
                         HomeViewModel.State.Idle -> {
                         }
-                        HomeViewModel.State.GetPersonaSuccess -> {
+                        is HomeViewModel.State.GetPersonaSuccess -> {
                             binding.tvUserPersona1.text = personaName.value.toString()
                             binding.tvUserName1.text = profileName.value.toString()
                         }
                         is HomeViewModel.State.GetPersonaListSuccess -> {
-                            Log.d("state.myProfileList", "${state.myProfileList}")
-                            myProfileListAdapter.submitList(state.myProfileList.result)
+                            Log.d("state.myProfileList", "${state.profileList}")
+                            myProfileListAdapter.submitList(state.profileList)
 
-//                            val firstProfile = state.myProfileList.result?.getOrNull()
-                            val firstProfile = state.myProfileList.result?.firstOrNull()
-                            if (firstProfile != null) {
-                                onClickPersona(firstProfile)
+                            val selectedProfile = state.profileList.find { it.isSelected }
+                            if (selectedProfile != null) {
+                                setUserName(selectedProfile)
                             }
                         }
                         is HomeViewModel.State.GetMonthlyCountSuccess -> {
@@ -186,12 +184,12 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
     private fun setupListeners() {
         binding.cvAddMyProfile.setOnClickListener {
-            if (myProfileListAdapter.currentList.size < 3) {
+            if (myProfileListAdapter.currentList.size <= 5) {
                 createNewProfile()
             } else {
                 Toast.makeText(
                     requireActivity(),
-                    "프로필은 3개까지 생성 가능합니다.",
+                    "프로필은 5개까지 생성 가능합니다.",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -247,16 +245,21 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
     }
 
-    private fun onClickPersona(profileResponse: MyProfileResponse) {
+    private fun onClickPersona(item: MyProfileItem) {
         // TODO: 화면에 표시될 페르소나 데이터 연동 추가하기
-        binding.tvUserPersona1.text = profileResponse.personaName
-        binding.tvUserName1.text = profileResponse.profileName
+        viewModel.setSelectedProfile(item)
+    }
 
-        binding.tvUserPersona2.text = profileResponse.personaName
-        binding.tvUserName2.text = profileResponse.profileName
-        profileId = profileResponse.profileId
+    private fun setUserName(item: MyProfileItem) {
+        Log.d("MyProfileItem하하하", "$item")
+        binding.tvUserPersona1.text = item.myProfile.personaName
+        binding.tvUserName1.text = item.myProfile.profileName
+
+        binding.tvUserPersona2.text = item.myProfile.personaName
+        binding.tvUserName2.text = item.myProfile.profileName
+        profileId = item.myProfile.profileId
         prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID, profileId!!)
-        viewModel.setSelectedProfile(profileResponse)
+        viewModel.setSelectedProfile(item)
     }
 
     /**

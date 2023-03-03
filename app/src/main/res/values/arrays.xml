@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="look_category_array">
+        <item>카테고리 전체</item>
         <item>문화/예술</item>
         <item>스포츠</item>
         <item>자기계발</item>
         <item>기타</item>
+        <item>카테고리 전체</item>
     </string-array>
 </resources>
