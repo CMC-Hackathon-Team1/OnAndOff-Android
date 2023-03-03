@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.FeedDeleteData
+import com.onandoff.onandoff_android.data.model.FeedSimpleData
 import com.onandoff.onandoff_android.data.model.FeedReadData
 import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.databinding.ActivityPostingReadBinding
@@ -26,6 +28,10 @@ class PostingReadActivity : AppCompatActivity() {
     private val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
     var profileId by Delegates.notNull<Int>()
     var feedId by Delegates.notNull<Int>()
+    var likeImg by Delegates.notNull<Boolean>()
+    private lateinit var imageAdapter: PostingImageAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostingReadBinding.inflate(layoutInflater)
@@ -40,6 +46,10 @@ class PostingReadActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        imageAdapter = PostingImageAdapter()
+        binding.posting.imagePhotoList.layoutManager = LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
+        binding.posting.imagePhotoList.adapter = imageAdapter
+
         binding.btnPostingReadOut.setOnClickListener {
             //뒤로가기 기능
             finish()
@@ -60,8 +70,34 @@ class PostingReadActivity : AppCompatActivity() {
             }
             bottomPostingOptionFragment.show(supportFragmentManager, bottomPostingOptionFragment.tag)
         }
+        binding.posting.imageLike.setOnClickListener {
+            clickLike(profileId, feedId)
+
+            if(!likeImg) {
+                binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
+
+            } else {
+                binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
+            }
+        }
     }
 
+    private fun clickLike(profileId: Int, feedId: Int) {
+        val feedSimpleData = FeedSimpleData(profileId, feedId)
+        val call = feedInterface?.likeFeedResponse(feedSimpleData)
+        call?.enqueue(object : Callback<FeedResponse> {
+            override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
+                if (response.body() != null) {
+                    likeImg = response.body()!!.message == "Like"
+                }
+            }
+
+            override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
     private fun readPost(profileId: Int, feedId: Int){
         val call = feedInterface?.readFeedResponse(feedId, profileId)
         call?.enqueue(object : Callback<FeedReadData> {
@@ -71,20 +107,25 @@ class PostingReadActivity : AppCompatActivity() {
                         Log.d("readFeed", "onResponse: Success + ${response.body().toString()}")
                         if(response.body()!=null) {
                             binding.posting.textContent.text = response.body()!!.feedContent
+                            likeImg = response.body()!!.isLike
                             if(response.body()!!.isLike) {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
                             } else {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
                             }
-                            binding.posting.textHashtag.text = response.body()!!.hashTagList.toString()
+                            val hashTagList = response.body()!!.hashTagList
+                            var tagText = ""
+                            for (tag in hashTagList) {
+                                tagText = "#$tag $tagText "
+                            }
+                            binding.posting.textHashtag.text = tagText
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName
                             if(response.body()!!.feedImgList.isEmpty()) {
-                                binding.posting.imagePhoto.visibility = View.GONE
+                                binding.posting.imagePhotoList.visibility = View.GONE
                             } else {
-                                Glide.with(binding.root.context)
-                                    .load(response.body()!!.feedImgList[0])
-                                    .into(binding.posting.imagePhoto)
+                                imageAdapter.setItems(response.body()!!.feedImgList)
+                                imageAdapter.notifyDataSetChanged()
                             }
                             if (response.body()!!.profileImg.isNotEmpty()) {
                                 Glide.with(binding.root.context)
@@ -122,11 +163,9 @@ class PostingReadActivity : AppCompatActivity() {
     }
 
     private fun deleteFeed(){
-        val feedDeleteData = FeedDeleteData(profileId, feedId)
+        val feedSimpleData = FeedSimpleData(profileId, feedId)
 
-
-
-        val call = feedInterface?.deleteFeedResponse(feedDeleteData)
+        val call = feedInterface?.deleteFeedResponse(feedSimpleData)
         call?.enqueue(object : Callback<FeedResponse>{
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
                 if(response.code() == 200)

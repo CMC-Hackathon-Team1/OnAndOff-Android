@@ -9,7 +9,6 @@ import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.CategoryResponse
-import com.onandoff.onandoff_android.data.model.FeedData
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.data.model.error.NetworkError
 import com.onandoff.onandoff_android.data.remote.FeedRemoteDataSourceImpl

@@ -21,10 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.CalendarData
+import com.onandoff.onandoff_android.data.model.*
 
-import com.onandoff.onandoff_android.data.model.RelevantUserData
-import com.onandoff.onandoff_android.data.model.StatisticsResponse
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
 
 import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaActivity
@@ -307,8 +305,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         binding.fgCalDay.adapter = calendarAdapter
 
-
-
         binding.fgCalPre.setOnClickListener {
             calendarAdapter.changeToPrevMonth()
         }
@@ -396,22 +392,26 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
         val calendarInterface: CalendarInterface? = RetrofitClient.getClient()?.create(CalendarInterface::class.java)
         val call = calendarInterface?.getCalendarList(userId, year, monthFormat)
-        call?.enqueue(object : Callback<List<CalendarData>> {
+        call?.enqueue(object : Callback<CalendarResponse> {
             override fun onResponse(
-                call: Call<List<CalendarData>>,
-                response: Response<List<CalendarData>>
+                call: Call<CalendarResponse>,
+                response: Response<CalendarResponse>
             ) {
+                Log.d("feedList", "onResponse: ${response.code()}")
+
                 when(response.code()) {
                     200 -> {
-                        val feedList = response.body()
+                        val feedList = response.body()?.result
                         Log.d("feedList", "onResponse: ${feedList?.size}")
-                        calendarAdapter.setItems(feedList!!)
+                        if (!feedList.isNullOrEmpty()) {
+                            calendarAdapter.setItems(feedList)
+                        }
                     }
                 }
             }
 
-            override fun onFailure(call: Call<List<CalendarData>>, t: Throwable) {
-                Log.d("TAG", "onFailure: caledar error")
+            override fun onFailure(call: Call<CalendarResponse>, t: Throwable) {
+                Log.d("TAG", "onFailure: calendar error ${t.message}")
             }
 
         })
