@@ -76,7 +76,7 @@
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
         <LinearLayout
-            android:id="@+id/layout_personas"
+            android:id="@+id/layout_persona"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="31dp"
@@ -109,33 +109,33 @@
             android:hint="ex. 작가"
             android:text="@={viewModel.personaName}"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/layout_personas"
-            app:layout_constraintEnd_toEndOf="@id/view_personas"
-            app:layout_constraintStart_toEndOf="@id/layout_personas"
-            app:layout_constraintTop_toTopOf="@id/layout_personas" />
+            app:layout_constraintBottom_toBottomOf="@id/layout_persona"
+            app:layout_constraintEnd_toEndOf="@id/view_persona"
+            app:layout_constraintStart_toEndOf="@id/layout_persona"
+            app:layout_constraintTop_toTopOf="@id/layout_persona" />
 
         <View
-            android:id="@+id/view_personas"
+            android:id="@+id/view_persona"
             android:layout_width="151dp"
             android:layout_height="1dp"
             android:layout_marginTop="9dp"
             android:layout_marginEnd="23dp"
             android:background="#9A9A9A"
-            app:layout_constraintStart_toStartOf="@id/layout_personas"
-            app:layout_constraintTop_toBottomOf="@id/layout_personas" />
+            app:layout_constraintStart_toStartOf="@id/layout_persona"
+            app:layout_constraintTop_toBottomOf="@id/layout_persona" />
 
         <TextView
-            android:id="@+id/tv_personas_error"
+            android:id="@+id/tv_persona_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="필수로 입력해야 합니다"
-            android:textColor="@color/transparent"
+            android:textColor="@color/errorColor"
             android:textSize="10sp"
             android:textStyle="bold"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="@id/layout_personas"
-            app:layout_constraintTop_toBottomOf="@id/view_personas" />
+            app:layout_constraintStart_toStartOf="@id/layout_persona"
+            app:layout_constraintTop_toBottomOf="@id/view_persona" />
 
         <TextView
             android:id="@+id/tv_oneline"
@@ -148,7 +148,7 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_personas" />
+            app:layout_constraintTop_toBottomOf="@id/layout_persona" />
 
         <EditText
             android:id="@+id/edit_introduce"
@@ -174,7 +174,7 @@
             android:layout_marginEnd="45dp"
             android:background="#9A9A9A"
             app:layout_constraintEnd_toEndOf="@id/view_nickname"
-            app:layout_constraintStart_toStartOf="@id/view_personas"
+            app:layout_constraintStart_toStartOf="@id/view_persona"
             app:layout_constraintTop_toBottomOf="@id/tv_oneline" />
 
         <LinearLayout
@@ -183,8 +183,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="31dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/layout_personas"
-            app:layout_constraintTop_toTopOf="@id/layout_personas">
+            app:layout_constraintStart_toEndOf="@id/layout_persona"
+            app:layout_constraintTop_toTopOf="@id/layout_persona">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -211,10 +211,10 @@
             android:background="@android:color/transparent"
             android:text="@={viewModel.profileName}"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/layout_personas"
+            app:layout_constraintBottom_toBottomOf="@id/layout_persona"
             app:layout_constraintEnd_toEndOf="@id/view_nickname"
             app:layout_constraintStart_toEndOf="@id/layout_nickname"
-            app:layout_constraintTop_toTopOf="@id/layout_personas" />
+            app:layout_constraintTop_toTopOf="@id/layout_persona" />
 
         <View
             android:id="@+id/view_nickname"
@@ -224,7 +224,7 @@
             android:layout_marginEnd="23dp"
             android:background="#9A9A9A"
             app:layout_constraintStart_toStartOf="@id/layout_nickname"
-            app:layout_constraintTop_toBottomOf="@id/layout_personas" />
+            app:layout_constraintTop_toBottomOf="@id/layout_persona" />
 
         <TextView
             android:id="@+id/tv_nickname_error"
@@ -232,9 +232,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="필수로 입력해야 합니다"
-            android:textColor="@color/transparent"
+            android:textColor="@color/errorColor"
             android:textSize="10sp"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/view_nickname"
             app:layout_constraintTop_toBottomOf="@id/view_nickname" />
 
