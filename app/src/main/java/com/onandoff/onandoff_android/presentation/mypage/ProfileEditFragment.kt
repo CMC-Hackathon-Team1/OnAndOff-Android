@@ -249,8 +249,10 @@ class ProfileEditFragment: Fragment() {
                 response: Response<ProfileListResultResponse>
             ) {
                 Toast.makeText(mainActivity,"프로필 편집이 성공했습니다",Toast.LENGTH_SHORT).show()
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .remove(this@ProfileEditFragment).commit()
+                mainActivity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fcv_main,MypageFragment())
+                    .commit()
 
             }
             override fun onFailure(call: Call<ProfileListResultResponse>, t: Throwable){
