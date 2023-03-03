@@ -238,10 +238,10 @@ class ProfileEditFragment: Fragment() {
         lateinit var call :Call<ProfileListResultResponse>
         if(imgFile !=null) {
             call = profileInterface?.profileEdit(profileId,
-                FormDataUtil.getBody("profileName", etProfileName.toString()) , FormDataUtil.getBody("statusMessage", etStatusMsg.toString()),image= imgFile,defaultImage= FormDataUtil.getBody("statusMessage", isBasicImage))!!
+                FormDataUtil.getBody("profileName", etProfileName.toString()) , FormDataUtil.getBody("statusMessage", etStatusMsg.toString()),image= imgFile,defaultImage= FormDataUtil.getBody("defaultImage", isBasicImage))!!
         }else{
             call = profileInterface?.profileEdit(profileId,
-                FormDataUtil.getBody("profileName", etProfileName.toString()) , FormDataUtil.getBody("statusMessage", etStatusMsg.toString()),defaultImage= FormDataUtil.getBody("statusMessage", isBasicImage))!!
+                FormDataUtil.getBody("profileName", etProfileName.toString()) , FormDataUtil.getBody("statusMessage", etStatusMsg.toString()),defaultImage= FormDataUtil.getBody("defaultImage", isBasicImage))!!
         }
         call?.enqueue(object: Callback<ProfileListResultResponse> {
             override fun onResponse(
@@ -249,8 +249,9 @@ class ProfileEditFragment: Fragment() {
                 response: Response<ProfileListResultResponse>
             ) {
                 Toast.makeText(mainActivity,"프로필 편집이 성공했습니다",Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.beginTransaction()
+                mainActivity.supportFragmentManager.beginTransaction()
                     .remove(this@ProfileEditFragment).commit()
+
             }
             override fun onFailure(call: Call<ProfileListResultResponse>, t: Throwable){
                 Toast.makeText(mainActivity,"프로필 편집이 실패했습니다${t}",Toast.LENGTH_SHORT).show()
