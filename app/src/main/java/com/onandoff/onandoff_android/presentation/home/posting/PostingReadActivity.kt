@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
@@ -27,6 +29,9 @@ class PostingReadActivity : AppCompatActivity() {
     var profileId by Delegates.notNull<Int>()
     var feedId by Delegates.notNull<Int>()
     var likeImg by Delegates.notNull<Boolean>()
+    private lateinit var imageAdapter: PostingImageAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostingReadBinding.inflate(layoutInflater)
@@ -41,6 +46,10 @@ class PostingReadActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        imageAdapter = PostingImageAdapter()
+        binding.posting.imagePhotoList.layoutManager = LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
+        binding.posting.imagePhotoList.adapter = imageAdapter
+
         binding.btnPostingReadOut.setOnClickListener {
             //뒤로가기 기능
             finish()
@@ -113,11 +122,10 @@ class PostingReadActivity : AppCompatActivity() {
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName
                             if(response.body()!!.feedImgList.isEmpty()) {
-                                binding.posting.imagePhoto.visibility = View.GONE
+                                binding.posting.imagePhotoList.visibility = View.GONE
                             } else {
-                                Glide.with(binding.root.context)
-                                    .load(response.body()!!.feedImgList[0])
-                                    .into(binding.posting.imagePhoto)
+                                imageAdapter.setItems(response.body()!!.feedImgList)
+                                imageAdapter.notifyDataSetChanged()
                             }
                             if (response.body()!!.profileImg.isNotEmpty()) {
                                 Glide.with(binding.root.context)
