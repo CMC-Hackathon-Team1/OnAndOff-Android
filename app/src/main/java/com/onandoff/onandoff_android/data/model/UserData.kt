@@ -27,12 +27,12 @@ data class SignInResponseResult(
 data class KakaoRequest(
     @SerializedName("access_token")val token:String
 )
-data class KakaoResponse(
+data class SocialLoginResponse(
     @SerializedName("isSuccess")val statusCode:String,
     @SerializedName("code")val message:Int,
-    @SerializedName("result")val result: KakaoResponseResult,
+    @SerializedName("result")val result: SocialLoginResponseResult,
 )
-data class KakaoResponseResult(
+data class SocialLoginResponseResult(
     @SerializedName("state")val state:String,
     @SerializedName("jwt")val jwt:String
 )

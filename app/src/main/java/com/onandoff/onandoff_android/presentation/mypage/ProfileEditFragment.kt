@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
+import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.FormDataUtil
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.ext.setImageUrl
@@ -59,6 +60,8 @@ class ProfileEditFragment: Fragment() {
     private lateinit var binding : FragmentProfileEditBinding
     val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(
         ProfileInterface::class.java)
+    val userInterface: UserInterface? = RetrofitClient.getClient()?.create(
+        UserInterface::class.java)
     val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
     var profileIdList = ArrayList<Int>()
     lateinit var mainActivity: MainActivity

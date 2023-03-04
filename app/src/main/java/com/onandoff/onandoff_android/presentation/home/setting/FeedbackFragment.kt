@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
+import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.FeedbackRequest
 import com.onandoff.onandoff_android.data.model.ProfileResult
@@ -29,8 +30,8 @@ import retrofit2.Response
 
 class FeedbackFragment: Fragment() {
     private lateinit var binding:FragmentFeedbackBinding
-    val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(
-        ProfileInterface::class.java)
+    val userInterface: UserInterface? = RetrofitClient.getClient()?.create(
+        UserInterface::class.java)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -70,7 +71,7 @@ class FeedbackFragment: Fragment() {
     }
 
     fun sendFeedback(feedText:String){
-        val call = profileInterface?.sendFeedBack(FeedbackRequest(feedText))
+        val call = userInterface?.sendFeedBack(feedText)
         call?.enqueue(object: Callback<ProfileResult> {
             override fun onResponse(
                 call: Call<ProfileResult>,

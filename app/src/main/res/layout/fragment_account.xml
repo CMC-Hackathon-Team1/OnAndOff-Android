@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="email"
+            type="String"/>
+    </data>
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
@@ -49,15 +56,17 @@
             android:textColor="@color/black"
             />
         <TextView
+            android:id="@+id/tv_account_email"
             android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:text="테스트용 텏트 "/>
+            android:text="@{email}"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/layout_password_reset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -84,6 +93,7 @@
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
+        android:id="@+id/layout_account_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -111,3 +121,4 @@
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

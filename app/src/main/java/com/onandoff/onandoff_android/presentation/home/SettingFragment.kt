@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,11 @@ import androidx.fragment.app.Fragment
 import com.google.gson.JsonElement
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
+import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.FeedbackRequest
 import com.onandoff.onandoff_android.data.model.ProfileResult
+import com.onandoff.onandoff_android.data.model.getMyEmail
 import com.onandoff.onandoff_android.databinding.DialogLogoutBinding
 import com.onandoff.onandoff_android.databinding.DialogProfileDeleteBinding
 import com.onandoff.onandoff_android.databinding.FragmentProfileEditBinding
@@ -36,8 +39,13 @@ import retrofit2.Response
 class SettingFragment:Fragment() {
     private lateinit var binding:FragmentSettingBinding
     lateinit var mainActivity: MainActivity
-    val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(
-        ProfileInterface::class.java)
+    val userInterface: UserInterface? = RetrofitClient.getClient()?.create(
+        UserInterface::class.java)
+    var email:String = ""
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getEmail()
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -50,6 +58,7 @@ class SettingFragment:Fragment() {
         binding = FragmentSettingBinding.inflate(layoutInflater)
 
         binding.ivBackArrow.setOnClickListener{
+
             mainActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fcv_main, HomeFragment())
@@ -57,9 +66,13 @@ class SettingFragment:Fragment() {
         }
 
         binding.layoutSettingAccount.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("email", email)
+            val accountFragment = AccountFragment()
+            accountFragment.arguments = bundle
             mainActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fcv_main, AccountFragment())
+                .replace(R.id.fcv_main, accountFragment)
                 .commit()
 
         }
@@ -103,21 +116,43 @@ class SettingFragment:Fragment() {
         return binding.root
     }
     fun logout(){
-        val call = profileInterface?.logout()
-        call?.enqueue(object: Callback<JsonElement> {
+            val call = userInterface?.logout()
+            call?.enqueue(object : Callback<JsonElement> {
+                override fun onResponse(
+                    call: Call<JsonElement>,
+                    response: Response<JsonElement>
+                ) {
+                    prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT, "")
+                    Toast.makeText(mainActivity, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(mainActivity, SplashActivity::class.java)
+                    startActivity(intent)
+                    mainActivity.finish()
+                }
+
+                override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                    Toast.makeText(
+                        mainActivity,
+                        "로그아웃에 실패했습니다${t} 잠시후 다시 시도해주세요",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+    fun getEmail() {
+        val call = userInterface?.getEmail()
+        call?.enqueue(object : Callback<getMyEmail> {
             override fun onResponse(
-                call: Call<JsonElement>,
-                response: Response<JsonElement>
-            ){
-                prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,"")
-                Toast.makeText(mainActivity,"로그아웃 되었습니다",Toast.LENGTH_SHORT).show()
-                val intent = Intent(mainActivity,SplashActivity::class.java)
-                startActivity(intent)
-                mainActivity.finish()
+                call: Call<getMyEmail>,
+                response: Response<getMyEmail>
+            ) {
+                email = response.body()?.result?.email!!
+                Log.d("setting","$email")
             }
-            override fun onFailure(call: Call<JsonElement>, t: Throwable){
-                Toast.makeText(mainActivity,"로그아웃에 실패했습니다${t} 잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+
+            override fun onFailure(call: Call<getMyEmail>, t: Throwable) {
+
             }
         })
+
     }
 }

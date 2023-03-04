@@ -50,3 +50,12 @@ data class ProfileEditData(
     @SerializedName("profileImgUrl")val profileImgUrl: String,
     @SerializedName("statusMessage")val statusMessage: String
 )
+data class getMyEmail(
+    @SerializedName("statusCode")val statusCode :Int,
+    @SerializedName("message")val message:String,
+    @SerializedName("result")val result:getMyEmailResponse
+)
+data class getMyEmailResponse(
+    @SerializedName("email")val email :String,
+
+)
