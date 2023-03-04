@@ -86,8 +86,11 @@ class ProfileEditFragment: Fragment() {
 //        binding.ivProfileAvatar.setImageUrl(profileImg.toString())
 //        binding.tvOneline.text = statusMsg.toString()
         binding.ivArrow.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction()
-                .remove(this@ProfileEditFragment).commit()
+
+            mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcv_main, MypageFragment())
+                .commit()
         }
         binding.ivProfileAvatar.setOnClickListener{
             showBottomSheet(mainActivity)

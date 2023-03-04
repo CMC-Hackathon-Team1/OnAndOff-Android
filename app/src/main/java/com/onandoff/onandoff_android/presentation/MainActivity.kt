@@ -1,9 +1,9 @@
 package com.onandoff.onandoff_android.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.navigation.NavigationBarView
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
@@ -12,9 +12,19 @@ import com.onandoff.onandoff_android.presentation.home.HomeFragment
 import com.onandoff.onandoff_android.presentation.look.FeedListFragment
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 
+
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
+    private var isBackPressed = false // 뒤로가기 버튼 두 번 눌렸는지 체크하는 변수
 
+    override fun onBackPressed() {
+        if (!isBackPressed) {
+            Toast.makeText(this@MainActivity, "한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            isBackPressed = true // 첫 번째 뒤로가기 버튼 클릭 시 true로 변경
+        } else {
+            super.onBackPressed() // 두 번째 뒤로가기 버튼 클릭 시 앱 종료
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

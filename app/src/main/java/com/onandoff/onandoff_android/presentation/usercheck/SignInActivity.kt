@@ -166,6 +166,7 @@ class SignInActivity:AppCompatActivity() {
                                                 prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_EMAIL,email)
                                                 val mainIntent = Intent(this@SignInActivity, MainActivity::class.java)
                                                 startActivity(mainIntent)
+                                                finish()
                                             }
                                         }
                                     }

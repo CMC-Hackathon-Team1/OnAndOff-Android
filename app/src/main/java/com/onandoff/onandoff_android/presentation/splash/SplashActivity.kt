@@ -187,6 +187,7 @@ fun kakaoApi(token: OAuthToken) {
 
                                 val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
                                 startActivity(mainIntent)
+                                finish()
                             }
                         }
                     }
@@ -233,6 +234,7 @@ fun kakaoApi(token: OAuthToken) {
                 if(response.body()?.result?.state == "회원가입 완료" || prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,"" )== ""){
                 val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
                 startActivity(intent)
+                    finish()
                 }else{
                     val intent = Intent(this@SplashActivity, MainActivity::class.java)
                     startActivity(intent)

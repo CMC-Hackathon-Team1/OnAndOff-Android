@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.JsonElement
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.MyFeedService
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
@@ -107,7 +108,7 @@ class MypageFragment: Fragment(){
                 response: Response<getFeedResponeData>
             ){
 
-                val tmpFeedList = response.body()?.result
+                val tmpFeedList = response.body()?.result?.feedArray
                 if (tmpFeedList != null) {
                     for(item in tmpFeedList){
                         feedList.apply{add(item)}
