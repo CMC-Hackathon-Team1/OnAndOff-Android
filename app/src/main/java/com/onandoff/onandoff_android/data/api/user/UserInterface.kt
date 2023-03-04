@@ -18,8 +18,9 @@ interface UserInterface {
     @POST("/auth/kakao-login")
     fun kakaoLogIn(@Body token:KakaoRequest ):Call<SocialLoginResponse>
 
+
     @POST("/auth/google-login")
-    fun googleLogIn(@Field("id_token")token:String):Call<SocialLoginResponse>
+    fun googleLogIn(@Body token:GoogleRequest):Call<SocialLoginResponse>
 
     @FormUrlEncoded
     @POST("/users/send-mail")

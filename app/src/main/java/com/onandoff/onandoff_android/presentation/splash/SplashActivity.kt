@@ -3,6 +3,7 @@ package com.onandoff.onandoff_android.presentation.splash
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Constraints
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,9 +16,11 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.GoogleRequest
 import com.onandoff.onandoff_android.data.model.KakaoRequest
 import com.onandoff.onandoff_android.data.model.ProfileListResponse
 import com.onandoff.onandoff_android.data.model.SocialLoginResponse
@@ -27,6 +30,7 @@ import com.onandoff.onandoff_android.presentation.profile.ProfileCreateActivity
 import com.onandoff.onandoff_android.presentation.usercheck.SignInActivity
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_JWT
+import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,11 +57,13 @@ class SplashActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         val mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         val account = GoogleSignIn.getLastSignedInAccount(this)
-//        updateUI(account)
+        account?.idToken?.let { googleApi(it) } ?:
+        Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var keyHash = Utility.getKeyHash(this)
@@ -119,14 +125,16 @@ class SplashActivity:AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
+            account.idToken?.let { googleApi(it) } ?:
+                Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
 
             // Signed in successfully, show authenticated UI.
 //            updateUI(account)
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-//            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-//            updateUI(null)
+            Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
+
         }
     }
 //카카오에서 반환해준 토큰을 우리쪽 서버와 통신하여 jwt를 얻는 함수
@@ -171,11 +179,11 @@ fun kakaoApi(token: OAuthToken) {
                                     "Get",
                                     "retrofit manager called, onSucess called with ${response.body()}"
                                 );
-                                val list = mutableSetOf<String>()
-                                for(i in profileResponse?.result!!){
-                                    list.add(i.profileId.toString())
-                                }
-                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
+//                                val list = mutableSetOf<String>()
+//                                for(i in profileResponse?.result!!){
+//                                    list.add(i.profileId.toString())
+//                                }
+//                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
 
                                 val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
                                 startActivity(mainIntent)
@@ -212,4 +220,29 @@ fun kakaoApi(token: OAuthToken) {
 
     })
 }
+    fun googleApi(token:String){
+        val call = userInterface?.googleLogIn(GoogleRequest(token))
+        call?.enqueue(object :Callback<SocialLoginResponse>{
+            override fun onResponse(
+                call: Call<SocialLoginResponse>,
+                response: Response<SocialLoginResponse>
+            ) {
+                prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,
+                    response.body()?.result?.jwt!!
+                )
+                if(response.body()?.result?.state == "회원가입 완료" || prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,"" )== ""){
+                val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
+                startActivity(intent)
+                }else{
+                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                finish()
+            }
+
+            override fun onFailure(call: Call<SocialLoginResponse>, t: Throwable) {
+            }
+
+        })
+    }
 }

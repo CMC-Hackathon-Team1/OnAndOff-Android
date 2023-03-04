@@ -541,4 +541,5 @@ B. 계정 관련
     <string name="alaram_example_following_posting"><b>개발자 온오프</b>님이 새로운 글을 올렸습니다.</string>
     <string name="alaram_example_posting">회원님의 새로운 소식을 알려주세요!</string>
     <string name="alaram_example_notice">개발자 온앤오프님이 회원님의 게시글 좋아합니다.</string>
+    <string name="default_web_client_id">751634127071-de0j72k0d9m2gmd2854qoh3iqu88trnl.apps.googleusercontent.com</string>
 </resources>

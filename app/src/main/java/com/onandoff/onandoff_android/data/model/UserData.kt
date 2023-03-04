@@ -27,6 +27,9 @@ data class SignInResponseResult(
 data class KakaoRequest(
     @SerializedName("access_token")val token:String
 )
+data class GoogleRequest(
+    @SerializedName("id_token")val token:String
+)
 data class SocialLoginResponse(
     @SerializedName("isSuccess")val statusCode:String,
     @SerializedName("code")val message:Int,

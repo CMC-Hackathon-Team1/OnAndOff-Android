@@ -7,9 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MyFeedService {
-    @GET("/feeds/my-feeds/by-month")
+    @GET("/feeds/monthly")
     fun getMyFeed(
-        @Query("profileId") profileId:Int,
+        @Query("baseProfileId") baseProfileId:Int,
+        @Query("targetProfileId") targetProfileId:Int,
         @Query("year")year:Int,
         @Query("month")month:String,
         @Query("page")page:Int
