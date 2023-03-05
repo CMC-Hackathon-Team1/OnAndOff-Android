@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.data.api.user
 
+import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import com.onandoff.onandoff_android.data.model.*
 import okhttp3.MultipartBody
@@ -23,7 +24,7 @@ interface ProfileInterface {
     @GET("/profiles/my-profiles")
     fun profileCheck(): Call<ProfileListResponse>
 
-
+    @Multipart
     @PATCH("/profiles/{profileId}")
     fun profileEdit(@Path("profileId")  profileId:Int,
         @Part profileName: MultipartBody.Part,
@@ -34,4 +35,5 @@ interface ProfileInterface {
 
     @DELETE("/profiles/{profileId}")
     fun profileDelete(@Path("profileId") profileId:Int):Call<ProfileResult>
+
 }

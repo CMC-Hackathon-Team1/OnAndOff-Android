@@ -45,6 +45,14 @@ class SignupPolicyActivity:AppCompatActivity() {
                 }
 
             }
+            ivPrivatePolicyMore.setOnClickListener{
+                val intent = Intent(this@SignupPolicyActivity,PrivatePolicyActivity::class.java)
+                startActivity(intent)
+            }
+            ivServicePolicyMore.setOnClickListener{
+                val intent = Intent(this@SignupPolicyActivity,ServicePolicyActivity::class.java)
+                startActivity(intent)
+            }
             //individual check
             btnAgecheck.setOnClickListener {
                 if (policyAge) {

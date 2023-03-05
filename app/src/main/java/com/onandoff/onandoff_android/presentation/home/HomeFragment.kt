@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.presentation.home
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -19,11 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import androidx.recyclerview.widget.GridLayoutManager
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
+import com.onandoff.onandoff_android.presentation.MainActivity
 
 import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.HomeViewModel
@@ -34,6 +37,7 @@ import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragment
+import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
@@ -58,10 +62,14 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
             onClick = ::onClickPersona
         )
     }
+    lateinit var mainActivity: MainActivity
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
     private lateinit var calendarAdapter: CalendarAdapter
     private var profileId: Int? = null
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -190,7 +198,10 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
 
         binding.ivSetting.setOnClickListener {
-
+            mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcv_main, SettingFragment())
+                .commit()
         }
 
         binding.btnPost.setOnClickListener {

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+//    id 'com.google.gms.google-services'
 }
 //Properties properties = new Properties() properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
@@ -88,9 +89,10 @@ dependencies {
 
     // 카카오 로그인 모듈
     implementation "com.kakao.sdk:v2-user:$kakao_version"
-//    //permission 관리 모듈
-//    implementation "gun0912.ted:tedpermission:2.2.3"
     implementation 'io.github.ParkSangGwon:tedkeyboardobserver:1.0.1'
+
+    // 구글 로그인 모듈
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 }
 
 kapt {

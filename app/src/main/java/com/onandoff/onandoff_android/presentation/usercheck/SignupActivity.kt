@@ -3,6 +3,9 @@ package com.onandoff.onandoff_android.presentation.usercheck
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -27,12 +30,105 @@ class SignupActivity:AppCompatActivity() {
     var isExistBlank = false
     var isPWSame = false
     val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
+    var isPwHide:Boolean = true
+    var isPwRepeatHide:Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.ivArrow.setOnClickListener{
+        binding.ivBackArrow.setOnClickListener{
             finish()
+        }
+        binding.etSignupEmail.addTextChangedListener(object:TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.etSignupEmail.text.toString() !=""&&binding.etSignupPassword.text.toString() !=""&&binding.etSignupPasswordRepeat.text.toString() !=""){
+                    binding.btSingup.setBackgroundResource(R.drawable.button_primary)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        }
+
+        )
+        binding.etSignupPassword.addTextChangedListener(object:TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.etSignupEmail.text.toString() !=""&&binding.etSignupPassword.text.toString() !=""&&binding.etSignupPasswordRepeat.text.toString() !=""){
+                    binding.btSingup.setBackgroundResource(R.drawable.button_primary)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        }
+
+        )
+        binding.etSignupPasswordRepeat.addTextChangedListener(object:TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.etSignupEmail.text.toString() !=""&&binding.etSignupPassword.text.toString() !=""&&binding.etSignupPasswordRepeat.text.toString() !=""){
+                    binding.btSingup.setBackgroundResource(R.drawable.button_primary)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        }
+
+        )
+        binding.btnPasswordHide.setOnClickListener{
+            if(isPwHide){
+                Log.d("signup","$isPwHide")
+                isPwHide = false
+                binding.btnPasswordHide.setImageResource(R.drawable.ic_eye_open_16)
+                binding.etSignupPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                Log.d("signup","${binding.etSignupPassword.inputType}")
+
+            }else{
+                isPwHide = true
+                binding.btnPasswordHide.setImageResource(R.drawable.ic_eye_close_16)
+                binding.etSignupPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+
+            }
+            binding.etSignupPassword.setSelection(binding.etSignupPassword.text.length);
+
+
+        }
+        binding.btnPasswordRepeatHide.setOnClickListener{
+            if(isPwRepeatHide){
+                Log.d("signup","$isPwRepeatHide")
+                isPwRepeatHide = false
+                binding.btnPasswordRepeatHide.setImageResource(R.drawable.ic_eye_open_16)
+                binding.etSignupPasswordRepeat.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            }else{
+                isPwRepeatHide = true
+                binding.btnPasswordRepeatHide.setImageResource(R.drawable.ic_eye_close_16)
+                binding.etSignupPasswordRepeat.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            binding.etSignupPasswordRepeat.setSelection(binding.etSignupPassword.text.length);
+
+        }
+        binding.btnEmailReset.setOnClickListener{
+            binding.etSignupEmail.setText("")
+        }
+        binding.btnPasswordReset.setOnClickListener{
+            binding.etSignupPassword.setText("")
+        }
+        binding.btnPasswordRepeatReset.setOnClickListener{
+            binding.etSignupPasswordRepeat.setText("")
         }
         binding.btSingup.setOnClickListener{
             //1. email 입력값
