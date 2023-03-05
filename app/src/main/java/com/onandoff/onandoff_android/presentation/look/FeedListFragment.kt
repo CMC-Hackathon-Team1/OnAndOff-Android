@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +13,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CategoryResponse
-import com.onandoff.onandoff_android.data.model.FeedData
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.FragmentFeedListBinding
 import com.onandoff.onandoff_android.presentation.look.viewmodel.FeedListViewModel
@@ -65,8 +67,12 @@ class FeedListFragment : Fragment() {
         setupListeners()
         setupViewModel()
         binding.srlFeedList.setOnRefreshListener {
-            feedListAdapter.refresh()
-            binding.srlFeedList.isRefreshing = false
+            if (viewModel.isQueryChanged()) {
+                viewModel.refresh()
+            } else {
+                feedListAdapter.refresh()
+            }
+            binding.editInputHashtag.clearFocus()
         }
     }
 
@@ -76,13 +82,43 @@ class FeedListFragment : Fragment() {
 
         TedKeyboardObserver(requireActivity())
             .listen { isShow ->
+                val isItemEmpty = feedListAdapter.itemCount == 0
                 binding.spinner.isInvisible = isShow
-                binding.srlFeedList.isInvisible = isShow
+                binding.rvFeedList.isInvisible = isShow || isItemEmpty
+                binding.tvNothingFound.isVisible = !isShow && isItemEmpty
 
                 if (!isShow) {
                     binding.editInputHashtag.clearFocus()
                 }
             }
+
+        feedListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (positionStart == 0 && itemCount > 0) {
+                    binding.rvFeedList.scrollTo(0, 0)
+                }
+            }
+        })
+
+        feedListAdapter.addLoadStateListener { loadStates: CombinedLoadStates ->
+            val isEmptyVisible = (loadStates.source.refresh is LoadState.NotLoading
+                && loadStates.append.endOfPaginationReached
+                && feedListAdapter.itemCount < 1)
+
+            val isLoadingVisible = loadStates.refresh is LoadState.Loading
+
+            binding.rvFeedList.isVisible = !isLoadingVisible && !isEmptyVisible
+//            binding.spinner.isVisible = !isLoadingVisible && !isEmptyVisible
+            binding.tvNothingFound.isVisible = isEmptyVisible
+
+            if (loadStates.append is LoadState.Loading
+                || loadStates.append is LoadState.Error
+                || isEmptyVisible
+            ) {
+                binding.srlFeedList.isRefreshing = false
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -91,8 +127,6 @@ class FeedListFragment : Fragment() {
                 binding.editInputHashtag.hint = ""
             } else {
                 binding.editInputHashtag.setHint(R.string.search_hashtag)
-                binding.spinner.visibility = View.VISIBLE
-                binding.rvFeedList.visibility = View.VISIBLE
             }
         }
 
@@ -100,28 +134,25 @@ class FeedListFragment : Fragment() {
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     val query = textView?.text.toString() // # 없이 검색
+                    binding.rvFeedList.isGone = true
                     viewModel.getSearchFeedResult(query)
                     Log.d("query", "FeedListFragment - setupListeners: query - $query")
 
                     closeKeyboard(binding.root)
+                    binding.editInputHashtag.clearFocus()
                 }
             }
             true
         }
 
-        binding.editInputHashtag.setOnKeyListener { view, keyCode, keyEvent ->
-            if (keyEvent.action == KeyEvent.ACTION_DOWN) {
-                binding.spinner.visibility = View.VISIBLE
-                binding.rvFeedList.visibility = View.VISIBLE
-
-                false
-            }
-            true
-        }
-
         binding.layoutSpinnerFeedList.setOnClickListener {
-            if (binding.srlFeedList.isInvisible) {
+            if (binding.rvFeedList.isInvisible) {
                 closeKeyboard(binding.root)
+            }
+
+            if (binding.editInputHashtag.hasFocus()) {
+                binding.layoutSpinnerFeedList.isVisible = true
+                binding.editInputHashtag.clearFocus()
             }
         }
     }
@@ -133,23 +164,14 @@ class FeedListFragment : Fragment() {
 
     private fun setupViewModel() {
         with(viewModel) {
-//            lifecycleScope.launch {
-////                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-//                    feedList
-//                        .collect {
-//                            Log.d("feedRequest", "$it")
-//                            feedListAdapter.submitData(it)
-//                        }
-////                }
+//            feedList.observe(viewLifecycleOwner) {
+//                lifecycleScope.launch {
+//                    it.collect {
+//                        Log.d("feedRequest", "$it")
+//                        feedListAdapter.submitData(it)
+//                    }
+//                }
 //            }
-            feedList.observe(viewLifecycleOwner) {
-                lifecycleScope.launch {
-                    it.collect {
-                        Log.d("feedRequest", "$it")
-                        feedListAdapter.submitData(it)
-                    }
-                }
-            }
 
             lifecycleScope.launch {
                 state.collect { state ->
@@ -347,7 +369,7 @@ class FeedListFragment : Fragment() {
         }
     }
 
-    // 팔로잉 탭을 클릭할 경우 같은 API를 재호출 하되 fResult를 true로 해서 서버에 요청하셔야 합니다.
+    // 팔로잉 탭을 클릭할 경우 같은 API 를 재호출 하되 fResult 를 true 로 해서 서버에 요청하셔야 합니다.
     // 이렇게 요청하시면 서버에서 팔로우 된 게시글만 필터링하여 클라이언트로 넘겨드립니다
     private fun initLookAroundTabs() {
         binding.tlLookAroundList.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -364,8 +386,8 @@ class FeedListFragment : Fragment() {
         })
     }
 
-    private fun initSpinner(list: List<CategoryResponse>) {
-        val items = list.sortedBy { it.categoryId }
+    private fun initSpinner(categoryList: List<CategoryResponse>) {
+        val items = categoryList.sortedBy { it.categoryId }
 
         val spinnerAdapter = object : ArrayAdapter<String>(
             requireActivity(),
@@ -384,7 +406,7 @@ class FeedListFragment : Fragment() {
             }
 
             override fun getCount(): Int {
-                // 마지막 아이템은 힌트용으로만 사용하기 때문에 getCount에 1을 빼줍니다.
+                // 마지막 아이템은 힌트용으로만 사용하기 때문에 getCount 에 1을 빼줍니다.
                 return super.getCount() - 1
             }
         }
@@ -404,11 +426,41 @@ class FeedListFragment : Fragment() {
                 id: Long
             ) {
                 // 아이템이 클릭되면 맨 위(position 0번)부터 순서대로 동작하게 된다.
-                val value = parent!!.getItemAtPosition(position).toString()
+                val itemValue = parent!!.getItemAtPosition(position).toString()
+
+//                val newCategoryList = mutableListOf<CategoryResponse>()
+//                val categoryValue = binding.spinner.selectedItem
+//                if (!categoryValue.equals("카테고리 전체")) {
+//                    for (i in items.indices) {
+//                        if (items[i].categoryName?.equals(categoryValue) == true) {
+//                            newCategoryList.add(items[4])
+//                        } else {
+//                            newCategoryList.add(items[i])
+//                        }
+//
+//                        Log.d("onItemSelected", "onItemSelected: ${newCategoryList[i]}")
+//                    }
+//
+//                    spinnerAdapter.clear()
+//                    spinnerAdapter.addAll(newCategoryList.map { it.categoryName })
+//
+//                    val spinnerItemText = view?.findViewById<View>(R.id.tv_item_spinner) as TextView
+//                    spinnerItemText.hint = categoryValue.toString()
+//                } else {
+//                    spinnerAdapter.clear()
+//                    spinnerAdapter.addAll(items.map { it.categoryName })
+//
+//                    val spinnerItemText = view?.findViewById<View>(R.id.tv_item_spinner) as TextView
+//                    spinnerItemText.hint = categoryValue.toString()
+//                }
 
                 val category = items.getOrNull(position)
                 if (category != null) {
-                    getCategoryFeedList(category)
+//                    val categoryIndex = items.indexOf(category)
+//                    if (items[categoryIndex].categoryId == category.categoryId) {
+//                        category.categoryName = "카테고리 전체"
+//                    }
+                    getCategoryFeedList(category, categoryList)
                 }
             }
 
@@ -426,13 +478,25 @@ class FeedListFragment : Fragment() {
         )
     }
 
-    private fun getCategoryFeedList(category: CategoryResponse) {
+    var oldCategoryItemId: Int = 0
+    var oldCategoryItemName: String = ""
+    var oldCategoryItemIndex: Int = 0
+
+    private fun getCategoryFeedList(
+        category: CategoryResponse,
+        categoryList: List<CategoryResponse>
+    ) {
         viewModel.setSelectedCategory(category)
+
+//        val oldCategoryItemIndex = categoryList.indexOf(category)
+//        if (categoryList[oldCategoryItemIndex].oldCategoryItemId == category.categoryId) {
+//            categoryList[oldCategoryItemIndex].oldCategoryItemName = category.categoryName
+//        }
     }
 
     private fun initFeedListRecyclerView(recyclerView: RecyclerView) {
         feedListAdapter = FeedListAdapter(
-            onProfileClick = ::intentPost,
+            onProfileClick = ::onFeedProfileClick,
             onFollowClick = ::onClickFollow,
             onLikeClick = ::onClickLike,
             onOptionClick = ::openOptionMenuBottomSheet
@@ -442,30 +506,36 @@ class FeedListFragment : Fragment() {
             setHasFixedSize(true)
             adapter = feedListAdapter
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = null
         }
     }
 
     private fun openOptionMenuBottomSheet(feedData: LookAroundFeedData) {
-        val bottomSheetDialogFragment = BottomSheetFeedListOptionMenu.newInstance(feedId = feedData.feedId)
+        val bottomSheetDialogFragment =
+            BottomSheetFeedListOptionMenu.newInstance(feedId = feedData.feedId)
         bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
     }
 
-    private fun intentPost(feedData: LookAroundFeedData) {
+    private fun onFeedProfileClick(feedData: LookAroundFeedData) {
         // TODO: 해당 데이터의 상세 페이지로 이동하기
-//        val intent = PostingReadActivity.getIntent(requireActivity(), feedData.feedId)
+//        val intent = Intent(requireActivity(), OtherUserFragment::class.java)
 //        startActivity(intent)
     }
 
     private fun onClickFollow(feedData: LookAroundFeedData) {
-        viewModel.follow(feedData.profileId)
-        feedData.isFollowing = !feedData.isFollowing
-        feedListAdapter.notifyDataSetChanged()
+        viewModel.follow(feedData.profileId) {
+            Log.d("isFollowing : ", "$it")
+            feedData.isFollowing = it
+            feedListAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun onClickLike(feedData: LookAroundFeedData) {
-        viewModel.like(feedData.feedId)
-        feedData.isLike = !feedData.isLike
-        feedListAdapter.notifyDataSetChanged()
+        viewModel.like(feedData.feedId) {
+            Log.d("isLike : ", "$it")
+            feedData.isLike = it
+            feedListAdapter.notifyDataSetChanged()
+        }
     }
 
     companion object {
