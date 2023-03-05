@@ -534,4 +534,6 @@ B. 계정 관련
     <string name="report">신고하기</string>
     <string name="report_feed">게시글 신고하기</string>
     <string name="nothing_found">검색 결과가 없습니다.</string>
+    <string name="no_following_found">팔로우가 없습니다</string>
+    <string name="no_feed_found">게시글이 없습니다</string>
 </resources>
