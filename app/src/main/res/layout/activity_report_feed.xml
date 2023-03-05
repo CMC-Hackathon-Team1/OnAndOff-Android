@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -64,85 +65,192 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_spam_promotion"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_spam_promotion"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="스팸 및 홍보글" />
+                    android:layout_marginStart="8dp"
+                    android:text="스팸 및 홍보글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_porn"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_porn"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="음란성이 포함된 글" />
+                    android:layout_marginStart="8dp"
+                    android:text="음란성이 포함된 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_despise"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_despise"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="욕설 / 생명경시 / 혐오 / 차별적인 글" />
+                    android:layout_marginStart="8dp"
+                    android:text="욕설 / 생명경시 / 혐오 / 차별적인 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_dobae"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_dobae"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="게시글 도배" />
+                    android:layout_marginStart="8dp"
+                    android:text="게시글 도배"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_private_info_illegal_info"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_private_info_illegal_info"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="개인정보 노출 및 불법 정보" />
+                    android:layout_marginStart="8dp"
+                    android:text="개인정보 노출 및 불법 정보"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <!--                <CheckBox-->
+                <!--                    android:id="@+id/checkbox_etc"-->
+                <!--                    android:layout_width="25dp"-->
+                <!--                    android:layout_height="25dp"-->
+                <!--                    android:layout_marginStart="3dp"-->
+                <!--                    android:checked="false" />-->
 
                 <CheckBox
                     android:id="@+id/checkbox_etc"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="기타 부적절한 글" />
+                    android:layout_marginStart="8dp"
+                    android:text="기타 부적절한 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
 
             </LinearLayout>
 
@@ -151,12 +259,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginStart="30dp"
-                android:paddingVertical="15dp"
+                android:enabled="false"
                 android:hint="기타 신고 사유를 입력하세요. (20자 이내)"
-                android:textColorHint="@color/black_fifth"
-                android:textSize="@dimen/body_text_size"
                 android:maxLength="20"
-                android:enabled="false" />
+                android:paddingVertical="15dp"
+                android:textColorHint="@color/black_fifth"
+                android:textSize="@dimen/body_text_size" />
 
         </LinearLayout>
 
@@ -164,8 +272,8 @@
             android:id="@+id/btn_agree"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
             android:background="@color/black_fifth"
             android:clickable="false"
             android:text="동의" />
