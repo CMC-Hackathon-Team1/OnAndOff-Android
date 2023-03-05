@@ -59,6 +59,7 @@ data class LookAroundFeedResponse(
 
 data class FeedData(
     val profileId: Int,
+    val feedId: Int,
     val categoryId: Int,
     val hashTagList: List<String>,
     val content: String,
@@ -70,11 +71,24 @@ data class FeedResponse(
     @SerializedName("message") val message: String
 )
 
-data class FeedDeleteData(
+data class FeedSimpleData(
     val profileId: Int,
     val feedId: Int
 )
 
+data class FeedCategoryResponse(
+    @SerializedName("statusCode")
+    val statusCode: Int,
+    @SerializedName("message")
+    val message: String?,
+    @SerializedName("result")
+    val result: List<CategoryData>
+)
+
+data class CategoryData(
+    val categoryId: Int,
+    val categoryName:String
+)
 data class FeedReadData(
     val feedId: Int,
     val categoryId: Int,

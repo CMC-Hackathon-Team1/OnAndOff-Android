@@ -5,12 +5,16 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
@@ -33,11 +37,61 @@ class SignInActivity:AppCompatActivity() {
     var isExistBlank = false
     val userInterface: UserInterface? = RetrofitClient.getClient()?.create(UserInterface::class.java)
     val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
+    var isPwHide:Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.ivArrow.setOnClickListener{
+        binding.etSigninEmail.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.etSigninEmail.text.toString() !=""&&binding.etSigninPassword.text.toString() !=""){
+                    binding.btSignin.setBackgroundResource(R.drawable.button_primary)
+                }
+            }
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        }
+
+        )
+        binding.btnPasswordHide.setOnClickListener{
+            if(isPwHide){
+                Log.d("signup","$isPwHide")
+                isPwHide = false
+                binding.btnPasswordHide.setImageResource(R.drawable.ic_eye_open_16)
+                binding.etSigninPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                Log.d("signup","${binding.etSigninPassword.inputType}")
+
+            }else{
+                isPwHide = true
+                binding.btnPasswordHide.setImageResource(R.drawable.ic_eye_close_16)
+                binding.etSigninPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+
+            }
+            binding.etSigninPassword.setSelection(binding.etSigninPassword.text.length);
+
+
+        }
+        binding.etSigninPassword.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.etSigninEmail.text.toString() !=""&&binding.etSigninPassword.text.toString() !=""){
+                    binding.btSignin.setBackgroundResource(R.drawable.button_primary)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+        binding.ivBackArrow.setOnClickListener{
             finish()
         }
         binding.tvPasswordUpdate.setOnClickListener {
@@ -147,6 +201,13 @@ class SignInActivity:AppCompatActivity() {
             val Intent = Intent(this@SignInActivity, SignupActivity::class.java)
             startActivity(Intent)
         }
+        binding.btnEmailReset.setOnClickListener{
+            binding.etSigninEmail.setText("")
+        }
+        binding.btnPasswordReset.setOnClickListener{
+            binding.etSigninPassword.setText("")
+        }
+
     }
 fun showDialog(){
         val dialog = Dialog(this@SignInActivity)

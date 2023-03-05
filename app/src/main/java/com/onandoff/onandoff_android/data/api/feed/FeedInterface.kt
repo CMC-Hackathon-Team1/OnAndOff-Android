@@ -1,11 +1,12 @@
 package com.onandoff.onandoff_android.data.api.feed
 
-import retrofit2.Call
+
 import com.onandoff.onandoff_android.data.model.*
+import okhttp3.MultipartBody
+import retrofit2.Call
 import com.onandoff.onandoff_android.data.request.FollowRequest
 import com.onandoff.onandoff_android.data.request.LikeRequest
 import com.onandoff.onandoff_android.data.request.ReportFeedRequest
-import okhttp3.MultipartBody
 import retrofit2.http.*
 
 interface FeedInterface {
@@ -53,9 +54,9 @@ interface FeedInterface {
     @Multipart
     @POST("/feeds")
     fun addFeedResponse(
-        @Part profileId : MultipartBody.Part,
+        @Part profileId: MultipartBody.Part,
         @Part categoryId:  MultipartBody.Part,
-        @Part hashTagList:  MultipartBody.Part,
+        @Part hashTagList: List<MultipartBody.Part>,
         @Part images: MultipartBody.Part?=null,
         @Part content: MultipartBody.Part,
         @Part isSecret: MultipartBody.Part,
@@ -73,6 +74,14 @@ interface FeedInterface {
 
     @PATCH("/feeds/status")
     fun deleteFeedResponse(
-        @Body body:FeedDeleteData
+        @Body body:FeedSimpleData
     ): Call<FeedResponse>
+
+    @POST("/likes")
+    fun likeFeedResponse(
+        @Body body:FeedSimpleData
+    ): Call<FeedResponse>
+
+    @GET("/categories/categories")
+    fun getFeedCategoryResponse(): Call<FeedCategoryResponse>
 }

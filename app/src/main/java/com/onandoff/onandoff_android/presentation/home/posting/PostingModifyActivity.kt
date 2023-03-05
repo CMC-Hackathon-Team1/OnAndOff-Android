@@ -37,8 +37,7 @@ class PostingModifyActivity : AppCompatActivity() {
 
         binding.btnPostingModify.setOnClickListener{
             // 게시물 수정
-            modifyPosting(profileId)
-            Log.d("profileId", "onCreate: -------------------$profileId-------------------")
+            modifyPosting(profileId,feedId)
         }
         binding.btnCamera.setOnClickListener{
             // 사진 추가
@@ -55,10 +54,10 @@ class PostingModifyActivity : AppCompatActivity() {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
-                    0 -> binding.textCategory.text = "문화 및 예술"
-                    1 -> binding.textCategory.text = "스포츠"
-                    2 -> binding.textCategory.text = "자기계발"
-                    3 -> binding.textCategory.text = "기타"
+                    1 -> binding.textCategory.text = "문화 및 예술"
+                    2 -> binding.textCategory.text = "스포츠"
+                    3 -> binding.textCategory.text = "자기계발"
+                    4 -> binding.textCategory.text = "기타"
                 }
                 categoryId = it
             }
@@ -72,10 +71,15 @@ class PostingModifyActivity : AppCompatActivity() {
             override fun onResponse(call: Call<FeedReadData>, response: Response<FeedReadData>) {
                 when(response.code()) {
                     200 -> {
-                        Log.d("readFeed", "onResponse: Success + ${response.body().toString()}")
+                        Log.d("readFeed", "onResponse: Success + ${response.body()!!.hashTagList}")
                         if(response.body()!=null) {
                             binding.textContent.setText(response.body()!!.feedContent)
-                            binding.textHashtag.setText(response.body()!!.hashTagList.toString())
+                            val hashTagList = response.body()!!.hashTagList
+                            var tagText = ""
+                            for (tag in hashTagList) {
+                                tagText = "#$tag $tagText"
+                            }
+                            binding.textHashtag.setText(tagText)
                         }
                     }
                 }
@@ -87,9 +91,10 @@ class PostingModifyActivity : AppCompatActivity() {
         })
     }
 
-    private fun modifyPosting(profileId: Int){
+    private fun modifyPosting(profileId: Int,feedId: Int){
         val hashTag = binding.textHashtag.text.toString()
-        val hashTagList = hashTag.split(" #", " ", "#")
+        var hashTagList = hashTag.split(" ", "#")
+        hashTagList = hashTagList.filter { it.isNotEmpty() }
 
         val content = binding.textContent.text.toString()
         val isSecret = when(binding.checkboxSecret.isChecked) {
@@ -97,7 +102,7 @@ class PostingModifyActivity : AppCompatActivity() {
             true -> "PRIVATE"
         }
 
-        val data = FeedData(profileId, categoryId, hashTagList, content, isSecret)
+        val data = FeedData(profileId, feedId, categoryId, hashTagList, content, isSecret)
 
         val call = feedInterface?.updateFeedResponse(data)
         call?.enqueue(object : Callback<FeedResponse> {

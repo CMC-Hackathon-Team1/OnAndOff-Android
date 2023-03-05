@@ -523,6 +523,7 @@ B. 계정 관련
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="email_verification">%1s로 전송되었습니다.\n이메일 링크에 접속한 후,아래 인증하기 버튼을 눌러주세요.</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -534,6 +535,16 @@ B. 계정 관련
     <string name="report">신고하기</string>
     <string name="report_feed">게시글 신고하기</string>
     <string name="nothing_found">검색 결과가 없습니다.</string>
+
     <string name="no_following_found">팔로우가 없습니다</string>
     <string name="no_feed_found">게시글이 없습니다</string>
+
+    <string name="dialog_delete_account">계정을 정말로 <font color ="#ff6767">삭제</font>하시겠습니까?</string>
+    <string name="alaram_example_like"><b>개발자 온오프</b>님이 회원님의 게시글 좋아합니다.</string>
+    <string name="alaram_example_following"><b>개발자 온오프님</b>이 회원님을 팔로잉 합니다.</string>
+    <string name="alaram_example_following_posting"><b>개발자 온오프</b>님이 새로운 글을 올렸습니다.</string>
+    <string name="alaram_example_posting">회원님의 새로운 소식을 알려주세요!</string>
+    <string name="alaram_example_notice">개발자 온앤오프님이 회원님의 게시글 좋아합니다.</string>
+    <string name="default_web_client_id">751634127071-de0j72k0d9m2gmd2854qoh3iqu88trnl.apps.googleusercontent.com</string>
+
 </resources>

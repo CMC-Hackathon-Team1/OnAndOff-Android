@@ -74,19 +74,18 @@
         app:layout_constraintTop_toBottomOf="@id/image_profile"
         tools:text="#문화/예술 #에세이 #책 #작가" />
 
-    <ImageView
-        android:id="@+id/image_photo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/image_photo_list"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_hashtag"
-        app:layout_constraintWidth_percent="0.9"
-        tools:src="@drawable/ic_launcher_background"
-        android:contentDescription="@string/image" />
+        app:layout_constraintTop_toBottomOf="@+id/text_hashtag"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_image"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/text_content"
@@ -97,7 +96,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_photo"
+        app:layout_constraintTop_toBottomOf="@id/image_photo_list"
         app:layout_constraintWidth_percent="0.87"
         tools:text="예전의 어린 나는 가슴 속에 나침반이 하나 있었다. 그래서 어디로 가야 할지 모를 때 가슴 속의 나침반이 나의 길로 나를 이끌었다. 언제부터인가 나는 돈에 집착하기 시작했고 가슴 속의 나침반은 어이상 작동하지 않았다. 몸에 쇳가루가 많이 묻으면 나침반은 돌지 않는법. 나의 순결한 나침반이 우울증을 앓던 날 나는 그렇게 나의 길을 잃었다.
 박광수" />

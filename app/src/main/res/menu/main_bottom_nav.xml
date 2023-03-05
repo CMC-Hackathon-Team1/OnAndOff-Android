@@ -3,15 +3,14 @@
 
     <item android:id="@+id/menu_home"
         android:title=""
-        android:icon="@drawable/ic_home_mono"
-        />
+        android:icon="@drawable/ic_home_24" />
 
     <item android:id="@+id/menu_look_around"
         android:title=""
-        android:icon="@drawable/ic_look_around_mono" />
+        android:icon="@drawable/ic_search_24" />
 
     <item android:id="@+id/menu_my_page"
         android:title=""
-        android:icon="@drawable/ic_my_page_mono" />
+        android:icon="@drawable/ic_profile_24" />
 
 </menu>

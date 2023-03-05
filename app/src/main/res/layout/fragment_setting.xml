@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingHorizontal="31dp">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp">
+        android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/iv_arrow"
+            android:id="@+id/iv_back_arrow"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_baseline_arrow_back_ios_24"
-            />
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="설정"
+            android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            />
-    </LinearLayout>
+            app:layout_constraintTop_toTopOf="@id/iv_back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
+        android:id="@+id/layout_setting_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingVertical="14dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="20dp"
         >
         <ImageView
             android:layout_width="23dp"
             android:layout_height="23dp"
-            android:src="@drawable/setting_user"/>
+            android:src="@drawable/ic_setting_user_30"/>
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
@@ -45,18 +52,58 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:layout_marginEnd="10dp"
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+    </LinearLayout>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/black_fifth"/>-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_setting_private"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:paddingVertical="14dp">-->
 <!--        <ImageView-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:src="@drawable/ic_setting_lock_30"/>-->
+<!--        <TextView-->
+<!--            android:layout_marginStart="17dp"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_baseline_arrow_forward_ios_24"/>-->
-
-
-    </LinearLayout>
+<!--            android:text="개인정보 보호"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginRight="16dp"/>-->
+<!--        <View-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            />-->
+<!--        <ImageView-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            -->
+<!--            android:layout_width="16dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />-->
+<!--    </LinearLayout>-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
+        android:id="@+id/layout_setting_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -64,31 +111,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/setting_privacy"/>
-        <TextView
-            android:layout_marginStart="17dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="개인정보 보호"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginRight="16dp"/>
-
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black_fifth"/>
-    <LinearLayout
-        android:id="@+id/layout_alarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="14dp">
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/setting_alarm"/>
+            android:src="@drawable/ic_setting_alarm_30"/>
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
@@ -97,7 +120,17 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:layout_marginEnd="10dp"
+            
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
     </LinearLayout>
     <View
@@ -105,7 +138,7 @@
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
-        android:id="@+id/layout_feedback"
+        android:id="@+id/layout_setting_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -113,24 +146,34 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/setting_feedback"/>
+            android:src="@drawable/ic_setting_feedback_30"/>
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알림"
+            android:text="피드백 / 문의하기"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
 
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:layout_marginEnd="10dp"
+            
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
-        android:id="@+id/layout_policy"
+        android:id="@+id/layout_setting_policy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -138,7 +181,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/setting_policy"/>
+            android:src="@drawable/ic_setting_policy_30"/>
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
@@ -148,13 +191,23 @@
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
 
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:layout_marginEnd="10dp"
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
+        android:id="@+id/layout_setting_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -162,7 +215,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/setting_version"/>
+            android:src="@drawable/ic_setting_version_30"/>
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
@@ -171,14 +224,19 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:layout_marginRight="16dp"/>
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
         <TextView
-            android:layout_marginStart="17dp"
+
+            android:layout_marginEnd = "10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="v1.0"
             android:textSize="14sp"
-            android:textColor="@color/black"
+            android:textColor="@color/black_fifth"
             android:layout_marginRight="16dp"/>
     </LinearLayout>
     <View
@@ -186,6 +244,7 @@
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
     <LinearLayout
+        android:id="@+id/layout_setting_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -193,7 +252,8 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/setting_signout"/>
+            android:src="@drawable/ic_setting_logout_30"/>
+
         <TextView
             android:layout_marginStart="17dp"
             android:layout_width="wrap_content"
@@ -209,15 +269,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black_fifth"/>
-    <Button
-        android:id="@+id/bt_singup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="동의"
-        android:paddingVertical="14dp"
-        android:textStyle="bold"
-        android:layout_marginTop="72dp"
-        />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

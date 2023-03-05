@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.presentation.home.calendar
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import com.onandoff.onandoff_android.data.model.CalendarData
 import com.onandoff.onandoff_android.databinding.ItemCalendarBinding
 import java.util.*
 
+@SuppressLint("NotifyDataSetChanged")
 class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? = null) : RecyclerView.Adapter<CalendarAdapter.CalendarItemViewHolder>() {
 
     private val baseCalendar = BaseCalendar()
@@ -39,6 +41,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
 
     fun changeToPrevMonth() {
         baseCalendar.changeToPrevMonth {
+            removeItem()
             onMonthChangeListener?.onMonthChanged(it)
             notifyDataSetChanged()
         }
@@ -46,6 +49,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
 
     fun changeToNextMonth() {
         baseCalendar.changeToNextMonth {
+            removeItem()
             onMonthChangeListener?.onMonthChanged(it)
             notifyDataSetChanged()
         }
@@ -74,20 +78,18 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                 binding.item.visibility = View.VISIBLE
             }
 
-            if (feedList != null) {
+            if (!feedList.isNullOrEmpty()) {
                 for (feed in feedList!!) {
-                    Log.d("CalenderAdapter", "feed day : ${feed.day}, date : ${date} ")
                     if(feed.day.toInt() == date) {
-                        binding.sivCalendar.visibility = View.VISIBLE
-                        feed.feedId
-                        if (feed.feedImgUrl != null && feed.feedImgUrl.isNotEmpty()) {
+                        if (!feed.feedImgUrl.isNullOrEmpty()) {
+                            binding.sivCalendar.visibility = View.VISIBLE
+                            binding.point.visibility = View.GONE
                             Glide.with(itemView)
-                                .load(feed.feedImgUrl[0])
+                                .load(feed.feedImgUrl)
                                 .into(binding.sivCalendar)
                         } else {
-                            Glide.with(itemView)
-                                .load("https://onandoff-image.s3.amazonaws.com/defaultProfileImg/defaultProfileImg.png")
-                                .into(binding.sivCalendar)
+                            binding.point.visibility = View.VISIBLE
+                            binding.sivCalendar.visibility = View.GONE
                         }
 
                         itemView.setOnClickListener {
@@ -95,13 +97,10 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
                         }
                     }
                 }
+            } else {
+                binding.sivCalendar.visibility = View.GONE
+                binding.point.visibility = View.GONE
             }
-
-//            val pos = adapterPosition
-//            if(pos!= RecyclerView.NO_POSITION)
-//            {
-//
-//            }
         }
     }
     fun setItems(item: List<CalendarData>) {
@@ -109,9 +108,12 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
         notifyDataSetChanged()
     }
 
+    fun removeItem() {
+        feedList = null
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: CalendarItemViewHolder, position: Int) {
-        if (holder is CalendarItemViewHolder) {
-            holder.bind(baseCalendar.data[position], position)
-        }
+        holder.bind(baseCalendar.data[position], position)
     }
 }
