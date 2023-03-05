@@ -135,6 +135,11 @@ class FeedListViewModel(
 
     val searchKeyword: MutableLiveData<String> = MutableLiveData()
 
+    private val _emptyStateMessage =
+        MutableLiveData(getApplication<Application>().getString(R.string.no_feed_found))
+    val emptyStateMessage: LiveData<String>
+        get() = _emptyStateMessage
+
     private val profileId: Int
         get() = SharePreference.prefs.getSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
@@ -146,6 +151,8 @@ class FeedListViewModel(
 
     private val _feedList = MutableLiveData<Flow<PagingData<LookAroundFeedData>>>()
     val feedList: LiveData<Flow<PagingData<LookAroundFeedData>>> = _feedList
+
+    private var latestQuery = ""
 
     private var currentExploreType: ExploreType = ExploreType.Normal
     private val fResult: Boolean
@@ -159,14 +166,45 @@ class FeedListViewModel(
 
         getCategories()
 
+        setupFeedLoadRequest()
+
+        observeProfileChanged()
+    }
+
+    private fun setupFeedLoadRequest() {
         viewModelScope.launch {
             feedLoadEvent
                 .collect {
-                    Log.d("FeedRequest", "$it")
+                    latestQuery = it.query
+
+                    val emptyMessageResId = if (!it.fResult && it.query.isEmpty()) {
+                        R.string.no_feed_found
+                    } else if (it.fResult && it.query.isEmpty()) {
+                        R.string.no_following_found
+                    } else {
+                        R.string.nothing_found
+                    }
+                    _emptyStateMessage.value =
+                        getApplication<Application>().getString(emptyMessageResId)
+
                     _feedList.value = feedRepository.getFeedListSource(it)
                 }
         }
     }
+
+    private fun observeProfileChanged() {
+        viewModelScope.launch {
+            SharePreference.prefs.observePreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID)
+                .collect { profileId ->
+                    Log.d("profileIdTest", "$profileId")
+                    getFeedList(categoryId)
+                }
+        }
+    }
+
+    var oldCategoryItemId: Int = 0
+    var oldCategoryItemName: String = ""
+    var oldCategoryItemIndex: Int = 0
 
     private fun getCategories() {
         viewModelScope.launch {
@@ -178,7 +216,8 @@ class FeedListViewModel(
                         0,
                         getApplication<Application>().getString(R.string.category_all),
                     )
-                    val result = listOf(element) + it
+//                    val result = listOf(element) + it // 맨 처음부터 카테고리 전체가 말풍선 목록에 있으면 안됨. 말 풍선 목록에는 4개만 있어야 함
+                    val result = it
                     result + element.copy(categoryId = result.size, isInvalid = true)
                 }
                 .onSuccess {
@@ -235,11 +274,6 @@ class FeedListViewModel(
 //        }
     }
 
-    fun setSpinnerEntry(entry: List<Int>) {
-        viewModelScope.launch {
-            _spinnerEntry.emit(entry)
-        }
-    }
 
     private fun getFeedDetail(feedId: Int, profileId: Int) {
         viewModelScope.launch {
@@ -299,7 +333,7 @@ class FeedListViewModel(
 //        }
     }
 
-    fun like(feedId: Int) {
+    fun like(feedId: Int, callback: (isLike: Boolean) -> Unit) {
         val request = LikeRequest(
             profileId = profileId,
             feedId = feedId
@@ -312,8 +346,10 @@ class FeedListViewModel(
                 feedRepository.addOrUndoLike(request)
             }
                 .onSuccess {
-                    Log.d("LookAroundViewModel : ", "$it")
-//                    _state.value = State.LikeOrNoLikeFeedSuccess
+                    if (it.statusCode == 2000 || it.statusCode == 2001) {
+                        val isLike = it.message == "Like"
+                        callback(isLike)
+                    }
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -333,7 +369,7 @@ class FeedListViewModel(
         }
     }
 
-    fun follow(followProfileId: Int) {
+    fun follow(followProfileId: Int, callback: (isFollowed: Boolean) -> Unit) {
         val request = FollowRequest(
             fromProfileId = profileId,
             toProfileId = followProfileId
@@ -344,8 +380,10 @@ class FeedListViewModel(
                 feedRepository.addOrUndoFollow(request)
             }
                 .onSuccess {
-                    Log.d("LookAroundViewModel : ", "$it")
-//                    _state.value = State.FollowOrUnfollowSuccess
+                    if (it.statusCode == 2101 || it.statusCode == 2102) {
+                        val isFollowed = it.message == "Follow"
+                        callback(isFollowed)
+                    }
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -394,7 +432,7 @@ class FeedListViewModel(
     }
 
     fun setSelectedCategory(category: CategoryResponse) {
-        Log.d("category", "$category")
+        Log.d("category : ", "$category")
         if (!category.isInvalid) {
             categoryId = category.categoryId
             getFeedList(category.categoryId)
@@ -403,6 +441,20 @@ class FeedListViewModel(
 
     override fun onCleared() {
         super.onCleared()
+    }
+
+    fun setSpinnerEntry(entry: List<Int>) {
+        viewModelScope.launch {
+            _spinnerEntry.emit(entry)
+        }
+    }
+
+    fun isQueryChanged(): Boolean {
+        return latestQuery != searchKeyword.value.orEmpty()
+    }
+
+    fun refresh() {
+        getFeedList(categoryId)
     }
 
     companion object {

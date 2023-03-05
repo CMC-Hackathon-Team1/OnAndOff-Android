@@ -7,6 +7,13 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import java.io.File
 
+@BindingAdapter("imageResId")
+fun ImageView.setImageUrl(@DrawableRes resource: Int?) {
+    if (resource != null) {
+        setImageResource(resource)
+    }
+}
+
 @BindingAdapter("imageUrl")
 fun ImageView.setImageUrl(url: String?) {
     Glide.with(context)

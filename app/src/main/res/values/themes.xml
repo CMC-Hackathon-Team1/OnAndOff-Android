@@ -79,6 +79,7 @@
     <style name="SpinnerDivideStyle" parent="android:style/Widget.ListView.DropDown">
         <item name="android:divider">@color/black_fifth</item> <!-- divider 색 -->
         <item name="android:dividerHeight">1dp</item> <!-- divider 높이 -->
+        <item name="android:paddingHorizontal">12dp</item>
         <item name="android:contentInsetStart">15dp</item>
     </style>
 

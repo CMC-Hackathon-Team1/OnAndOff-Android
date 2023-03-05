@@ -42,16 +42,11 @@ class ReportFeedViewModel(
     val state: StateFlow<State> = _state.asStateFlow()
 
     private val feedId: Int = requireNotNull(savedStateHandle[FEED_ID])
-    val reportedCategoryId: MutableLiveData<Int> = MutableLiveData()
-    val content: MutableLiveData<String> = MutableLiveData()
 
-    fun reportFeed() {
-        val reportedCategoryId = reportedCategoryId.value
-        val content = content.value
-
+    fun reportFeed(reportedCategoryId: Int, content: String?) {
         val request = ReportFeedRequest(
             feedId = feedId,
-            reportedCategoryId = reportedCategoryId!!,
+            reportedCategoryId = reportedCategoryId,
             content = content
         )
 
