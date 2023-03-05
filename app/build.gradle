@@ -86,6 +86,9 @@ dependencies {
     // Paging
     implementation 'androidx.paging:paging-runtime:3.1.1'
 
+    // 말풍선 디자인
+    implementation "com.github.skydoves:balloon:1.5.2"
+
     // 카카오 로그인 모듈
     implementation "com.kakao.sdk:v2-user:$kakao_version"
 //    //permission 관리 모듈
