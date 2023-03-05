@@ -19,12 +19,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityCreatePersonaBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.CreatePersonaViewModel
-import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -120,22 +118,21 @@ class CreatePersonaActivity : AppCompatActivity() {
 //            }
         }
         binding.tvFinish.setOnClickListener {
-            // TODO: MaterialAlertDialog 를 이용 ? 또는 CreatePersonaDialog 를 이용 ?
             val createPersonaDialog = CreatePersonaDialog.newInstance()
-
             createPersonaDialog.show(supportFragmentManager, CreatePersonaDialog.TAG)
-//            val builder = MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
+        }
 
-//            builder.setView(R.layout.dialog_create_persona)
-//                .setPositiveButton("생성"
-//                ) { _, _ -> viewModel.onCreatePersona() }
-//                .setNegativeButton("취소"
-//                ) { _, _ ->  }
-//                .create()
-//                .show()
-
+        supportFragmentManager.setFragmentResultListener(
+            CreatePersonaDialog.TAG,
+            this@CreatePersonaActivity
+        ) { _: String, result: Bundle ->
+            val action = result.getString(CreatePersonaDialog.RESULT_ACTION)
+            if (action == CreatePersonaDialog.ACTION_CREATE) {
+                viewModel.onCreatePersona()
+            }
         }
     }
+
     private fun openGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK)
         pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
@@ -152,12 +149,15 @@ class CreatePersonaActivity : AppCompatActivity() {
                 val body = MultipartBody.Part.createFormData("profile", file.name, requestFile)
 
                 viewModel.setPersonaImagePath(absolutelyPath(imagePath, this))
-                Log.d("viewModel.setPersonaImagePath", "viewModel.setPersonaImagePath: $file.absolutePath")
+                Log.d(
+                    "viewModel.setPersonaImagePath",
+                    "viewModel.setPersonaImagePath: $file.absolutePath"
+                )
             }
         }
 
     // 절대 경로 변환
-    private fun absolutelyPath(path: Uri?, context : Context): String {
+    private fun absolutelyPath(path: Uri?, context: Context): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
         val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -173,9 +173,7 @@ class CreatePersonaActivity : AppCompatActivity() {
         val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
         val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-        return if (ActivityCompat.checkSelfPermission(this, cameraPermission)
-            == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, readPermission)
+        return if (ActivityCompat.checkSelfPermission(this, readPermission)
             == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, writePermission)
             == PackageManager.PERMISSION_GRANTED
