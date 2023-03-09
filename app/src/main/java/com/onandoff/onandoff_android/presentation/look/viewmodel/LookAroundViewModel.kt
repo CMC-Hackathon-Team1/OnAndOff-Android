@@ -22,7 +22,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class FeedListViewModel(
+class LookAroundViewModel(
     application: Application,
     private val feedRepository: FeedRepository
 ) : AndroidViewModel(application) {
@@ -403,34 +403,6 @@ class FeedListViewModel(
         }
     }
 
-
-    fun reportFeed() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-//                feedRepository.reportFeed(feedId.value ?: 0)
-            }
-                .onSuccess {
-                    Log.d("LookAroundViewModel : ", "$it")
-                    _state.value = State.ReportFeedSuccess
-                }
-                .onFailure {
-                    if (it is NetworkError) {
-                        when (it) {
-                            is NetworkError.BodyError -> _state.value =
-                                State.ReportFeedFailed(State.ReportFeedFailed.Reason.PARAMETER_ERROR)
-                            is NetworkError.JwtError -> _state.value =
-                                State.ReportFeedFailed(State.ReportFeedFailed.Reason.JWT_ERROR)
-                            is NetworkError.DBError -> _state.value =
-                                State.ReportFeedFailed(State.ReportFeedFailed.Reason.DB_ERROR)
-                            is NetworkError.InvalidFeedDataError -> _state.value =
-                                State.ReportFeedFailed(State.ReportFeedFailed.Reason.INVALID_FEED)
-                            else -> {}
-                        }
-                    }
-                }
-        }
-    }
-
     fun setSelectedCategory(category: CategoryResponse) {
         Log.d("category : ", "$category")
         if (!category.isInvalid) {
@@ -470,7 +442,7 @@ class FeedListViewModel(
                 // Create a SavedStateHandle for this ViewModel from extras
                 val savedStateHandle = extras.createSavedStateHandle()
 
-                return FeedListViewModel(
+                return LookAroundViewModel(
                     application,
                     FeedRepositoryImpl(
                         FeedRemoteDataSourceImpl(

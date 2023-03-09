@@ -27,28 +27,28 @@ import com.google.android.material.tabs.TabLayout
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CategoryResponse
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
-import com.onandoff.onandoff_android.databinding.FragmentFeedListBinding
-import com.onandoff.onandoff_android.presentation.look.viewmodel.FeedListViewModel
+import com.onandoff.onandoff_android.databinding.FragmentLookAroundBinding
+import com.onandoff.onandoff_android.presentation.look.viewmodel.LookAroundViewModel
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import kotlinx.coroutines.launch
 
-class FeedListFragment : Fragment() {
-    private var _binding: FragmentFeedListBinding? = null
+class LookAroundFragment : Fragment() {
+    private var _binding: FragmentLookAroundBinding? = null
     private val binding
         get() = _binding!!
 
-    private val viewModel by viewModels<FeedListViewModel>(factoryProducer = {
-        FeedListViewModel.Factory
+    private val viewModel by viewModels<LookAroundViewModel>(factoryProducer = {
+        LookAroundViewModel.Factory
     })
 
-    private lateinit var feedListAdapter: FeedListAdapter
+    private lateinit var lookAroundFeedListAdapter: LookAroundFeedListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFeedListBinding.inflate(inflater)
+        _binding = FragmentLookAroundBinding.inflate(inflater)
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
@@ -70,7 +70,7 @@ class FeedListFragment : Fragment() {
             if (viewModel.isQueryChanged()) {
                 viewModel.refresh()
             } else {
-                feedListAdapter.refresh()
+                lookAroundFeedListAdapter.refresh()
             }
             binding.editInputHashtag.clearFocus()
         }
@@ -78,11 +78,12 @@ class FeedListFragment : Fragment() {
 
     private fun setupView() {
         initLookAroundTabs()
+        binding.spinner.dropDownVerticalOffset = -20
         initFeedListRecyclerView(binding.rvFeedList)
 
         TedKeyboardObserver(requireActivity())
             .listen { isShow ->
-                val isItemEmpty = feedListAdapter.itemCount == 0
+                val isItemEmpty = lookAroundFeedListAdapter.itemCount == 0
                 binding.spinner.isInvisible = isShow
                 binding.rvFeedList.isInvisible = isShow || isItemEmpty
                 binding.tvNothingFound.isVisible = !isShow && isItemEmpty
@@ -92,7 +93,7 @@ class FeedListFragment : Fragment() {
                 }
             }
 
-        feedListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        lookAroundFeedListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 super.onItemRangeInserted(positionStart, itemCount)
                 if (positionStart == 0 && itemCount > 0) {
@@ -101,10 +102,10 @@ class FeedListFragment : Fragment() {
             }
         })
 
-        feedListAdapter.addLoadStateListener { loadStates: CombinedLoadStates ->
+        lookAroundFeedListAdapter.addLoadStateListener { loadStates: CombinedLoadStates ->
             val isEmptyVisible = (loadStates.source.refresh is LoadState.NotLoading
                 && loadStates.append.endOfPaginationReached
-                && feedListAdapter.itemCount < 1)
+                && lookAroundFeedListAdapter.itemCount < 1)
 
             val isLoadingVisible = loadStates.refresh is LoadState.Loading
 
@@ -146,14 +147,18 @@ class FeedListFragment : Fragment() {
         }
 
         binding.layoutSpinnerFeedList.setOnClickListener {
+            Log.d("binding.rvFeedList.isInvisible", "${binding.rvFeedList.isInvisible}")
             if (binding.rvFeedList.isInvisible) {
                 closeKeyboard(binding.root)
             }
 
             if (binding.editInputHashtag.hasFocus()) {
-                binding.layoutSpinnerFeedList.isVisible = true
                 binding.editInputHashtag.clearFocus()
             }
+        }
+
+        binding.spinner.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.spinner.dropDownVerticalOffset = binding.spinner.dropDownVerticalOffset - 7
         }
     }
 
@@ -176,23 +181,23 @@ class FeedListFragment : Fragment() {
             lifecycleScope.launch {
                 state.collect { state ->
                     when (state) {
-                        is FeedListViewModel.State.GetFeedListFailed -> {
+                        is LookAroundViewModel.State.GetFeedListFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.GetFeedListFailed.Reason.BODY_ERROR -> {
+                                LookAroundViewModel.State.GetFeedListFailed.Reason.BODY_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "body error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.GetFeedListFailed.Reason.JWT_ERROR -> {
+                                LookAroundViewModel.State.GetFeedListFailed.Reason.JWT_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "jwt error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.GetFeedListFailed.Reason.SERVER_ERROR -> {
+                                LookAroundViewModel.State.GetFeedListFailed.Reason.SERVER_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "server error",
@@ -201,30 +206,30 @@ class FeedListFragment : Fragment() {
                                 }
                             }
                         }
-                        is FeedListViewModel.State.GetFeedFailed -> {
+                        is LookAroundViewModel.State.GetFeedFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.GetFeedFailed.Reason.BODY_ERROR -> {
+                                LookAroundViewModel.State.GetFeedFailed.Reason.BODY_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "body error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.GetFeedFailed.Reason.JWT_ERROR -> {
+                                LookAroundViewModel.State.GetFeedFailed.Reason.JWT_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "jwt error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.GetFeedFailed.Reason.SERVER_ERROR -> {
+                                LookAroundViewModel.State.GetFeedFailed.Reason.SERVER_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "server error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.GetFeedFailed.Reason.NO_PROFILE_ID -> {
+                                LookAroundViewModel.State.GetFeedFailed.Reason.NO_PROFILE_ID -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "no profile id error",
@@ -233,9 +238,9 @@ class FeedListFragment : Fragment() {
                                 }
                             }
                         }
-                        is FeedListViewModel.State.SearchFeedFailed -> {
+                        is LookAroundViewModel.State.SearchFeedFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.SearchFeedFailed.Reason.NO_PROFILE_ID -> {
+                                LookAroundViewModel.State.SearchFeedFailed.Reason.NO_PROFILE_ID -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "no profile id error",
@@ -245,30 +250,30 @@ class FeedListFragment : Fragment() {
                                 else -> {}
                             }
                         }
-                        is FeedListViewModel.State.LikeOrNoLikeFeedFailed -> {
+                        is LookAroundViewModel.State.LikeOrNoLikeFeedFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.LikeOrNoLikeFeedFailed.Reason.UNAUTHORIZED -> {
+                                LookAroundViewModel.State.LikeOrNoLikeFeedFailed.Reason.UNAUTHORIZED -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "unauthorized",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.LikeOrNoLikeFeedFailed.Reason.DB_ERROR -> {
+                                LookAroundViewModel.State.LikeOrNoLikeFeedFailed.Reason.DB_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "db error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.LikeOrNoLikeFeedFailed.Reason.NO_PROFILE_ID -> {
+                                LookAroundViewModel.State.LikeOrNoLikeFeedFailed.Reason.NO_PROFILE_ID -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "no profile id error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.LikeOrNoLikeFeedFailed.Reason.INVALID_FEED -> {
+                                LookAroundViewModel.State.LikeOrNoLikeFeedFailed.Reason.INVALID_FEED -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "invalid feed error",
@@ -277,30 +282,30 @@ class FeedListFragment : Fragment() {
                                 }
                             }
                         }
-                        is FeedListViewModel.State.FollowOrUnfollowFailed -> {
+                        is LookAroundViewModel.State.FollowOrUnfollowFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.FollowOrUnfollowFailed.Reason.UNAUTHORIZED -> {
+                                LookAroundViewModel.State.FollowOrUnfollowFailed.Reason.UNAUTHORIZED -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "unauthorized",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.FollowOrUnfollowFailed.Reason.DB_ERROR -> {
+                                LookAroundViewModel.State.FollowOrUnfollowFailed.Reason.DB_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "db error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.FollowOrUnfollowFailed.Reason.INVALID_FROM_PROFILE_ID -> {
+                                LookAroundViewModel.State.FollowOrUnfollowFailed.Reason.INVALID_FROM_PROFILE_ID -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "invalid from profile id error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.FollowOrUnfollowFailed.Reason.INVALID_TO_PROFILE_ID -> {
+                                LookAroundViewModel.State.FollowOrUnfollowFailed.Reason.INVALID_TO_PROFILE_ID -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "invalid to profile id error",
@@ -309,30 +314,30 @@ class FeedListFragment : Fragment() {
                                 }
                             }
                         }
-                        is FeedListViewModel.State.ReportFeedFailed -> {
+                        is LookAroundViewModel.State.ReportFeedFailed -> {
                             when (state.reason) {
-                                FeedListViewModel.State.ReportFeedFailed.Reason.PARAMETER_ERROR -> {
+                                LookAroundViewModel.State.ReportFeedFailed.Reason.PARAMETER_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "parameter error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.ReportFeedFailed.Reason.JWT_ERROR -> {
+                                LookAroundViewModel.State.ReportFeedFailed.Reason.JWT_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "jwt error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.ReportFeedFailed.Reason.DB_ERROR -> {
+                                LookAroundViewModel.State.ReportFeedFailed.Reason.DB_ERROR -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "db error",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                                FeedListViewModel.State.ReportFeedFailed.Reason.INVALID_FEED -> {
+                                LookAroundViewModel.State.ReportFeedFailed.Reason.INVALID_FEED -> {
                                     Toast.makeText(
                                         requireActivity(),
                                         "invalid feed error",
@@ -341,26 +346,26 @@ class FeedListFragment : Fragment() {
                                 }
                             }
                         }
-                        FeedListViewModel.State.Idle -> {}
-                        is FeedListViewModel.State.GetFeedListSuccess -> {
+                        LookAroundViewModel.State.Idle -> {}
+                        is LookAroundViewModel.State.GetFeedListSuccess -> {
 
                         }
-                        is FeedListViewModel.State.GetFeedSuccess -> {
+                        is LookAroundViewModel.State.GetFeedSuccess -> {
 
                         }
-                        is FeedListViewModel.State.SearchFeedSuccess -> {
+                        is LookAroundViewModel.State.SearchFeedSuccess -> {
 
                         }
-                        is FeedListViewModel.State.LikeOrNoLikeFeedSuccess -> {
+                        is LookAroundViewModel.State.LikeOrNoLikeFeedSuccess -> {
 
                         }
-                        is FeedListViewModel.State.FollowOrUnfollowSuccess -> {
+                        is LookAroundViewModel.State.FollowOrUnfollowSuccess -> {
 
                         }
-                        is FeedListViewModel.State.ReportFeedSuccess -> {
+                        is LookAroundViewModel.State.ReportFeedSuccess -> {
 
                         }
-                        is FeedListViewModel.State.GetCategoryListSuccess -> {
+                        is LookAroundViewModel.State.GetCategoryListSuccess -> {
                             initSpinner(state.list)
                         }
                     }
@@ -446,7 +451,16 @@ class FeedListFragment : Fragment() {
 //
 //                    val spinnerItemText = view?.findViewById<View>(R.id.tv_item_spinner) as TextView
 //                    spinnerItemText.hint = categoryValue.toString()
-//                } else {
+//                }
+//                else {
+//                    val element = CategoryResponse(
+//                        0,
+//                        "카테고리 전체"
+//                    )
+//
+//                    getCategoryFeedList(element, categoryList)
+//                }
+//                else {
 //                    spinnerAdapter.clear()
 //                    spinnerAdapter.addAll(items.map { it.categoryName })
 //
@@ -495,7 +509,7 @@ class FeedListFragment : Fragment() {
     }
 
     private fun initFeedListRecyclerView(recyclerView: RecyclerView) {
-        feedListAdapter = FeedListAdapter(
+        lookAroundFeedListAdapter = LookAroundFeedListAdapter(
             onProfileClick = ::onFeedProfileClick,
             onFollowClick = ::onClickFollow,
             onLikeClick = ::onClickLike,
@@ -504,7 +518,7 @@ class FeedListFragment : Fragment() {
 
         recyclerView.run {
             setHasFixedSize(true)
-            adapter = feedListAdapter
+            adapter = lookAroundFeedListAdapter
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
         }
@@ -512,7 +526,7 @@ class FeedListFragment : Fragment() {
 
     private fun openOptionMenuBottomSheet(feedData: LookAroundFeedData) {
         val bottomSheetDialogFragment =
-            BottomSheetFeedListOptionMenu.newInstance(feedId = feedData.feedId)
+            BottomSheetLookAroundFeedOptionMenu.newInstance(feedId = feedData.feedId)
         bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
     }
 
@@ -525,8 +539,10 @@ class FeedListFragment : Fragment() {
     private fun onClickFollow(feedData: LookAroundFeedData) {
         viewModel.follow(feedData.profileId) {
             Log.d("isFollowing : ", "$it")
+
             feedData.isFollowing = it
-            feedListAdapter.notifyDataSetChanged()
+            lookAroundFeedListAdapter.notifyDataSetChanged()
+//            feedListAdapter.refresh()
         }
     }
 
@@ -534,12 +550,12 @@ class FeedListFragment : Fragment() {
         viewModel.like(feedData.feedId) {
             Log.d("isLike : ", "$it")
             feedData.isLike = it
-            feedListAdapter.notifyDataSetChanged()
+            lookAroundFeedListAdapter.notifyDataSetChanged()
         }
     }
 
     companion object {
-        fun newInstance() = FeedListFragment()
+        fun newInstance() = LookAroundFragment()
     }
 
     override fun onDestroyView() {
