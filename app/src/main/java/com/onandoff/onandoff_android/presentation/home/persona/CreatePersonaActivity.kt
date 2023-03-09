@@ -200,54 +200,6 @@ class CreatePersonaActivity : AppCompatActivity() {
         }
     }
 
-//    //프로필 생성 확인 alert 창
-//    fun checkDialog(){
-//        val dialog = Dialog(this@CreatePersonaActivity)
-//        val dialogView = DialogProfileCreateAlertBinding.inflate(LayoutInflater.from(this@CreatePersonaActivity))
-//        dialog.setContentView(dialogView.root)
-//        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
-//        params?.width = WindowManager.LayoutParams.MATCH_PARENT
-//        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
-//        if (params != null) {
-//            dialog.window?.setLayout(params.width,params.height)
-//        }
-//        dialog.show()
-//        dialogView.btnYes.setOnClickListener{
-//            Log.d("profile create","동의 완료")
-//            isValid = true
-//            val nickname = binding.editNickname.text.toString()
-//            val personas = binding.editPersona.text.toString()
-//            val statusmsg = binding.editIntroduce.text.toString()
-//            val call = createProfile(nickname, personas, statusmsg, null)
-//            call?.let { it1 -> getData(it1) }
-////
-//        }
-//        dialogView.btnNo.setOnClickListener{
-//            dialog.dismiss()
-//        }
-//    }
-
-//    // 갤러리, 기본 이미지 변경 여부 체크
-//    fun showBottomSheet(context: Context){
-//
-//        val dialog = BottomSheetDialog(context)
-//        val dialogView = BottomsheetSelectProfileImageBinding.inflate(LayoutInflater.from(context))
-//        dialog.setContentView(dialogView.root)
-//        dialog.show()
-//        dialogView.layoutGallery.setOnClickListener{
-//            if(checkPermission(STORAGE_PERMISSION, FLAG_PERM_STORAGE) ){
-//                move_gallery()
-//            }
-//            dialog.dismiss()
-//        }
-//        dialogView.layoutBasic.setOnClickListener{
-//            imgFile = null
-//            binding.ivPersonaProfile.setImageResource(R.drawable.persona_profile)
-//            dialog.dismiss()
-//        }
-//
-//    }
-
     companion object {
         const val PERMISSION_REQ_CODE = 1010
 
