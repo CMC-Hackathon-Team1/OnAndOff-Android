@@ -19,8 +19,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.BottomSheetSelectImageOptionMenuBinding
@@ -30,7 +28,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
-class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
+class BottomSheetSelectImageOptionMenu : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSelectImageOptionMenuBinding? = null
     private val binding: BottomSheetSelectImageOptionMenuBinding
         get() = _binding!!
@@ -52,14 +50,12 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun getTheme(): Int = R.style.RounderBottomSheetDialog
+
     private fun setupView() {
         binding.cvSelectImageOptionMenu.background = GradientDrawable().apply {
             val radius = resources.getDimension(R.dimen.bottom_sheet_radius)
-            cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, radius, radius, radius, radius)
-
-            val strokeWidth =
-                resources.getDimensionPixelSize(R.dimen.create_persona_dialog_stroke_width)
-            setStroke(strokeWidth, ContextCompat.getColor(requireContext(), R.color.color_main))
+            cornerRadii = floatArrayOf(radius, radius, radius, radius, 0f, 0f, 0f, 0f)
         }
     }
 
@@ -102,13 +98,16 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
                 val body = MultipartBody.Part.createFormData("profile", file.name, requestFile)
 
                 viewModel.setPersonaImagePath(absolutelyPath(imagePath, requireActivity()))
-                Log.d("viewModel.setPersonaImagePath", "viewModel.setPersonaImagePath: $file.absolutePath")
+                Log.d(
+                    "viewModel.setPersonaImagePath",
+                    "viewModel.setPersonaImagePath: $file.absolutePath"
+                )
                 dismiss()
             }
         }
 
     // 절대 경로 변환
-    private fun absolutelyPath(path: Uri?, context : Context): String {
+    private fun absolutelyPath(path: Uri?, context: Context): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
         val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
