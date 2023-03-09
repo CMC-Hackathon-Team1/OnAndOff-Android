@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View" />
@@ -13,9 +14,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".presentation.home.persona.CreatePersonaActivity">
 
-        <ImageView
+        <com.skydoves.elasticviews.ElasticImageView
             android:id="@+id/iv_back_arrow"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -23,7 +25,8 @@
             android:layout_marginTop="55.72dp"
             android:src="@drawable/ic_baseline_arrow_back_ios_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:imageView_duration="150" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -44,25 +47,22 @@
             android:layout_marginEnd="21dp"
             android:text="생성하기"
             android:textColor="#58B8A1"
-            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_title"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_persona_profile"
             android:layout_width="95dp"
             android:layout_height="95dp"
             android:layout_marginTop="78dp"
-            app:fallbackImage="@{R.drawable.persona_profile}"
+            app:fallbackImage="@{R.drawable.ic_persona_profile}"
             app:imageUrl="@{viewModel.image}"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
-
-        <!-- android:src="@drawable/persona_profile" - 삭제? -->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_camera"
@@ -94,10 +94,11 @@
                 android:id="@+id/tv_personas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="페르소나"
+                android:text="페르소나?"
                 android:textColor="#000000"
-                android:textSize="12sp"
+                android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <EditText
@@ -108,7 +109,9 @@
             android:background="@android:color/transparent"
             android:hint="ex. 작가"
             android:text="@={viewModel.personaName}"
-            android:textSize="12sp"
+            android:textSize="@dimen/small_text_size"
+            android:inputType="text"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@id/layout_persona"
             app:layout_constraintEnd_toEndOf="@id/view_persona"
             app:layout_constraintStart_toEndOf="@id/layout_persona"
@@ -131,7 +134,7 @@
             android:layout_marginTop="3dp"
             android:text="필수로 입력해야 합니다"
             android:textColor="@color/errorColor"
-            android:textSize="10sp"
+            android:textSize="@dimen/sub_text_size"
             android:textStyle="bold"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/layout_persona"
@@ -145,7 +148,7 @@
             android:layout_marginTop="41dp"
             android:text="한줄소개"
             android:textColor="#000000"
-            android:textSize="12sp"
+            android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_persona" />
@@ -158,7 +161,9 @@
             android:background="@android:color/transparent"
             android:hint="최대 30자까지 가능합니다"
             android:text="@={viewModel.introduce}"
-            android:textSize="12sp"
+            android:textSize="@dimen/small_text_size"
+            android:inputType="text"
+            android:maxLines="1"
             android:maxLength="30"
             app:layout_constraintBottom_toBottomOf="@id/tv_oneline"
             app:layout_constraintEnd_toEndOf="@id/view_oneline"
@@ -198,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:text="닉네임"
                 android:textColor="#000000"
-                android:textSize="12sp"
+                android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -210,7 +215,9 @@
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
             android:text="@={viewModel.profileName}"
-            android:textSize="12sp"
+            android:textSize="@dimen/small_text_size"
+            android:inputType="text"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@id/layout_persona"
             app:layout_constraintEnd_toEndOf="@id/view_nickname"
             app:layout_constraintStart_toEndOf="@id/layout_nickname"
@@ -218,7 +225,7 @@
 
         <View
             android:id="@+id/view_nickname"
-            android:layout_width="151dp"
+            android:layout_width="142dp"
             android:layout_height="1dp"
             android:layout_marginTop="9dp"
             android:layout_marginEnd="23dp"
@@ -233,7 +240,7 @@
             android:layout_marginTop="3dp"
             android:text="필수로 입력해야 합니다"
             android:textColor="@color/errorColor"
-            android:textSize="10sp"
+            android:textSize="@dimen/sub_text_size"
             android:textStyle="bold"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/view_nickname"

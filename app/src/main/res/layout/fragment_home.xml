@@ -105,14 +105,15 @@
                             app:layout_constraintEnd_toStartOf="@id/iv_setting"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <com.skydoves.elasticviews.ElasticImageView
                                 android:id="@+id/iv_alarm"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:src="@drawable/ic_alarm"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:imageView_duration="150" />
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/iv_alarm_red_dot"
@@ -125,7 +126,7 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <androidx.appcompat.widget.AppCompatImageView
+                        <com.skydoves.elasticviews.ElasticImageView
                             android:id="@+id/iv_setting"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -134,7 +135,8 @@
                             android:layout_marginEnd="20dp"
                             android:src="@drawable/ic_setting"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:imageView_duration="150" />
 
                         <View
                             android:id="@+id/view_empty"
@@ -219,7 +221,7 @@
                             app:layout_constraintTop_toBottomOf="@id/layout_please_share_your_today"
                             app:layout_constraintWidth_percent="0.48" />
 
-                        <Button
+                        <com.skydoves.elasticviews.ElasticButton
                             android:id="@+id/btn_post"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -228,7 +230,8 @@
                             android:layout_marginTop="10dp"
                             android:text="@string/post"
                             android:textColor="@color/white"
-                            app:layout_constraintTop_toBottomOf="@id/iv_please_share_your_day" />
+                            app:layout_constraintTop_toBottomOf="@id/iv_please_share_your_day"
+                            app:imageView_duration="100" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
