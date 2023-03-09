@@ -55,7 +55,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
-                    app:fallbackImage="@{R.drawable.persona_profile}"
+                    app:fallbackImage="@{R.drawable.ic_persona_profile}"
                     app:imageUrl="@{myPersona.myProfile.profileImgUrl}" />
 
             </com.google.android.material.card.MaterialCardView>
