@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityReportFeedBinding
+import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaDialog
 import com.onandoff.onandoff_android.presentation.look.viewmodel.ReportFeedViewModel
 import kotlinx.coroutines.launch
 
@@ -90,12 +93,8 @@ class ReportFeedActivity : AppCompatActivity() {
                         }
                         ReportFeedViewModel.State.Idle -> {}
                         ReportFeedViewModel.State.ReportFeedSuccess -> {
-                            Toast.makeText(
-                                this@ReportFeedActivity,
-                                "신고가 성공적으로 접수되었습니다!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            finish()
+                            val reportFeedConfirmedDialog = ReportFeedConfirmedDialog.newInstance()
+                            reportFeedConfirmedDialog.show(supportFragmentManager, ReportFeedConfirmedDialog.TAG)
                         }
                     }
                 }
@@ -122,16 +121,27 @@ class ReportFeedActivity : AppCompatActivity() {
         }
 
         binding.btnAgree.setOnClickListener {
-            val reportCategoryId = checkBoxList.indexOfFirst { it.isChecked } + 1
-            if (reportCategoryId >= 1) {
-                val content =
-                    if (binding.checkboxEtc.isChecked) {
-                        binding.editEtc.text.toString()
-                    } else {
-                        null
-                    }
+            val reportFeedDialog = ReportFeedDialog.newInstance()
+            reportFeedDialog.show(supportFragmentManager, ReportFeedDialog.TAG)
+        }
 
-                viewModel.reportFeed(reportCategoryId, content)
+        supportFragmentManager.setFragmentResultListener(
+            ReportFeedDialog.TAG,
+            this@ReportFeedActivity
+        ) { _: String, result: Bundle ->
+            val action = result.getString(ReportFeedDialog.RESULT_ACTION)
+            if (action == ReportFeedDialog.ACTION_REPORT) {
+                val reportCategoryId = checkBoxList.indexOfFirst { it.isChecked } + 1
+                if (reportCategoryId >= 1) {
+                    val content =
+                        if (binding.checkboxEtc.isChecked) {
+                            binding.editEtc.text.toString()
+                        } else {
+                            null
+                        }
+
+                    viewModel.reportFeed(reportCategoryId, content)
+                }
             }
         }
     }
@@ -145,6 +155,11 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxPrivateInfoIllegalInfo.isChecked = false
                 binding.checkboxEtc.isChecked = false
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
+            } else {
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
 
@@ -156,6 +171,11 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxPrivateInfoIllegalInfo.isChecked = false
                 binding.checkboxEtc.isChecked = false
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
+            } else {
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
 
@@ -167,6 +187,11 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxPrivateInfoIllegalInfo.isChecked = false
                 binding.checkboxEtc.isChecked = false
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
+            } else {
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
 
@@ -178,6 +203,11 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxPrivateInfoIllegalInfo.isChecked = false
                 binding.checkboxEtc.isChecked = false
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
+            } else {
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
 
@@ -189,6 +219,11 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxSpamPromotion.isChecked = false
                 binding.checkboxEtc.isChecked = false
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
+            } else {
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
 
@@ -200,6 +235,8 @@ class ReportFeedActivity : AppCompatActivity() {
                 binding.checkboxPrivateInfoIllegalInfo.isChecked = false
                 binding.checkboxSpamPromotion.isChecked = false
                 binding.editEtc.isEnabled = true
+                binding.btnAgree.isEnabled = true
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_round_main_corner_main_background)
 
                 if (binding.editEtc.text.length > 20) {
                     Toast.makeText(
@@ -211,6 +248,8 @@ class ReportFeedActivity : AppCompatActivity() {
             } else {
                 binding.editEtc.text.clear()
                 binding.editEtc.isEnabled = false
+                binding.btnAgree.isEnabled = false
+                binding.btnAgree.background = ContextCompat.getDrawable(this, R.drawable.button_disable)
             }
         }
     }
