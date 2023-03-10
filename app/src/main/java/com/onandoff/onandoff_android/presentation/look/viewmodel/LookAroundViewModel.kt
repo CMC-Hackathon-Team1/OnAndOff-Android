@@ -216,8 +216,8 @@ class LookAroundViewModel(
                         0,
                         getApplication<Application>().getString(R.string.category_all),
                     )
-//                    val result = listOf(element) + it // 맨 처음부터 카테고리 전체가 말풍선 목록에 있으면 안됨. 말 풍선 목록에는 4개만 있어야 함
-                    val result = it
+                    val result = listOf(element) + it // 맨 처음부터 카테고리 전체가 말풍선 목록에 있으면 안됨. 말 풍선 목록에는 4개만 있어야 함
+//                    val result = it
                     result + element.copy(categoryId = result.size, isInvalid = true)
                 }
                 .onSuccess {

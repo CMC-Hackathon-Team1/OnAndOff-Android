@@ -112,6 +112,7 @@
             android:textSize="@dimen/small_text_size"
             android:inputType="text"
             android:maxLines="1"
+            android:maxLength="10"
             app:layout_constraintBottom_toBottomOf="@id/layout_persona"
             app:layout_constraintEnd_toEndOf="@id/view_persona"
             app:layout_constraintStart_toEndOf="@id/layout_persona"
