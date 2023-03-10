@@ -85,11 +85,11 @@
             android:id="@+id/buttonPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:strokeColor="@color/color_main">
 
-            <Button
+            <com.skydoves.elasticviews.ElasticButton
                 android:id="@+id/btn_cancel"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
@@ -97,21 +97,23 @@
                 android:layout_weight="1"
                 android:text="취소"
                 android:textColor="@color/color_main"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:imageView_duration="150" />
 
             <!--            android:background="@drawable/round_main_corner_white_background"-->
             <!--            app:strokeColor="@color/color_main"-->
             <!--            app:strokeWidth="1dp"-->
 
-            <Button
+            <com.skydoves.elasticviews.ElasticButton
                 android:id="@+id/btn_create_persona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/round_main_corner_main_background"
+                android:background="@drawable/round_main_bottom_right_corner_background"
                 android:text="생성"
                 android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:imageView_duration="150" />
 
         </LinearLayout>
 
