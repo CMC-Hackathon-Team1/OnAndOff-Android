@@ -108,7 +108,7 @@ class CalendarAdapter(private val onMonthChangeListener: OnMonthChangeListener? 
         notifyDataSetChanged()
     }
 
-    fun removeItem() {
+    private fun removeItem() {
         feedList = null
         notifyDataSetChanged()
     }

@@ -8,27 +8,39 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
+import com.onandoff.onandoff_android.data.api.feed.FeedInterface
+import com.onandoff.onandoff_android.data.api.feed.MyFeedService
+import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.CalendarResponse
+import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.FragmentOtherUserBinding
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
+import com.onandoff.onandoff_android.presentation.mypage.MypageRVAdapter
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.properties.Delegates
 
-class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarAdapter.OnItemClickListener  {
+private const val TAG = "OtherUserFragment"
+class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
+    CalendarAdapter.OnItemClickListener {
     private var _binding: FragmentOtherUserBinding? = null
     private val binding
         get() = _binding!!
 
     private lateinit var calendarAdapter: CalendarAdapter
-    private var profileId: Int? = null
-    private var otherUserId: Int? = null
+    private lateinit var otherUserFeedListAdapter: OtherUserFeedListAdapter
+    private var profileId by Delegates.notNull<Int>()
+    private var otherUserId by Delegates.notNull<Int>()
+    private var feedList = ArrayList<FeedResponseData>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +52,15 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        profileId = SharePreference.prefs.getSharedPreference(
+            APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
+            0
+        )
+        otherUserId = 27
         setupCalendar()
+        getProfileData()
+        getFeedData()
+        onInitRecyclerView()
     }
 
     override fun onDestroyView() {
@@ -49,7 +69,6 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
     }
 
     override fun onMonthChanged(calendar: Calendar) {
-        val userId = if(profileId != null) profileId!! else 0
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
         var monthFormat = month.toString()
@@ -61,8 +80,9 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
         binding.fgCalMonth.text = sdf.format(calendar.time)
 
         val calendarInterface: CalendarInterface? = RetrofitClient.getClient()?.create(
-            CalendarInterface::class.java)
-        val call = calendarInterface?.getCalendarList(userId, year, monthFormat)
+            CalendarInterface::class.java
+        )
+        val call = calendarInterface?.getCalendarList(otherUserId, year, monthFormat)
         call?.enqueue(object : Callback<CalendarResponse> {
             override fun onResponse(
                 call: Call<CalendarResponse>,
@@ -70,7 +90,7 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
             ) {
                 Log.d("feedList", "onResponse: ${response.code()}")
 
-                when(response.code()) {
+                when (response.code()) {
                     200 -> {
                         val feedList = response.body()?.result
                         Log.d("feedList", "onResponse: ${feedList?.size}")
@@ -85,6 +105,26 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
                 Log.d("TAG", "onFailure: calendar error ${t.message}")
             }
 
+        })
+    }
+
+    private fun getProfileData() {
+        val profileService: ProfileInterface? = RetrofitClient.getClient()?.create(
+            ProfileInterface::class.java
+        )
+        val call = profileService?.getMyProfile(profileId)
+        call?.enqueue(object : Callback<getMyProfileResponse> {
+            override fun onResponse(
+                call: Call<getMyProfileResponse>,
+                response: Response<getMyProfileResponse>
+            ) {
+                binding.profile = response.body()?.result!!
+
+            }
+
+            override fun onFailure(call: Call<getMyProfileResponse>, t: Throwable) {
+
+            }
         })
     }
 
@@ -113,11 +153,41 @@ class OtherUserFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, Cale
     }
 
     private fun intentPostReadActivity(feedId: Int) {
-        //intent로 profileId랑 feedId를 보내야함
         val intent = Intent(requireActivity(), PostingReadActivity::class.java)
         intent.putExtra("otherUserId", otherUserId)
         intent.putExtra("profileId", profileId)
         intent.putExtra("feedId", feedId)
         startActivity(intent)
+    }
+
+    private fun onInitRecyclerView() {
+        otherUserFeedListAdapter = OtherUserFeedListAdapter(feedList)
+        binding.rvFeedList.adapter = otherUserFeedListAdapter
+        binding.rvFeedList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true
+        )
+    }
+
+    private fun getFeedData(){
+        val feedService = RetrofitClient.getClient()?.create(FeedInterface::class.java)
+
+        Log.d(TAG, "data: $profileId $otherUserId")
+
+        val call = feedService?.getOtherUserFeedListResponse(profileId, otherUserId,2023, "03",1)
+        call?.enqueue(object: Callback<getFeedListRespone> {
+            override fun onResponse(
+                call: Call<getFeedListRespone>,
+                response: Response<getFeedListRespone>
+            ){
+                Log.d(TAG, "onResponse: ${response.code()}")
+                Log.d(TAG, "onResponse: ${response.body()?.result}")
+                val feedArray = response.body()?.result?.feedArray
+                if (feedArray != null) {
+                    otherUserFeedListAdapter.setItems(feedArray)
+                }
+            }
+            override fun onFailure(call: Call<getFeedListRespone>, t: Throwable){
+                Log.d(TAG, "fail")
+            }
+        })
     }
 }

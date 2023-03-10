@@ -84,4 +84,13 @@ interface FeedInterface {
 
     @GET("/categories/categories")
     fun getFeedCategoryResponse(): Call<FeedCategoryResponse>
+
+    @GET("/feeds/monthly")
+    fun getOtherUserFeedListResponse(
+        @Query("baseProfileId") baseProfileId:Int,
+        @Query("targetProfileId") targetProfileId:Int,
+        @Query("year")year:Int,
+        @Query("month")month:String,
+        @Query("page")page:Int
+    ): Call<getFeedListRespone>
 }
