@@ -42,13 +42,12 @@ interface FeedInterface {
     suspend fun follow(
         @Body followRequest: FollowRequest
     ): LikeFollowResponse
-
     @POST("/follow")
     fun followResponse(
         @Body followRequest: FollowRequest
     ): Call<LikeFollowResponse>
 
-    @POST("/feeds/report")
+    @POST("/reports")
     suspend fun reportFeed(
         @Body reportFeedRequest: ReportFeedRequest
     ): ReportFeedResponse

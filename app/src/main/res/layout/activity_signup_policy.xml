@@ -110,6 +110,7 @@
             android:layout_weight="1"
             />
         <ImageView
+            android:id="@+id/iv_service_policy_more"
             android:layout_width="16dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
@@ -141,6 +142,7 @@
             android:layout_weight="1"
             />
         <ImageView
+            android:id="@+id/iv_private_policy_more"
             android:layout_width="16dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_baseline_arrow_forward_ios_24"

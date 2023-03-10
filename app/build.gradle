@@ -4,6 +4,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+
 }
 //Properties properties = new Properties() properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
@@ -17,6 +18,7 @@ android {
         versionName "1.0"
         buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures {
@@ -88,15 +90,20 @@ dependencies {
     // Paging
     implementation 'androidx.paging:paging-runtime:3.1.1'
 
+    // 말풍선 디자인
+    implementation "com.github.skydoves:elasticviews:2.1.0"
+    implementation "com.github.skydoves:balloon:1.5.2"
+
     // 카카오 로그인 모듈
     implementation "com.kakao.sdk:v2-user:$kakao_version"
-//    //permission 관리 모듈
-//    implementation "gun0912.ted:tedpermission:2.2.3"
     implementation 'io.github.ParkSangGwon:tedkeyboardobserver:1.0.1'
 
     //알람을 위한 파이어베이스 설정
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // 구글 로그인 모듈
+//    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 }
 
 kapt {

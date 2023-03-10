@@ -181,7 +181,7 @@ class PostingReadActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
-                //TODO("Not yet implemented")
+                // TODO("Not yet implemented")
             }
 
         })

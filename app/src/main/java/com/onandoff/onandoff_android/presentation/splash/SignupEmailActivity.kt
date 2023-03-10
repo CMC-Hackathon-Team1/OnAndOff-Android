@@ -25,6 +25,7 @@ class SignupEmailActivity:AppCompatActivity() {
         setContentView(binding.root)
 //        val intent = getIntent() //전달할 데이터를 받을 Intent
         val email = intent.getStringExtra("email")
+        binding.email = email
         val password = intent.getStringExtra("password")
         Log.d("email verify","$email $password")
         binding.btnEmailVerify.setOnClickListener {

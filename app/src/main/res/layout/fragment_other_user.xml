@@ -6,7 +6,7 @@
 
     <data>
         <variable
-            name="profile"
+            name="profile2"
             type="com.onandoff.onandoff_android.data.model.ProfileListResultResponse"/>
     </data>
 
@@ -70,7 +70,7 @@
                     android:id="@+id/iv_mypage_profile_avatar"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    app:profileUrl="@{profile.profileImgUrl}"
+                    app:profileUrl="@{profile2.profileImgUrl}"
                     app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                 <LinearLayout
@@ -83,7 +83,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="21dp"
-                        android:text="@{profile.personaName+' '+ profile.profileName}"
+                        android:text="@{profile2.personaName+' '+ profile2.profileName}"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -91,7 +91,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="18dp"
-                        android:text="@{profile.statusMessage}"
+                        android:text="@{profile2.statusMessage}"
                         android:textColor="@color/black_fourth"
                         android:textSize="14sp"
                         android:textStyle="bold" />

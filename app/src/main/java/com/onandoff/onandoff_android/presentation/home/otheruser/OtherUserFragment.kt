@@ -120,7 +120,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
             override fun onResponse(
                 call: Call<getMyProfileResponse>, response: Response<getMyProfileResponse>
             ) {
-                binding.profile = response.body()?.result!!
+                binding.profile2 = response.body()?.result!!
                 Log.d(TAG, "onResponse: ${response.body()?.result!!}")
 
             }

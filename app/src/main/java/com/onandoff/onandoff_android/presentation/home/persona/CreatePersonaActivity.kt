@@ -19,12 +19,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityCreatePersonaBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.CreatePersonaViewModel
-import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -120,22 +118,21 @@ class CreatePersonaActivity : AppCompatActivity() {
 //            }
         }
         binding.tvFinish.setOnClickListener {
-            // TODO: MaterialAlertDialog 를 이용 ? 또는 CreatePersonaDialog 를 이용 ?
             val createPersonaDialog = CreatePersonaDialog.newInstance()
-
             createPersonaDialog.show(supportFragmentManager, CreatePersonaDialog.TAG)
-//            val builder = MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
+        }
 
-//            builder.setView(R.layout.dialog_create_persona)
-//                .setPositiveButton("생성"
-//                ) { _, _ -> viewModel.onCreatePersona() }
-//                .setNegativeButton("취소"
-//                ) { _, _ ->  }
-//                .create()
-//                .show()
-
+        supportFragmentManager.setFragmentResultListener(
+            CreatePersonaDialog.TAG,
+            this@CreatePersonaActivity
+        ) { _: String, result: Bundle ->
+            val action = result.getString(CreatePersonaDialog.RESULT_ACTION)
+            if (action == CreatePersonaDialog.ACTION_CREATE) {
+                viewModel.onCreatePersona()
+            }
         }
     }
+
     private fun openGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK)
         pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
@@ -152,12 +149,15 @@ class CreatePersonaActivity : AppCompatActivity() {
                 val body = MultipartBody.Part.createFormData("profile", file.name, requestFile)
 
                 viewModel.setPersonaImagePath(absolutelyPath(imagePath, this))
-                Log.d("viewModel.setPersonaImagePath", "viewModel.setPersonaImagePath: $file.absolutePath")
+                Log.d(
+                    "viewModel.setPersonaImagePath",
+                    "viewModel.setPersonaImagePath: $file.absolutePath"
+                )
             }
         }
 
     // 절대 경로 변환
-    private fun absolutelyPath(path: Uri?, context : Context): String {
+    private fun absolutelyPath(path: Uri?, context: Context): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         val cursor: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
         val index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -173,9 +173,7 @@ class CreatePersonaActivity : AppCompatActivity() {
         val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
         val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-        return if (ActivityCompat.checkSelfPermission(this, cameraPermission)
-            == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, readPermission)
+        return if (ActivityCompat.checkSelfPermission(this, readPermission)
             == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, writePermission)
             == PackageManager.PERMISSION_GRANTED
@@ -201,54 +199,6 @@ class CreatePersonaActivity : AppCompatActivity() {
             openGallery()
         }
     }
-
-//    //프로필 생성 확인 alert 창
-//    fun checkDialog(){
-//        val dialog = Dialog(this@CreatePersonaActivity)
-//        val dialogView = DialogProfileCreateAlertBinding.inflate(LayoutInflater.from(this@CreatePersonaActivity))
-//        dialog.setContentView(dialogView.root)
-//        val params : WindowManager.LayoutParams? = dialog.window?.attributes;
-//        params?.width = WindowManager.LayoutParams.MATCH_PARENT
-//        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
-//        if (params != null) {
-//            dialog.window?.setLayout(params.width,params.height)
-//        }
-//        dialog.show()
-//        dialogView.btnYes.setOnClickListener{
-//            Log.d("profile create","동의 완료")
-//            isValid = true
-//            val nickname = binding.editNickname.text.toString()
-//            val personas = binding.editPersona.text.toString()
-//            val statusmsg = binding.editIntroduce.text.toString()
-//            val call = createProfile(nickname, personas, statusmsg, null)
-//            call?.let { it1 -> getData(it1) }
-////
-//        }
-//        dialogView.btnNo.setOnClickListener{
-//            dialog.dismiss()
-//        }
-//    }
-
-//    // 갤러리, 기본 이미지 변경 여부 체크
-//    fun showBottomSheet(context: Context){
-//
-//        val dialog = BottomSheetDialog(context)
-//        val dialogView = BottomsheetSelectProfileImageBinding.inflate(LayoutInflater.from(context))
-//        dialog.setContentView(dialogView.root)
-//        dialog.show()
-//        dialogView.layoutGallery.setOnClickListener{
-//            if(checkPermission(STORAGE_PERMISSION, FLAG_PERM_STORAGE) ){
-//                move_gallery()
-//            }
-//            dialog.dismiss()
-//        }
-//        dialogView.layoutBasic.setOnClickListener{
-//            imgFile = null
-//            binding.ivPersonaProfile.setImageResource(R.drawable.persona_profile)
-//            dialog.dismiss()
-//        }
-//
-//    }
 
     companion object {
         const val PERMISSION_REQ_CODE = 1010

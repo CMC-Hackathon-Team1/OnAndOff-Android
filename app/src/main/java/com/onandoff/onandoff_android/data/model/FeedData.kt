@@ -1,25 +1,37 @@
 package com.onandoff.onandoff_android.data.model
 
+import androidx.annotation.DrawableRes
 import com.google.gson.annotations.SerializedName
+import com.onandoff.onandoff_android.R
 
 
 data class LookAroundFeedData(
     val feedId: Int,
     val profileId: Int,
-    val profileImg: String = "",
-    val personaName: String = "",
-    val profileName: String = "",
-    val feedContent: String = "",
+    val profileImg: String,
+    val personaName: String,
+    val profileName: String,
+    val feedContent: String,
     val createdAt: String,
-    var isLike: Boolean = false,
-    var isFollowing: Boolean = false,
-    val feedImgList: List<String>,
+    var isLike: Boolean,
+    var isFollowing: Boolean,
+    val feedImgList: List<String>?,
     val hashTagList: List<String>
-)
+) {
+
+    val likeImage: Int
+        get() = if (isLike) R.drawable.ic_heart_full else R.drawable.ic_heart_mono
+
+    val followImage: Int
+        get() = if (isFollowing) R.drawable.ic_is_following else R.drawable.ic_not_following
+
+    val thumbnailPhoto: String?
+        get() = feedImgList?.firstOrNull()
+}
 
 data class LookAroundFeedResponse(
     @SerializedName("feedImgList")
-    val feedImgList: List<String>,
+    val feedImgList: List<String>?,
     @SerializedName("isLike")
     val isLike: Boolean,
     @SerializedName("isFollowing")
@@ -40,7 +52,10 @@ data class LookAroundFeedResponse(
     val createdAt: String,
     @SerializedName("feedContent")
     val feedContent: String
-)
+) {
+    val thumbnailPhoto: String?
+        get() = feedImgList?.firstOrNull()
+}
 
 data class FeedData(
     val profileId: Int,
@@ -52,13 +67,13 @@ data class FeedData(
 )
 
 data class FeedResponse(
-    @SerializedName("statusCode")val statusCode:Int,
-    @SerializedName("message")val message:String
+    @SerializedName("statusCode") val statusCode: Int,
+    @SerializedName("message") val message: String
 )
 
 data class FeedSimpleData(
     val profileId: Int,
-    val feedId:Int
+    val feedId: Int
 )
 
 data class FeedCategoryResponse(
