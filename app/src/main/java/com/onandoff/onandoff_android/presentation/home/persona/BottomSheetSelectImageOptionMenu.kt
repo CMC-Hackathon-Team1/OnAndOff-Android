@@ -119,13 +119,10 @@ class BottomSheetSelectImageOptionMenu : BottomSheetDialogFragment() {
     }
 
     private fun checkStoragePermission(): Boolean {
-        val cameraPermission = Manifest.permission.CAMERA
         val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
         val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-        return if (ActivityCompat.checkSelfPermission(requireActivity(), cameraPermission)
-            == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(requireActivity(), readPermission)
+        return if (ActivityCompat.checkSelfPermission(requireActivity(), readPermission)
             == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(requireActivity(), writePermission)
             == PackageManager.PERMISSION_GRANTED
@@ -134,7 +131,7 @@ class BottomSheetSelectImageOptionMenu : BottomSheetDialogFragment() {
         } else {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf(cameraPermission, readPermission, writePermission),
+                arrayOf(readPermission, writePermission),
                 PERMISSION_REQ_CODE
             )
             false
