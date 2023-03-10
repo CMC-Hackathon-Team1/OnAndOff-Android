@@ -118,8 +118,12 @@ class CreatePersonaActivity : AppCompatActivity() {
 //            }
         }
         binding.tvFinish.setOnClickListener {
-            val createPersonaDialog = CreatePersonaDialog.newInstance()
-            createPersonaDialog.show(supportFragmentManager, CreatePersonaDialog.TAG)
+            if (binding.editPersona.length() < 2 || binding.editNickname.length() < 2) {
+                Toast.makeText(this@CreatePersonaActivity, "최소 2자 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                val createPersonaDialog = CreatePersonaDialog.newInstance()
+                createPersonaDialog.show(supportFragmentManager, CreatePersonaDialog.TAG)
+            }
         }
 
         supportFragmentManager.setFragmentResultListener(
@@ -169,7 +173,6 @@ class CreatePersonaActivity : AppCompatActivity() {
     }
 
     private fun checkStoragePermission(): Boolean {
-        val cameraPermission = Manifest.permission.CAMERA
         val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
         val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
@@ -182,7 +185,7 @@ class CreatePersonaActivity : AppCompatActivity() {
         } else {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(cameraPermission, readPermission, writePermission),
+                arrayOf(readPermission, writePermission),
                 PERMISSION_REQ_CODE
             )
             false
