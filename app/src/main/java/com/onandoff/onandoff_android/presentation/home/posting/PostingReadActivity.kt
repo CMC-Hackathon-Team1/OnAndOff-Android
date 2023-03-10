@@ -168,9 +168,16 @@ class PostingReadActivity : AppCompatActivity() {
         val call = feedInterface?.deleteFeedResponse(feedSimpleData)
         call?.enqueue(object : Callback<FeedResponse>{
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
-                if(response.code() == 200)
-                    Toast.makeText(this@PostingReadActivity, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
+                when(response.code()) {
+                    200 -> {
+                        Toast.makeText(this@PostingReadActivity, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    else -> {
+                        finish()
+                    }
+                }
+
             }
 
             override fun onFailure(call: Call<FeedResponse>, t: Throwable) {

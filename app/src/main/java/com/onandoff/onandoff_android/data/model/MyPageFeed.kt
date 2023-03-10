@@ -5,7 +5,12 @@ import com.google.gson.annotations.SerializedName
 data class getFeedResponeData(
     @SerializedName("statusCode")val statusCode :Int,
     @SerializedName("message")val message:String,
-    @SerializedName("result")val result:ArrayList<FeedResponseData>
+    @SerializedName("result")val result: ArrayList<FeedResponseData>
+)
+data class getFeedListRespone(
+    @SerializedName("statusCode")val statusCode :Int,
+    @SerializedName("message")val message:String,
+    @SerializedName("result")val result: FeedListResponseData
 )
 
 data class FeedResponseData(
@@ -15,5 +20,9 @@ data class FeedResponseData(
     @SerializedName("feedContent") val feedContent: String,
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("feedImgList") val feedImgList: ArrayList<String>
+)
+
+data class FeedListResponseData(
+    @SerializedName("feedArray")val feedArray: ArrayList<FeedResponseData>
 )
 

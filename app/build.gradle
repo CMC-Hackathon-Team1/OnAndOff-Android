@@ -3,7 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
-//    id 'com.google.gms.google-services'
+    id 'com.google.gms.google-services'
+
 }
 //Properties properties = new Properties() properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
@@ -47,6 +48,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.2'
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     //Coroutines
@@ -96,8 +98,12 @@ dependencies {
     implementation "com.kakao.sdk:v2-user:$kakao_version"
     implementation 'io.github.ParkSangGwon:tedkeyboardobserver:1.0.1'
 
+    //알람을 위한 파이어베이스 설정
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
     // 구글 로그인 모듈
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+//    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 }
 
 kapt {
