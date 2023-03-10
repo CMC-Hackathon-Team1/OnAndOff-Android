@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                     supportFragmentManager.beginTransaction().show(myPageFragment).commit()
                 } else {
                     supportFragmentManager.beginTransaction()
-                        .add(binding.fcvMain.id, OtherUserFragment()).commit()
+                        .add(binding.fcvMain.id, MypageFragment()).commit()
                 }
             }
             else -> {
