@@ -13,7 +13,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F5F5">
+        android:background="#F9F9F9">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_other_userpage"

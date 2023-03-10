@@ -2,12 +2,21 @@ package com.onandoff.onandoff_android.presentation.home.otheruser
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.api.feed.FeedInterface
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.data.model.FeedResponseData
+import com.onandoff.onandoff_android.data.model.FeedSimpleData
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
-import java.text.SimpleDateFormat
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -17,8 +26,42 @@ class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : 
     inner class OtherUserFeedListViewHolder(val binding: ItemMypageUserfeedBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(write: FeedResponseData){
             binding.tvMypageRvItemPostText.text = write.feedContent
-            binding.tvMypageRvItemDate.text = write.createdAt
-            binding.tvMypageRvItemLike.text = write.likeNum.toString()
+            binding.tvMypageRvItemDate.text = write.createdAt.split("T")[0].replace("-","/")
+            if(write.isLike) {
+                binding.ivMypageRvItemLike.setImageResource(R.drawable.ic_heart_full)
+                binding.tvMypageRvItemLike.text = write.likeNum.toString()
+                binding.tvMypageRvItemLike.visibility = View.VISIBLE
+            }
+            else {
+                binding.ivMypageRvItemLike.setImageResource(R.drawable.ic_heart_mono)
+                binding.tvMypageRvItemLike.visibility = View.GONE
+            }
+            binding.ivMypageRvItemLike.setOnClickListener {
+                val profileId = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, -1)
+                val data = FeedSimpleData(profileId, write.feedId)
+                RetrofitClient.getClient()?.create(FeedInterface::class.java)
+                    ?.likeFeedResponse(data)?.enqueue(object : Callback<FeedResponse> {
+                        override fun onResponse(
+                            call: Call<FeedResponse>,
+                            response: Response<FeedResponse>
+                        ) {
+                            if(response.body()?.message  == "Like") {
+                                binding.ivMypageRvItemLike.setImageResource(R.drawable.ic_heart_full)
+                                binding.tvMypageRvItemLike.text = write.likeNum.toString()
+                                binding.tvMypageRvItemLike.visibility = View.VISIBLE
+                            }
+                            else {
+                                binding.ivMypageRvItemLike.setImageResource(R.drawable.ic_heart_mono)
+                                binding.tvMypageRvItemLike.visibility = View.GONE
+                            }
+                        }
+
+                        override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+            }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserFeedListViewHolder {
