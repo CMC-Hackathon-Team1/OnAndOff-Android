@@ -65,7 +65,7 @@ fun LookAroundFeedResponse.toEntity(): LookAroundFeedData {
     return LookAroundFeedData(
         feedId = feedId,
         profileId = profileId,
-        profileImg = "",
+        profileImg = profileImg,
         personaName = personaName,
         profileName = profileName,
         feedContent = feedContent,

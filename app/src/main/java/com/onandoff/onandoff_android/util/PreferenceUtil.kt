@@ -2,9 +2,10 @@ package com.onandoff.onandoff_android.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.onandoff.onandoff_android.data.model.ProfileListResultResponse
-import org.json.JSONArray
-import org.json.JSONException
+import android.util.Log
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 
 class PreferenceUtil(context: Context) {
@@ -42,6 +43,24 @@ class PreferenceUtil(context: Context) {
 //    fun putSharedPreference(key: String?, value: HashSet<String>) {
 //        prefs.edit().putStringSet(key, value).apply()
 //    }
+
+    fun observePreference(targetKey: String?): Flow<Int> {
+        return callbackFlow {
+            val listener: (sharedPreferences: SharedPreferences, key: String) -> Unit =
+                { _, key ->
+                    if (key == targetKey) {
+                        trySend(getSharedPreference(targetKey, -1))
+                    }
+                }
+            prefs.registerOnSharedPreferenceChangeListener(listener)
+
+            // flow가 유효하지 않게 될때 불림.
+            awaitClose {
+                prefs.unregisterOnSharedPreferenceChangeListener(listener)
+            }
+        }
+    }
+
     fun getSharedPreference(key: String?, defaultValue: Int): Int {
         return prefs.getInt(key, defaultValue)
     }
@@ -75,6 +94,6 @@ class PreferenceUtil(context: Context) {
 object APIPreferences{
     val SHARED_PREFERENCE_NAME_JWT:String = "jwt"
     val SHARED_PREFERENCE_NAME_EMAIL:String = "email"
-    val SHARED_PREFERENCE_NAME_USERID :String = "profileId"
-    val SHARED_PREFERENCE_NAME_PROFILEID :String = "currentPersonaId"
+    val SHARED_PREFERENCE_NAME_USERID:String = "profileId"
+    val SHARED_PREFERENCE_NAME_PROFILEID:String = "currentPersonaId"
 }

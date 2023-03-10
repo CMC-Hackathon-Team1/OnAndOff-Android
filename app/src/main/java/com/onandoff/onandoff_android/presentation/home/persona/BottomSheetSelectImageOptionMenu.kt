@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,8 +17,12 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.BottomSheetSelectImageOptionMenuBinding
 import com.onandoff.onandoff_android.presentation.home.viewmodel.CreatePersonaViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -30,7 +35,7 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
     private val binding: BottomSheetSelectImageOptionMenuBinding
         get() = _binding!!
 
-    private val viewModel by viewModels<CreatePersonaViewModel>(factoryProducer = {
+    private val viewModel by activityViewModels<CreatePersonaViewModel>(factoryProducer = {
         CreatePersonaViewModel.Factory
     })
 
@@ -41,9 +46,21 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
     ): View {
         _binding = BottomSheetSelectImageOptionMenuBinding.inflate(inflater, container, false)
 
+        setupView()
         setupListeners()
 
         return binding.root
+    }
+
+    private fun setupView() {
+        binding.cvSelectImageOptionMenu.background = GradientDrawable().apply {
+            val radius = resources.getDimension(R.dimen.bottom_sheet_radius)
+            cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, radius, radius, radius, radius)
+
+            val strokeWidth =
+                resources.getDimensionPixelSize(R.dimen.create_persona_dialog_stroke_width)
+            setStroke(strokeWidth, ContextCompat.getColor(requireContext(), R.color.color_main))
+        }
     }
 
     private fun setupListeners() {
@@ -59,9 +76,15 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
             if (checkStoragePermission()) {
                 openGallery()
             }
-            dismiss()
         }
     }
+
+    // CreatePersonaActivity -> ImageChooser
+    // ImageChooser -> CreatePersonaActivity
+
+    // CreatePersonaActivity -> BottomSheetSelectImageOptionMenu -> ImageChooser
+    // ImageChooser -> BottomSheetSelectImageOptionMenu -> CreatePersonaActivity
+
 
     private fun openGallery() {
         val pickIntent = Intent(Intent.ACTION_PICK)
@@ -80,6 +103,7 @@ class BottomSheetSelectImageOptionMenu: BottomSheetDialogFragment() {
 
                 viewModel.setPersonaImagePath(absolutelyPath(imagePath, requireActivity()))
                 Log.d("viewModel.setPersonaImagePath", "viewModel.setPersonaImagePath: $file.absolutePath")
+                dismiss()
             }
         }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Unchecked -->
+    <item android:state_checked="false"
+        android:drawable="@drawable/button_circle">
+<!--        <shape>-->
+<!--            <stroke android:color="#c4cbd2" android:width="1dp" />-->
+<!--            <corners android:radius="20dp" />-->
+<!--            <solid android:color="#fff" />-->
+<!--        </shape>-->
+    </item>
+    <!-- Checked -->
+    <item android:state_checked="true"
+        android:drawable="@drawable/ic_check_15">
+<!--        <layer-list>-->
+<!--            &lt;!&ndash; 배경 &ndash;&gt;-->
+<!--            <item>-->
+<!--                <shape>-->
+<!--                    <corners android:radius="20dp" />-->
+<!--                    <solid android:color="#e14f50" />-->
+<!--                </shape>-->
+<!--            </item>-->
+<!--            &lt;!&ndash; 이미지 영역 &ndash;&gt;-->
+<!--&lt;!&ndash;            <item android:drawable="@drawable/checkbox_bg" android:top="4dp" android:right="4dp" android:bottom="4dp" android:left="4dp" />&ndash;&gt;-->
+<!--        </layer-list>-->
+    </item>
+</selector>

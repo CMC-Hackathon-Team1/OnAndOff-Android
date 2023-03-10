@@ -3,6 +3,9 @@ package com.onandoff.onandoff_android.presentation.look
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -30,41 +33,8 @@ class FeedListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(feedData: LookAroundFeedData) {
-            binding.tvPersonaName.text = feedData.personaName
-            Glide.with(binding.root.context)
-                .load(feedData.profileImg)
-                .into(binding.ivUserPersona)
-
-            binding.tvPostDate.text = feedData.createdAt
-
-            Log.d(
-                "feedData.personaName, like, follow",
-                "personaName : ${feedData.personaName}, isLike: ${feedData.isLike}, isFollowing: ${feedData.isFollowing}"
-            )
-            if (feedData.isLike) {
-                Glide.with(binding.root.context)
-                    .load(R.drawable.ic_heart_full)
-                    .into(binding.ivLike)
-            } else {
-                Glide.with(binding.root.context)
-                    .load(R.drawable.ic_heart_mono)
-                    .into(binding.ivLike)
-            }
-
-            // 팔로우 여부에 따라 팔로잉 아이콘 변경하기
-            if (feedData.isFollowing) {
-                binding.ivAddToFollowingList.setImageResource(R.drawable.ic_is_following)
-            } else {
-                binding.ivAddToFollowingList.setImageResource(R.drawable.ic_not_following)
-            }
-
-            binding.tvDesc.text = feedData.feedContent
-
-            val firstImage = feedData.feedImgList.firstOrNull()
-            Log.d("firstImage", "$firstImage")
-            Glide.with(binding.root.context)
-                .load(firstImage)
-                .into(binding.ivThumbnail)
+            binding.feedItem = feedData
+            binding.executePendingBindings()
 
             binding.layoutFeedProfile.setOnClickListener {
                 onProfileClick(feedData)
@@ -88,7 +58,13 @@ class FeedListAdapter(
         val binding =
             ItemFeedListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return FeedListViewHolder(binding, onProfileClick, onFollowClick, onLikeClick, onOptionClick)
+        return FeedListViewHolder(
+            binding,
+            onProfileClick,
+            onFollowClick,
+            onLikeClick,
+            onOptionClick
+        )
     }
 
     override fun onBindViewHolder(holder: FeedListViewHolder, position: Int) {
@@ -121,11 +97,17 @@ class FeedListAdapter(
     }
 
     companion object FeedListDiffUtil : DiffUtil.ItemCallback<LookAroundFeedData>() {
-        override fun areItemsTheSame(oldItem: LookAroundFeedData, newItem: LookAroundFeedData): Boolean {
-            return oldItem.profileId == newItem.profileId
+        override fun areItemsTheSame(
+            oldItem: LookAroundFeedData,
+            newItem: LookAroundFeedData
+        ): Boolean {
+            return false // oldItem.feedId == newItem.feedId
         }
 
-        override fun areContentsTheSame(oldItem: LookAroundFeedData, newItem: LookAroundFeedData): Boolean {
+        override fun areContentsTheSame(
+            oldItem: LookAroundFeedData,
+            newItem: LookAroundFeedData
+        ): Boolean {
             return oldItem == newItem
         }
     }
