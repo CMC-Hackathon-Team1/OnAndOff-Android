@@ -10,9 +10,11 @@ buildscript {
         fragment_ktx_version = "1.5.5"
         room_version = "2.4.2"
         kakao_version ="2.12.1"
+        google_version = "4.3.15"
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "com.google.gms:google-services:$google_version"
     }
 }
 

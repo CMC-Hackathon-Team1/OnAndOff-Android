@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.messaging.FirebaseMessaging
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
+import com.onandoff.onandoff_android.presentation.home.otheruser.OtherUserFragment
 import com.onandoff.onandoff_android.presentation.look.FeedListFragment
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 
@@ -26,9 +30,22 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         setupFragmentAdapter()
         setupBottomNavigationView()
 
+        initFirebase()
+
         if (savedInstanceState == null) {
             binding.bottomNavMain.selectedItemId = R.id.menu_home
         }
+    }
+
+    private fun initFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+
+            val token = task.result
+
+        })
     }
 
     private fun setupFragmentAdapter() {
@@ -77,12 +94,12 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 }
             }
             R.id.menu_my_page -> {
-                val myPageFragment = supportFragmentManager.fragments.find { it is MypageFragment }
+                val myPageFragment = supportFragmentManager.fragments.find { it is OtherUserFragment }
                 if (myPageFragment != null) {
                     supportFragmentManager.beginTransaction().show(myPageFragment).commit()
                 } else {
                     supportFragmentManager.beginTransaction()
-                        .add(binding.fcvMain.id, MypageFragment()).commit()
+                        .add(binding.fcvMain.id, OtherUserFragment()).commit()
                 }
             }
             else -> {
