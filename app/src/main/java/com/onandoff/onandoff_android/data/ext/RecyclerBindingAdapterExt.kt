@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.presentation.home.MyProfileListAdapter
 import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
-import com.onandoff.onandoff_android.presentation.look.FeedListAdapter
+import com.onandoff.onandoff_android.presentation.look.LookAroundFeedListAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,7 @@ fun RecyclerView.setLookAroundFeedItems(pagingDataLiveData: LiveData<Flow<Paging
     pagingDataLiveData.observe(activity) {
         activity.lifecycleScope.launch {
             it.collect {
-                val adapter = this@setLookAroundFeedItems.adapter as? FeedListAdapter
+                val adapter = this@setLookAroundFeedItems.adapter as? LookAroundFeedListAdapter
                 adapter?.submitData(it)
             }
         }

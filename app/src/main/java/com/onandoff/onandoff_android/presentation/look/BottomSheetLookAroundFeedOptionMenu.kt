@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.databinding.BottomSheetFeedListOptionMenuBinding
+import com.onandoff.onandoff_android.databinding.BottomSheetLookAroundFeedOptionMenuBinding
 
-class BottomSheetFeedListOptionMenu : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetFeedListOptionMenuBinding? = null
-    private val binding: BottomSheetFeedListOptionMenuBinding
+class BottomSheetLookAroundFeedOptionMenu : BottomSheetDialogFragment() {
+    private var _binding: BottomSheetLookAroundFeedOptionMenuBinding? = null
+    private val binding: BottomSheetLookAroundFeedOptionMenuBinding
         get() = _binding!!
 
     override fun onCreateView(
@@ -20,7 +19,7 @@ class BottomSheetFeedListOptionMenu : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetFeedListOptionMenuBinding.inflate(inflater, container, false)
+        _binding = BottomSheetLookAroundFeedOptionMenuBinding.inflate(inflater, container, false)
 
         setupView()
         setupListeners()
@@ -28,19 +27,17 @@ class BottomSheetFeedListOptionMenu : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun getTheme(): Int = R.style.RounderBottomSheetDialog
+
     private fun setupView() {
         binding.cvFeedListOptionMenu.background = GradientDrawable().apply {
             val radius = resources.getDimension(R.dimen.bottom_sheet_radius)
-            cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, radius, radius, radius, radius)
-
-            val strokeWidth =
-                resources.getDimensionPixelSize(R.dimen.create_persona_dialog_stroke_width)
-            setStroke(strokeWidth, ContextCompat.getColor(requireContext(), R.color.color_main))
+            cornerRadii = floatArrayOf(radius, radius, radius, radius, 0f, 0f, 0f, 0f)
         }
     }
 
     private fun setupListeners() {
-        binding.ivBack.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             dismiss()
         }
 
@@ -55,8 +52,8 @@ class BottomSheetFeedListOptionMenu : BottomSheetDialogFragment() {
     companion object {
         private const val FEED_ID = "feed_id"
 
-        fun newInstance(feedId: Int): BottomSheetFeedListOptionMenu =
-            BottomSheetFeedListOptionMenu().apply {
+        fun newInstance(feedId: Int): BottomSheetLookAroundFeedOptionMenu =
+            BottomSheetLookAroundFeedOptionMenu().apply {
                 arguments = Bundle().apply {
                     putInt(FEED_ID, feedId)
                 }

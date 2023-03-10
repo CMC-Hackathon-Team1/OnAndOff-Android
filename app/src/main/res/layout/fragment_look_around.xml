@@ -10,14 +10,14 @@
 
         <variable
             name="viewModel"
-            type="com.onandoff.onandoff_android.presentation.look.viewmodel.FeedListViewModel" />
+            type="com.onandoff.onandoff_android.presentation.look.viewmodel.LookAroundViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".presentation.look.FeedListFragment">
+        tools:context=".presentation.look.LookAroundFragment">
 
         <!--    <androidx.appcompat.widget.Toolbar-->
         <!--        android:id="@+id/toolbar"-->
@@ -51,7 +51,7 @@
             app:boxStrokeWidthFocused="0dp"
             app:endIconMode="clear_text"
             app:hintEnabled="false"
-            app:startIconDrawable="@drawable/icon_search_mono">
+            app:startIconDrawable="@drawable/ic_search_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_input_hashtag"
@@ -123,24 +123,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/spinner">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_feed_list"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@color/red_50"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:lookAroundFeedItems="@{viewModel.feedList}"
-                        tools:listitem="@layout/item_feed_list" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_feed_list"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/red_50"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lookAroundFeedItems="@{viewModel.feedList}"
+                    tools:listitem="@layout/item_feed_list" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

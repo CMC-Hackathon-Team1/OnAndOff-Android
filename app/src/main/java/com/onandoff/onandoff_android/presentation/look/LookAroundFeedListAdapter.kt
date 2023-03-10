@@ -1,28 +1,19 @@
 package com.onandoff.onandoff_android.presentation.look
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.data.model.FeedData
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.ItemFeedListBinding
 
-class FeedListAdapter(
+class LookAroundFeedListAdapter(
     private val onProfileClick: (LookAroundFeedData) -> Unit,
     private val onFollowClick: (LookAroundFeedData) -> Unit,
     private val onLikeClick: (LookAroundFeedData) -> Unit,
     private val onOptionClick: (LookAroundFeedData) -> Unit
-) : PagingDataAdapter<LookAroundFeedData, FeedListAdapter.FeedListViewHolder>(FeedListDiffUtil) {
-
-    private val feedDataList = mutableListOf<LookAroundFeedData>()
+) : PagingDataAdapter<LookAroundFeedData, LookAroundFeedListAdapter.FeedListViewHolder>(FeedListDiffUtil) {
 
     class FeedListViewHolder(
         private val binding: ItemFeedListBinding,
@@ -72,28 +63,6 @@ class FeedListAdapter(
         if (feedData != null) {
             holder.bind(feedData)
         }
-    }
-
-    fun setLookAroundListOnTab(feedDataList: List<LookAroundFeedData>) {
-        this.feedDataList.clear()
-        this.feedDataList.addAll(feedDataList)
-        notifyDataSetChanged()
-    }
-
-    fun add(position: Int, feedData: LookAroundFeedData) {
-        feedDataList.add(position, feedData)
-        notifyItemInserted(position)
-    }
-
-    fun replaceItem(feedData: LookAroundFeedData) {
-        val index = feedDataList.indexOf(feedData)
-        feedDataList[index] = feedData
-        notifyItemChanged(index)
-    }
-
-    fun delete(position: Int, feedData: LookAroundFeedData) {
-        feedDataList.remove(feedData)
-        notifyItemRemoved(position)
     }
 
     companion object FeedListDiffUtil : DiffUtil.ItemCallback<LookAroundFeedData>() {

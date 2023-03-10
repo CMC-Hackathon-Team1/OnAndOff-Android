@@ -2,14 +2,13 @@ package com.onandoff.onandoff_android.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import com.google.android.material.navigation.NavigationBarView
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
-import com.onandoff.onandoff_android.presentation.look.FeedListFragment
+import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
@@ -65,14 +64,14 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 }
             }
             R.id.menu_look_around -> {
-                val feedListFragment =
-                    supportFragmentManager.fragments.find { it is FeedListFragment }
-                if (feedListFragment != null) {
-                    supportFragmentManager.beginTransaction().show(feedListFragment).commit()
+                val lookAroundFragment =
+                    supportFragmentManager.fragments.find { it is LookAroundFragment }
+                if (lookAroundFragment != null) {
+                    supportFragmentManager.beginTransaction().show(lookAroundFragment).commit()
                 } else {
                     supportFragmentManager.beginTransaction().add(
                         binding.fcvMain.id,
-                        FeedListFragment.newInstance()
+                        LookAroundFragment.newInstance()
                     ).commit()
                 }
             }

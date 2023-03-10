@@ -17,6 +17,7 @@ android {
         versionName "1.0"
         buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures {
@@ -88,6 +89,7 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:3.1.1'
 
     // 말풍선 디자인
+    implementation "com.github.skydoves:elasticviews:2.1.0"
     implementation "com.github.skydoves:balloon:1.5.2"
 
     // 카카오 로그인 모듈

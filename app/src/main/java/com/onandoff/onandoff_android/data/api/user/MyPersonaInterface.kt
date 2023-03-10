@@ -26,4 +26,3 @@ interface MyPersonaInterface {
     @GET("/profiles/my-profiles")
     suspend fun getMyPersonaList(): MyProfileListResponse
 }
-
