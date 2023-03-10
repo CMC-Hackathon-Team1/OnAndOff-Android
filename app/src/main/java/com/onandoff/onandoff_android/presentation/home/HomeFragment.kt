@@ -182,7 +182,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
     private fun setupListeners() {
         binding.cvAddMyProfile.setOnClickListener {
-            if (myProfileListAdapter.currentList.size <= 5) {
+            if (myProfileListAdapter.currentList.size < 5) {
                 createNewProfile()
             } else {
                 Toast.makeText(
