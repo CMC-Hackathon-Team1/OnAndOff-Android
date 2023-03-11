@@ -27,7 +27,7 @@ class AlarmFragment:Fragment() {
     var isSwitchFollowingPosting:Boolean = true
     var isSwitchNotice:Boolean = true
 
-    val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(NotificationInterface::class.java)
+    private val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(NotificationInterface::class.java)
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -113,7 +113,7 @@ class AlarmFragment:Fragment() {
             NotificationData(0)
         }
 
-        notificationInterface?.updateLikeAlarmResponse(data)?.enqueue(object :
+        notificationInterface?.updateFollowAlarmResponse(data)?.enqueue(object :
             Callback<NotificationResponse> {
             override fun onResponse(
                 call: Call<NotificationResponse>,
