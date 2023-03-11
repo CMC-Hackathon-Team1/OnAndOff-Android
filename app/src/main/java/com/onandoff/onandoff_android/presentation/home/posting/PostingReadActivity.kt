@@ -115,9 +115,12 @@ class PostingReadActivity : AppCompatActivity() {
                             }
                             val hashTagList = response.body()!!.hashTagList
                             var tagText = ""
-                            for (tag in hashTagList) {
-                                tagText = "#$tag $tagText "
+                            if(hashTagList.isNotEmpty()) {
+                                for (tag in hashTagList) {
+                                    tagText = "#$tag $tagText "
+                                }
                             }
+
                             binding.posting.textHashtag.text = tagText
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName

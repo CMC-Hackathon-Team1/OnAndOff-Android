@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="posting"
             type="com.onandoff.onandoff_android.data.model.Posting" />
@@ -45,87 +46,87 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="129dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="492dp"
+            android:layout_marginTop="40dp"
             android:background="#F5F5F5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_posting_modify"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <TextView
-            android:id="@+id/title_category"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginBottom="17dp"
-            android:height="50dp"
-            android:gravity="center"
-            android:text="@string/category"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/view_line2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_line1"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_camera" />
 
-        <TextView
-            android:id="@+id/text_category"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/category_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@={posting.category}"
-            app:layout_constraintBottom_toBottomOf="@id/title_category"
-            app:layout_constraintStart_toEndOf="@id/title_category"
-            app:layout_constraintTop_toTopOf="@id/title_category"
-            tools:text="스포츠" />
-
-        <ImageView
-            android:id="@+id/btn_category"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/btn_category"
-            android:src="@drawable/arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/title_category"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.894"
-            app:layout_constraintStart_toEndOf="@+id/text_category"
-            app:layout_constraintTop_toTopOf="@+id/title_category" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_line1">
+
+            <TextView
+                android:id="@+id/title_category"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginStart="10dp"
+                android:height="50dp"
+                android:gravity="center"
+                android:text="@string/category"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@={posting.category}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/title_category"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="스포츠" />
+
+            <ImageView
+                android:id="@+id/btn_category"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/btn_category"
+                android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:id="@+id/view_line2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="456dp"
             android:background="#F5F5F5"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/category_layout"
             tools:layout_editor_absoluteX="10dp" />
 
         <EditText
             android:id="@+id/text_hashtag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
             android:layout_marginTop="18dp"
-            android:layout_marginEnd="104dp"
             android:layout_marginBottom="18dp"
             android:background="@null"
             android:hint="@string/hashtag_hint"
+            android:padding="20dp"
+            android:text="@={posting.hashtag}"
             android:textColorHint="#DDDDDD"
             android:textSize="14sp"
-            android:text="@={posting.hashtag}"
             app:layout_constraintBottom_toTopOf="@+id/view_line3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_line2" />
+            app:layout_constraintTop_toBottomOf="@+id/view_line2"
+            tools:ignore="Autofill,TextFields" />
 
         <View
             android:id="@+id/view_line3"
@@ -159,6 +160,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="36dp"
             android:background="@drawable/add_image"
+            android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -167,26 +169,27 @@
         <EditText
             android:id="@+id/text_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginRight="24dp"
+            android:layout_height="0dp"
             android:background="@null"
+            android:gravity="top"
             android:hint="@string/content_hint"
+            android:padding="20dp"
             android:scrollHorizontally="false"
+            android:text="@={posting.content}"
             android:textColorHint="#DDDDDD"
             android:textSize="14sp"
-            android:text="@={posting.content}"
+            app:layout_constraintBottom_toTopOf="@+id/view_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_line3" />
+            app:layout_constraintTop_toBottomOf="@+id/view_line3"
+            tools:ignore="Autofill,TextFields" />
 
         <CheckBox
             android:id="@+id/checkbox_secret"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/secret"
             android:checked="@={posting.status}"
+            android:text="@string/secret"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.029"
