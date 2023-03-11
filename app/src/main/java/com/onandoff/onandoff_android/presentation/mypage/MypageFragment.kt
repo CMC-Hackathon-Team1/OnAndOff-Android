@@ -201,7 +201,7 @@ class MypageFragment: Fragment(){
     }
     private fun onInitRecyclerView(){
         Log.d("feed","RecyclerView init")
-        val mypageRVAdapter =MypageRVAdapter(feedList, mainActivity)
+        val mypageRVAdapter = MypageRVAdapter(feedList, mainActivity)
         binding.rvProfileList.adapter = mypageRVAdapter;
         binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true);
         Log.d("feed","${feedList.size}")

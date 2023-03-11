@@ -34,6 +34,7 @@ import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -209,7 +210,7 @@ class PostingAddActivity : AppCompatActivity() {
         val imageFile = File(storageDir, filename)
         Log.d("camera","$filename ${imageFile.path}")
         val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 40, outputStream)
         outputStream.flush()
         outputStream.close()
         return imageFile
@@ -232,24 +233,13 @@ class PostingAddActivity : AppCompatActivity() {
                 FLAG_PERM_STORAGE ->{
                     val uri = data?.data // 선택한 이미지의 Uri 객체
                     binding.ivCamera.setImageURI(uri)
-                    val file = uri?.let { uriToMultipartBody(this@PostingAddActivity,it) }
+                    val filePath = uri?.let { getPathFromUri(it) }
+                    val file = File(filePath)
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                     Log.d("gallery","${File(file?.path).length()}")
-//                    val file = File(filePath)
-//
-//                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-//                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-//                    imgFile = body
-                    val requestFile =
-                        file?.let { RequestBody.create("image/*".toMediaTypeOrNull(), it) }
-                    imgFile =
-                        requestFile?.let {
-                            MultipartBody.Part.createFormData("images", file.name,
-                                it
-                            )
-                        }
-                    Log.d("gallery","${imgFile}")
-
-
+                    val body = MultipartBody.Part.createFormData("images", file.name, requestFile)
+                    imgFile = body
+                    Log.d("gallery","${imgFile?.body?.contentType()}")
                 }
                 FLAG_REQ_CAMERA ->{
                   if (data?.extras?.get("data") != null) {

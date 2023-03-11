@@ -233,7 +233,7 @@ class ProfileCreateActivity:AppCompatActivity() {
                     binding.ivProfileBackground.setImageURI(uri)
                     val filePath = uri?.let { getPathFromUri(it) }
                     val file = File(filePath)
-                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
 //                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                     val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
                     imgFile = body
