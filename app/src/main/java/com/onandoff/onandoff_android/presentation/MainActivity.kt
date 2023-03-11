@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
-import android.widget.Toast
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.messaging.FirebaseMessaging
 import com.onandoff.onandoff_android.FragmentAdapter

@@ -60,7 +60,7 @@ class MypageFragment: Fragment(){
 
         getProfileData()
         getFeedData()
-        onInitRecyclerView()
+
         binding.tvMypageEdit.setOnClickListener{
             val bundle = Bundle()
             bundle.putString("nickName", profile.profileName)
@@ -108,12 +108,13 @@ class MypageFragment: Fragment(){
                 response: Response<getFeedResponeData>
             ){
 
-//                val tmpFeedList = response.body()?.result?
-//                if (tmpFeedList != null) {
-//                    for(item in tmpFeedList){
-//                        feedList.apply{add(item)}
-//                    }
-//                }
+                val tmpFeedList = response.body()?.result?.feedArray
+                if (tmpFeedList != null) {
+                    for(item in tmpFeedList){
+                        feedList.apply{add(item)}
+                    }
+                }
+                onInitRecyclerView()
             }
             override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
 
@@ -121,8 +122,11 @@ class MypageFragment: Fragment(){
         })
     }
     private fun onInitRecyclerView(){
+        Log.d("feed","RecyclerView init")
         val mypageRVAdapter =MypageRVAdapter(feedList, mainActivity)
         binding.rvProfileList.adapter = mypageRVAdapter;
         binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true);
+        Log.d("feed","${feedList.size}")
+
     }
 }

@@ -15,10 +15,10 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
     inner class MypageViewHolder(val binding:ItemMypageUserfeedBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(write: FeedResponseData){
             binding.tvMypageRvItemPostText.text = write.feedContent
-//            binding.tvMypageRvItemLike.text = write.
             binding.tvMypageRvItemDate.text = write.createdAt
             binding.tvMypageRvItemLike.text = write.likeNum.toString()
-//            Glide.with(context).load(write.feedImgList[0]).into(binding.ivMypageRvItemPostImg)
+            Glide.with(context).load(write.feedImgList[0]).into(binding.ivMypageRvItemPostImg)
+            Log.d("feed","그려짐..?")
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MypageViewHolder {
