@@ -2,6 +2,7 @@ package com.onandoff.onandoff_android.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -22,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
 
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                     response: Response<NotificationResponse>
                 ) {
                     if (response.code() == 201){
-                        Toast.makeText(this@MainActivity, "Fcm token setting complete", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "onResponse: Fcm token setting complete")
                     }
                 }
 
