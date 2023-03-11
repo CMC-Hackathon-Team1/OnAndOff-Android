@@ -27,6 +27,8 @@ import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,12 +39,28 @@ class MypageFragment: Fragment(){
     lateinit var profile:ProfileListResultResponse
     lateinit var mainActivity: MainActivity
     var feedList = ArrayList<FeedResponseData>()
+    var currentDate:LocalDateTime = LocalDateTime.now()
+    var parsingDate:String = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
+        binding.tvMypageDate.text = parsingDate
+        binding.ivMypageDateBack.setOnClickListener{
+            currentDate = currentDate.minusMonths(1)
+            parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+            Log.d("time",parsingDate)
+            binding.tvMypageDate.text = parsingDate
+        }
+        binding.ivMypageDateForward.setOnClickListener{
+            currentDate =  currentDate.plusMonths(1)
+            parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+            Log.d("time",parsingDate)
+            binding.tvMypageDate.text = parsingDate
+        }
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,6 +107,9 @@ class MypageFragment: Fragment(){
                 Log.d(TAG,"api 호출")
                 profile = response.body()?.result!!
                 binding.profile = profile
+                //마이페이지가 처음 splash 되었을때 오늘날에 해당하는
+                //년, 월의 게시글 목록이 나옴
+
 
             }
             override fun onFailure(call: Call<getMyProfileResponse>, t: Throwable){
@@ -100,8 +121,14 @@ class MypageFragment: Fragment(){
         val myfeedService: MyFeedService? = RetrofitClient.getClient()?.create(
             MyFeedService::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+        var myfeedDate:String = "01"
         //날을 어떻게 넣을지 고민해봐야될듯
-        val call = myfeedService?.getMyFeed(profileId,profileId,2023, "03",1)
+        if(currentDate.monthValue < 10){
+            myfeedDate = "0"+currentDate.monthValue.toString()
+        }else{
+            myfeedDate = currentDate.monthValue.toString()
+        }
+        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,1)
         call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
                 call: Call<getFeedResponeData>,

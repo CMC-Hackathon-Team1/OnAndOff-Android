@@ -101,7 +101,7 @@
                 android:id="@+id/tv_mypage_date"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:text="2022년 9월"
+                android:text="2023년 3월"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
