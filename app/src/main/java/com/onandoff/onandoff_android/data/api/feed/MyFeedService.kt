@@ -1,6 +1,7 @@
 
 package com.onandoff.onandoff_android.data.api.feed
 
+import com.google.gson.JsonElement
 import com.onandoff.onandoff_android.data.model.getFeedResponeData
 import retrofit2.Call
 import retrofit2.http.GET
