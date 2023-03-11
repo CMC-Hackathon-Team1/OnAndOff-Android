@@ -71,7 +71,6 @@ class PostingAddActivity : AppCompatActivity() {
             builder.show()
         }
         binding.btnCategory.setOnClickListener {
-            // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
                     1 -> binding.textCategory.text = "문화 및 예술"
