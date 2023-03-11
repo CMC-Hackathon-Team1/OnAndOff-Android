@@ -10,3 +10,7 @@ data class NotificationResponse(
     @SerializedName("statusCode") val statusCode: Int,
     @SerializedName("message") val message: String
 )
+
+data class TokenData (
+    @SerializedName("alarmToken") val alarmToken: String
+)
