@@ -34,6 +34,7 @@ import com.onandoff.onandoff_android.util.Camera.STORAGE_PERMISSION
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -239,7 +240,7 @@ class PostingAddActivity : AppCompatActivity() {
         val imageFile = File(storageDir, filename)
         Log.d("camera", "$filename ${imageFile.path}")
         val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 30, outputStream)
         outputStream.flush()
         outputStream.close()
         return imageFile
@@ -279,8 +280,6 @@ class PostingAddActivity : AppCompatActivity() {
                             )
                         }
                     Log.d("gallery", "${imgFile}")
-
-
                 }
                 FLAG_REQ_CAMERA -> {
                     if (data?.extras?.get("data") != null) {

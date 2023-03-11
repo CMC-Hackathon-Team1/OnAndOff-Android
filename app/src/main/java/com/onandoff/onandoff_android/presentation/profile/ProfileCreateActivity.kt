@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -128,6 +129,9 @@ class ProfileCreateActivity:AppCompatActivity() {
         dialogView.layoutBasic.setOnClickListener{
             imgFile = null
             binding.ivProfileAvatar.setImageResource(R.drawable.icon_profile_default)
+            binding.ivProfileBackground.visibility = View.VISIBLE
+            Log.d("profile",imgFile.toString())
+            Log.d("profile",binding.ivProfileBackground.visibility.toString())
             dialog.dismiss()
         }
 
@@ -231,9 +235,12 @@ class ProfileCreateActivity:AppCompatActivity() {
                 FLAG_PERM_STORAGE ->{
                     val uri = data?.data // 선택한 이미지의 Uri 객체
                     binding.ivProfileBackground.setImageURI(uri)
+                    binding.ivAddAvatar.visibility = View.GONE
+                    binding.ivAddBackground.visibility = View.GONE
+                    binding.ivProfileAvatar.visibility = View.GONE
                     val filePath = uri?.let { getPathFromUri(it) }
                     val file = File(filePath)
-                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
 //                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                     val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
                     imgFile = body

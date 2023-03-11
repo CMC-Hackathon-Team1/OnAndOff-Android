@@ -79,7 +79,8 @@
             <ImageView
                 android:id="@+id/iv_mypage_rv_item_post_img"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="22dp"
                 android:src="@drawable/img_sample"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -88,7 +89,8 @@
                 android:id="@+id/tv_mypage_rv_item_post_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginVertical="16dp"
                 android:text="운동 갔다옴 슝슝"
                 android:textColor="@color/black"
                 android:textSize="14sp" />

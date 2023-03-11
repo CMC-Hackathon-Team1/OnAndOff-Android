@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class getFeedResponeData(
     @SerializedName("statusCode")val statusCode :Int,
     @SerializedName("message")val message:String,
-    @SerializedName("result")val result: ArrayList<FeedResponseData>
+    @SerializedName("result")val result: FeedListResponseData
+)
+data class getFeedResponse(
+    @SerializedName("feedArray")val feedArray:ArrayList<FeedResponseData>
 )
 data class getFeedListRespone(
     @SerializedName("statusCode")val statusCode :Int,
