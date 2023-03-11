@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.presentation.home.posting
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,8 +15,10 @@ import com.onandoff.onandoff_android.databinding.FragmentPostingCategoryBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-class PostingCategoryFragment(val itemClick: (Int) -> Unit) : BottomSheetDialogFragment(){
+@SuppressLint("NotifyDataSetChanged")
+class PostingCategoryFragment(
+    val itemClick: (Int) -> Unit
+) : BottomSheetDialogFragment(){
     private var _binding : FragmentPostingCategoryBinding? = null
     private val binding
         get() = _binding!!
@@ -40,17 +43,39 @@ class PostingCategoryFragment(val itemClick: (Int) -> Unit) : BottomSheetDialogF
             dialog?.dismiss()
         }
 
-        categoryAdapter = CategoryAdapter()
-        binding.categoryList.layoutManager = LinearLayoutManager(context)
-        binding.categoryList.adapter = categoryAdapter
-        categoryAdapter.setItemClickListener(object : CategoryAdapter.OnItemClickListener {
-            override fun onClick(v: View, categoryId: Int) {
-                itemClick(categoryId)
-                Log.d("categoryId", "onClick: $categoryId")
-                dialog?.dismiss()
-            }
-        })
-        getCategoryList()
+//        categoryAdapter = CategoryAdapter()
+//        binding.categoryList.layoutManager = LinearLayoutManager(requireContext())
+//        binding.categoryList.adapter = categoryAdapter
+//        getCategoryList()
+//
+//        categoryAdapter.setItemClickListener(object : CategoryAdapter.OnItemClickListener {
+//            override fun onClick(v: View, categoryId: Int) {
+////                itemClick(categoryId)
+//                Log.d("categoryId", "onClick: $categoryId")
+//                dialog?.dismiss()
+//            }
+//        })
+
+        binding.btnArt.setOnClickListener{
+            // 카테고리 선택(문화/예슬)
+            itemClick(1)
+            dialog?.dismiss()
+        }
+        binding.btnSports.setOnClickListener {
+            // 카테고리 선택(Sports)
+            itemClick(2)
+            dialog?.dismiss()
+        }
+        binding.btnSelf.setOnClickListener {
+            // 카테고리 선택(자기계발)
+            itemClick(3)
+            dialog?.dismiss()
+        }
+        binding.btnEtc.setOnClickListener {
+            // 카테고리 선택(기타)
+            itemClick(4)
+            dialog?.dismiss()
+        }
     }
 
     override fun onDestroyView() {
