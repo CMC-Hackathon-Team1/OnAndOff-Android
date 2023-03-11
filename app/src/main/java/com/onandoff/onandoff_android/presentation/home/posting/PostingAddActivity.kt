@@ -210,7 +210,7 @@ class PostingAddActivity : AppCompatActivity() {
         val imageFile = File(storageDir, filename)
         Log.d("camera","$filename ${imageFile.path}")
         val outputStream = FileOutputStream(imageFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 40, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 30, outputStream)
         outputStream.flush()
         outputStream.close()
         return imageFile
