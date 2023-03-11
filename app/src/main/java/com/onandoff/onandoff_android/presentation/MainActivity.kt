@@ -22,11 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-<<<<<<< HEAD
 private const val TAG = "MainActivity"
-=======
-
->>>>>>> develop
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private var isBackPressed = false // 뒤로가기 버튼 두 번 눌렸는지 체크하는 변수

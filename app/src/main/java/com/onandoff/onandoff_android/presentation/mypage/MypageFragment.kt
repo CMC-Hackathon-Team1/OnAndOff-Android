@@ -172,13 +172,13 @@ class MypageFragment: Fragment(){
         }else{
             myfeedDate = currentDate.monthValue.toString()
         }
-        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,pageNum)
+        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,1)
         call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
                 call: Call<getFeedResponeData>,
                 response: Response<getFeedResponeData>
             ){
-
+                feedList.clear()
                 var tmpFeedList = response.body()?.result?.feedArray
                 if (tmpFeedList!!.isNotEmpty()) {
                     for(item in tmpFeedList){
