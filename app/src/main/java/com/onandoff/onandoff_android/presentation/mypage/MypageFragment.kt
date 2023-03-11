@@ -108,12 +108,12 @@ class MypageFragment: Fragment(){
                 response: Response<getFeedResponeData>
             ){
 
-                val tmpFeedList = response.body()?.result?.feedArray
-                if (tmpFeedList != null) {
-                    for(item in tmpFeedList){
-                        feedList.apply{add(item)}
-                    }
-                }
+//                val tmpFeedList = response.body()?.result?
+//                if (tmpFeedList != null) {
+//                    for(item in tmpFeedList){
+//                        feedList.apply{add(item)}
+//                    }
+//                }
             }
             override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
 

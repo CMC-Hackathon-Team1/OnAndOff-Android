@@ -39,6 +39,7 @@ import retrofit2.Response
 
 class SplashActivity:AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
+    //startforactivity에서 코드
     val RC_SIGN_IN = 200
     val profileInterface: ProfileInterface? = RetrofitClient.getClient()?.create(ProfileInterface::class.java)
     val userInterface: UserInterface? =
@@ -56,27 +57,22 @@ class SplashActivity:AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        val mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        account?.idToken?.let { googleApi(it) } ?:
-        Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
+
+//        val account = GoogleSignIn.getLastSignedInAccount(this@SplashActivity)
+//        account?.idToken?.let { googleApi(it) } ?: Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
-        var userEmail = prefs.getSharedPreference("email", "")
-        Log.d("splash", userEmail)
-
+//        var userEmail = prefs.getSharedPreference("email", "")
+//        Log.d("splash", userEmail)
 //        if (userEmail != "") {
 //            val intent = Intent(applicationContext, MainActivity::class.java)
 //            startActivity(intent)
 //            Toast.makeText(this, "로그인 되었습니다", Toast.LENGTH_SHORT).show()
 //            finish()
 //        }
+
         binding.btServiceLogin.setOnClickListener {
             val Intent = Intent(this, SignInActivity::class.java)
             startActivity(Intent)
@@ -105,26 +101,39 @@ class SplashActivity:AppCompatActivity() {
 
 
         }
+
+        //1. 앱에 필요한 사용자 데이터를 요청하도록 로그인 옵션을 설정해줌
+        //DEFAULT_SIGN_IN parameter로 유저의 ID, 기본적 프로필 정보 요청
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()//email 요청
+            .build()
+        //2. 위에서 만든 gso를 파라미터로 넣어줘서 googlesignInClient 객체를 만들어줌
+        val mGoogleSignInClient = GoogleSignIn.getClient(this@SplashActivity, gso);
         binding.btGoogleLogin.setOnClickListener{
-            //TODO : Google Login code 작성
+            //3. signIn할수있는 intent를 생성
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        //4. startActivityForResult로 인해 실행된 코드
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
     }
+    //5. 사용자 정보 가져오기
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
+            Log.d("Google",completedTask.isSuccessful.toString())
             val account = completedTask.getResult(ApiException::class.java)
+
+            Log.d("Google",account.account.toString())
+            Log.d("Google",account.displayName.toString())
+            Log.d("Google",account.idToken.toString())
+            Log.d("Google",account.id.toString())
             account.idToken?.let { googleApi(it) } ?:
                 Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
 
@@ -133,7 +142,7 @@ class SplashActivity:AppCompatActivity() {
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Toast.makeText(this,"google 로그인에 실패하였습니다. 다시시도해주세요",Toast.LENGTH_SHORT).show()
+            Log.d("Google","google 로그인에 실패하였습니다. 다시시도해주세요${e}")
 
         }
     }
@@ -228,21 +237,28 @@ fun kakaoApi(token: OAuthToken) {
                 call: Call<SocialLoginResponse>,
                 response: Response<SocialLoginResponse>
             ) {
-                prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,
-                    response.body()?.result?.jwt!!
-                )
-                if(response.body()?.result?.state == "회원가입 완료" || prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,"" )== ""){
-                val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
-                startActivity(intent)
-                    finish()
-                }else{
+
+                if(response.body()?.result?.state == "회원가입 완료" ){
+                    prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,
+                        response.body()?.result?.jwt!!
+                    )
+                    val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
+                    startActivity(intent)
+                        finish()
+                }else if(response.body()?.result?.state == "로그인 완료" ){
                     val intent = Intent(this@SplashActivity, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
+                }else{
+                    Log.d("Google",response.body().toString())
                 }
-                finish()
+
+
             }
 
             override fun onFailure(call: Call<SocialLoginResponse>, t: Throwable) {
+                Log.d("Google","${t}")
+
             }
 
         })

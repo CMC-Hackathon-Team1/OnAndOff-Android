@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.gms.tasks.OnCompleteListener
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.messaging.FirebaseMessaging
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
-import com.onandoff.onandoff_android.presentation.home.otheruser.OtherUserFragment
 import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 

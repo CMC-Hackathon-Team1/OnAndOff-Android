@@ -47,6 +47,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.2'
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     //Coroutines
