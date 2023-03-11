@@ -36,8 +36,30 @@ class PostingModifyActivity : AppCompatActivity() {
         getPostingByFeedId(profileId,feedId)
 
         binding.btnPostingModify.setOnClickListener{
-            // 게시물 수정
-            modifyPosting(profileId,feedId)
+            val hashTag = binding.textHashtag.text.toString()
+            var hashTagList = hashTag.split(" ", "#")
+            hashTagList = hashTagList.filter { it.isNotEmpty() }
+
+            val content = binding.textContent.text.toString()
+            val isSecret = when(binding.checkboxSecret.isChecked) {
+                false -> "PUBLIC"
+                true -> "PRIVATE"
+            }
+
+            if (profileId == -1) {
+                finish()
+            } else if (hashTagList.isEmpty()) {
+                Toast.makeText(this@PostingModifyActivity, "해쉬태그를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else if (content.isEmpty() || content == "") {
+                Toast.makeText(this@PostingModifyActivity, "피드의 내용을 입력해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (categoryId == 0) {
+                Toast.makeText(this@PostingModifyActivity, "피드의 카테고리를 선택해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                // 게시물 추가
+                modifyPosting(profileId, feedId, hashTagList, content, isSecret)
+            }
         }
         binding.btnCamera.setOnClickListener{
             // 사진 추가
@@ -50,7 +72,7 @@ class PostingModifyActivity : AppCompatActivity() {
                 .setNegativeButton("아니오") { _, _ ->}
             builder.show()
         }
-        binding.btnCategory.setOnClickListener {
+        binding.categoryLayout.setOnClickListener {
             // 카테고리 선택 fragment 띄우기
             val bottomPostingCategoryFragment = PostingCategoryFragment{
                 when (it) {
@@ -80,6 +102,14 @@ class PostingModifyActivity : AppCompatActivity() {
                                 tagText = "#$tag $tagText"
                             }
                             binding.textHashtag.setText(tagText)
+                            when(response.body()!!.categoryId) {
+                                0 -> binding.textCategory.text = "카테고리"
+                                1 -> binding.textCategory.text = "문화 및 예술"
+                                2 -> binding.textCategory.text = "스포츠"
+                                3 -> binding.textCategory.text = "자기계발"
+                                4 -> binding.textCategory.text = "기타"
+                            }
+                            categoryId = response.body()!!.categoryId
                         }
                     }
                 }
@@ -91,17 +121,7 @@ class PostingModifyActivity : AppCompatActivity() {
         })
     }
 
-    private fun modifyPosting(profileId: Int,feedId: Int){
-        val hashTag = binding.textHashtag.text.toString()
-        var hashTagList = hashTag.split(" ", "#")
-        hashTagList = hashTagList.filter { it.isNotEmpty() }
-
-        val content = binding.textContent.text.toString()
-        val isSecret = when(binding.checkboxSecret.isChecked) {
-            false -> "PUBLIC"
-            true -> "PRIVATE"
-        }
-
+    private fun modifyPosting(profileId: Int,feedId: Int, hashTagList: List<String>, content:String, isSecret: String){
         val data = FeedData(profileId, feedId, categoryId, hashTagList, content, isSecret)
 
         val call = feedInterface?.updateFeedResponse(data)
@@ -110,6 +130,7 @@ class PostingModifyActivity : AppCompatActivity() {
                 when(response.code()) {
                     200 -> {
                         Log.d("updateFeed", "onResponse: ${response.body().toString()}")
+                        finish()
                     }
                 }
             }
