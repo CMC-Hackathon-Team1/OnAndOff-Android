@@ -110,7 +110,6 @@ class PostingModifyActivity : AppCompatActivity() {
                                 4 -> binding.textCategory.text = "기타"
                             }
                             categoryId = response.body()!!.categoryId
-                            finish()
                         }
                     }
                 }
@@ -131,6 +130,7 @@ class PostingModifyActivity : AppCompatActivity() {
                 when(response.code()) {
                     200 -> {
                         Log.d("updateFeed", "onResponse: ${response.body().toString()}")
+                        finish()
                     }
                 }
             }
