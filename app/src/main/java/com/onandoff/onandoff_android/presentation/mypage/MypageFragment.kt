@@ -132,6 +132,7 @@ class MypageFragment: Fragment(){
         val profileService: ProfileInterface? = RetrofitClient.getClient()?.create(
             ProfileInterface::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+        Log.d("mypage",profileId.toString())
         //날을 어떻게 넣을지 고민해봐야될듯
         val call = profileService?.getMyProfile(profileId)
         call?.enqueue(object: Callback<getMyProfileResponse> {

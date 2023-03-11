@@ -1,6 +1,8 @@
 package com.onandoff.onandoff_android.presentation.mypage
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.data.request.LikeRequest
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
+import com.onandoff.onandoff_android.presentation.home.posting.PostingOptionFragment
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
 import retrofit2.Call
@@ -34,7 +37,10 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
                 binding.ivMypageRvItemPostImg.visibility = View.GONE
             }
             binding.ivMypageRvItemMore.setOnClickListener{
-                // TODO: edit intent
+                val bundle = Bundle()
+                bundle.putInt("feedId", write.feedId)
+//                supportFragmentManager.beginTransaction().show(PostingOptionFragment).commit()
+
             }
             var isLike = write.isLike
             if(write.isLike){
