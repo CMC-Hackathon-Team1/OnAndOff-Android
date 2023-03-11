@@ -2,6 +2,7 @@ package com.onandoff.onandoff_android.presentation.home.setting
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,18 +15,20 @@ import com.onandoff.onandoff_android.data.model.NotificationResponse
 import com.onandoff.onandoff_android.databinding.FragmentSettingAlarmBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.home.SettingFragment
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.PreferenceUtil
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "AlarmFragment"
 class AlarmFragment:Fragment() {
     private lateinit var binding :FragmentSettingAlarmBinding
     lateinit var mainActivity: MainActivity
-    var isSwitchLike:Boolean = true
-    var isSwitchFollowing:Boolean = true
-    var isSwitchPosting:Boolean = true
-    var isSwitchFollowingPosting:Boolean = true
-    var isSwitchNotice:Boolean = true
+    private var isSwitchLike:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_LIKE_NOTIFICATION_SETTING, true)
+    private var isSwitchFollowing:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_FOLLOW_NOTIFICATION_SETTING, true)
+    private var isSwitchNotice:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NOTICE_NOTIFICATION_SETTING, true)
 
     private val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(NotificationInterface::class.java)
     override fun onAttach(context: Context) {
@@ -53,24 +56,6 @@ class AlarmFragment:Fragment() {
         binding.switchFollowing.setOnClickListener{
             isSwitchFollowing = !isSwitchFollowing
             updateFollowSetting()
-        }
-        binding.switchPosting.setOnClickListener{
-            if(isSwitchPosting){
-                isSwitchPosting = false
-                binding.switchPosting.setImageResource(R.drawable.ic_switch_off_40)
-            }else{
-                isSwitchPosting = true
-                binding.switchPosting.setImageResource(R.drawable.ic_switch_on_40)
-            }
-        }
-        binding.switchFollowingPosting.setOnClickListener{
-            if(isSwitchFollowingPosting){
-                isSwitchFollowingPosting = false
-                binding.switchFollowingPosting.setImageResource(R.drawable.ic_switch_off_40)
-            }else{
-                isSwitchFollowingPosting = true
-                binding.switchFollowingPosting.setImageResource(R.drawable.ic_switch_on_40)
-            }
         }
         binding.switchNotice.setOnClickListener{
             isSwitchNotice = !isSwitchNotice
@@ -100,7 +85,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: update notice")
             }
 
         })
@@ -127,7 +112,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: update follow")
             }
 
         })
@@ -154,7 +139,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: notice update")
             }
 
         })
