@@ -20,6 +20,8 @@ import com.onandoff.onandoff_android.data.model.SignRequest
 import com.onandoff.onandoff_android.data.model.SignUpResponse
 import com.onandoff.onandoff_android.databinding.ActivitySignupBinding
 import com.onandoff.onandoff_android.presentation.splash.SignupEmailActivity
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference
 import retrofit2.*
 import java.util.regex.Pattern
 
@@ -200,6 +202,16 @@ class SignupActivity:AppCompatActivity() {
                                 "retrofit manager called, onSucess called with ${body}"
                             );
                             Toast.makeText(this@SignupActivity,"회원가입 성공! 이메일 인증단계로 넘어갑니다",Toast.LENGTH_SHORT).show()
+
+                            SharePreference.prefs.putSharedPreference(
+                                APIPreferences.SHARED_PREFERENCE_LIKE_NOTIFICATION_SETTING,
+                                true)
+                            SharePreference.prefs.putSharedPreference(
+                                APIPreferences.SHARED_PREFERENCE_FOLLOW_NOTIFICATION_SETTING,
+                                true)
+                            SharePreference.prefs.putSharedPreference(
+                                APIPreferences.SHARED_PREFERENCE_NOTICE_NOTIFICATION_SETTING,
+                                true)
 
                             val Intent = Intent(this@SignupActivity, SignupEmailActivity::class.java)
                             Intent.putExtra("email",email)

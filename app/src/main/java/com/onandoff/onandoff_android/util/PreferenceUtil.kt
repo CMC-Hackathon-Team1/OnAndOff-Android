@@ -88,12 +88,13 @@ class PreferenceUtil(context: Context) {
     fun getSharedPreference(key: String, defaultValue: HashSet<String>): Set<String> {
         return prefs.getStringSet(key, defaultValue)!!
     }
-
-
 }
 object APIPreferences{
     val SHARED_PREFERENCE_NAME_JWT:String = "jwt"
     val SHARED_PREFERENCE_NAME_EMAIL:String = "email"
     val SHARED_PREFERENCE_NAME_USERID:String = "profileId"
     val SHARED_PREFERENCE_NAME_PROFILEID:String = "currentPersonaId"
+    const val SHARED_PREFERENCE_LIKE_NOTIFICATION_SETTING:String = "likeSetting"
+    const val SHARED_PREFERENCE_FOLLOW_NOTIFICATION_SETTING:String = "followSetting"
+    const val SHARED_PREFERENCE_NOTICE_NOTIFICATION_SETTING:String = "noticeSetting"
 }
