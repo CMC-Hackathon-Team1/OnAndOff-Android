@@ -20,6 +20,7 @@ import com.onandoff.onandoff_android.databinding.FragmentMypageBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
+import com.paginate.Paginate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +40,30 @@ class MypageFragment: Fragment(){
     var parsingDate:String = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
     var myfeedDate:String = "01"
 //    lateinit var joinDate:LocalDateTime
+    var loading:Boolean = false
     var pageNum:Int = 1
+    var callbacks: Paginate.Callbacks = object : Paginate.Callbacks {
+        override fun onLoadMore() {
+            // Load next page of data (e.g. network or database)
+            loading = true
+            pageNum += 1
+            getMoreFeedData()
+
+        }
+
+        override fun isLoading(): Boolean {
+            // Indicate whether new page loading is in progress or not
+            return loading
+        }
+
+        override fun hasLoadedAllItems(): Boolean {
+            // Indicate whether all data (pages) are loaded or not
+            return isAdded
+        }
+
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -192,44 +216,60 @@ class MypageFragment: Fragment(){
                 }else{
                     Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
                 }
-                onInitRecyclerView()
+                loading = false
             }
             override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
 
             }
         })
+
     }
     private fun onInitRecyclerView(){
         Log.d("feed","RecyclerView init")
         val mypageRVAdapter = MypageRVAdapter(feedList, mainActivity)
         binding.rvProfileList.adapter = mypageRVAdapter;
-        binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true);
+        binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true)
         Log.d("feed","${feedList.size}")
         //게시글 paging 처리 관련 스크롤 감지 이벤트리스너
+        Paginate.with(binding.rvProfileList, callbacks)
+            .setLoadingTriggerThreshold(10)
+            .build()
         binding.rvProfileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                var itemCount =  binding.rvProfileList.getAdapter()?.getItemCount()
-                Log.d("page",itemCount.toString())
-
-                if(itemCount!! ==10){
-                    Log.d("page","찍힘?")
+                var itemCount = binding.rvProfileList.getAdapter()?.getItemCount()
+                if(itemCount!! >0){
                     val lastVisibleItemPosition =
                         (binding.rvProfileList.getLayoutManager() as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     val itemTotalCount: Int = itemCount - 1
                     if (lastVisibleItemPosition == itemTotalCount ) {
-                        Toast.makeText(mainActivity,"Last Position", Toast.LENGTH_SHORT).show();
-                        pageNum +=1
-                        getMoreFeedData()
+                        Toast.makeText(mainActivity, "Last Position", Toast.LENGTH_SHORT).show()
+                        Log.d("page", itemCount.toString())
+                        callbacks.onLoadMore()
                     }
                 }
 
+
             }
         })
+//
+//
+//                if (itemCount!! == 10) {
+//                    getMoreFeedData()
+//                }
 
 
+//                    Log.d("page","찍힘?")
+//
+//                        pageNum +=1
+//                        getMoreFeedData()
+//                    }
+//            }
 
-
-
+//        })
     }
+
+
+
+
 }
