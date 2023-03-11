@@ -158,63 +158,15 @@ fun kakaoApi(token: OAuthToken) {
         ) {
             val body = response.body()
             response.body()?.result?.jwt?.let { Log.d("성공!", it) };
-            prefs.putSharedPreference(
-                SHARED_PREFERENCE_NAME_JWT,
-                body?.result?.jwt!!
-            )
-
-            Log.d("Splash",body?.result.state)
-            if(body?.result.state == "로그인 완료"){
-                val call2 = profileInterface?.profileCheck()
-                call2?.enqueue(object : Callback<ProfileListResponse> {
-                    override fun onResponse(
-                        call: Call<ProfileListResponse>,
-                        response: Response<ProfileListResponse>
-                    ) {
-                        val profileResponse = response.body()
-                        when(profileResponse?.statusCode){
-                            1503 -> {
-                                Log.d(
-                                    "Get",
-                                    "retrofit manager called, onSucess called but profile not exits"
-                                );
-                                val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
-                                startActivity(intent)
-                                finish()
-
-                            }
-                            else -> {
-                                Log.d(
-                                    "Get",
-                                    "retrofit manager called, onSucess called with ${response.body()}"
-                                );
-//                                val list = mutableSetOf<String>()
-//                                for(i in profileResponse?.result!!){
-//                                    list.add(i.profileId.toString())
-//                                }
-//                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
-
-                                val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
-                                startActivity(mainIntent)
-                                finish()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(
-                        call: Call<ProfileListResponse>,
-                        t: Throwable
-                    ) {
-                        Log.d(
-                            "Get",
-                            "retrofit manager called, onFailure called with ${t}"
-                        );
-                    }
 
 
-                })
-
-
+            body?.result?.let { Log.d("Splash", it.state) }
+            if(body?.result?.state == "로그인 완료"){
+                prefs.putSharedPreference(
+                    SHARED_PREFERENCE_NAME_JWT,
+                    body?.result?.jwt!!
+                )
+                checkProfile()
             }
             else{
                 val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
@@ -239,6 +191,7 @@ fun kakaoApi(token: OAuthToken) {
             ) {
 
                 if(response.body()?.result?.state == "회원가입 완료" ){
+                    Log.d("Google","이거 된거 맞음?")
                     prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,
                         response.body()?.result?.jwt!!
                     )
@@ -246,6 +199,10 @@ fun kakaoApi(token: OAuthToken) {
                     startActivity(intent)
                         finish()
                 }else if(response.body()?.result?.state == "로그인 완료" ){
+                    prefs.putSharedPreference(SHARED_PREFERENCE_NAME_JWT,
+                        response.body()?.result?.jwt!!
+                    )
+                    checkProfile()
                     val intent = Intent(this@SplashActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -261,6 +218,55 @@ fun kakaoApi(token: OAuthToken) {
 
             }
 
+        })
+    }
+
+    fun checkProfile() {
+        val call2 = profileInterface?.profileCheck()
+        call2?.enqueue(object : Callback<ProfileListResponse> {
+            override fun onResponse(
+                call: Call<ProfileListResponse>,
+                response: Response<ProfileListResponse>
+            ) {
+                val profileResponse = response.body()
+                when (profileResponse?.statusCode) {
+                    1503 -> {
+                        Log.d(
+                            "Get",
+                            "retrofit manager called, onSucess called but profile not exits"
+                        );
+                        val intent = Intent(this@SplashActivity, ProfileCreateActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    }
+                    else -> {
+                        Log.d(
+                            "Get",
+                            "retrofit manager called, onSucess called with ${response.body()}"
+                        );
+//                                val list = mutableSetOf<String>()
+//                                for(i in profileResponse?.result!!){
+//                                    list.add(i.profileId.toString())
+//                                }
+//                                prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,list)
+
+                        val mainIntent = Intent(this@SplashActivity, MainActivity::class.java)
+                        startActivity(mainIntent)
+                        finish()
+                    }
+                }
+            }
+
+            override fun onFailure(
+                call: Call<ProfileListResponse>,
+                t: Throwable
+            ) {
+                Log.d(
+                    "Get",
+                    "retrofit manager called, onFailure called with ${t}"
+                );
+            }
         })
     }
 }
