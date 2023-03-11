@@ -64,14 +64,16 @@ class SplashActivity:AppCompatActivity() {
         setContentView(binding.root)
         var keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
-//        var userEmail = prefs.getSharedPreference("email", "")
-//        Log.d("splash", userEmail)
-//        if (userEmail != "") {
-//            val intent = Intent(applicationContext, MainActivity::class.java)
+        var jwt = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_JWT, "")
+        if(jwt!=""){
+            checkProfile()
+//            val intent = Intent(this@SplashActivity, MainActivity::class.java)
 //            startActivity(intent)
-//            Toast.makeText(this, "로그인 되었습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "자동 로그인 되었습니다", Toast.LENGTH_SHORT).show()
 //            finish()
-//        }
+        }
+//        Log.d("splash", userEmail)
+
 
         binding.btServiceLogin.setOnClickListener {
             val Intent = Intent(this, SignInActivity::class.java)
