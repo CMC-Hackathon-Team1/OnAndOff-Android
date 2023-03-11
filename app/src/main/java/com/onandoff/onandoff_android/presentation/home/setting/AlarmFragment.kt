@@ -15,6 +15,9 @@ import com.onandoff.onandoff_android.data.model.NotificationResponse
 import com.onandoff.onandoff_android.databinding.FragmentSettingAlarmBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
 import com.onandoff.onandoff_android.presentation.home.SettingFragment
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.PreferenceUtil
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,9 +26,9 @@ private const val TAG = "AlarmFragment"
 class AlarmFragment:Fragment() {
     private lateinit var binding :FragmentSettingAlarmBinding
     lateinit var mainActivity: MainActivity
-    var isSwitchLike:Boolean = true
-    var isSwitchFollowing:Boolean = true
-    var isSwitchNotice:Boolean = true
+    private var isSwitchLike:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_LIKE_NOTIFICATION_SETTING, true)
+    private var isSwitchFollowing:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_FOLLOW_NOTIFICATION_SETTING, true)
+    private var isSwitchNotice:Boolean = prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NOTICE_NOTIFICATION_SETTING, true)
 
     private val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(NotificationInterface::class.java)
     override fun onAttach(context: Context) {
