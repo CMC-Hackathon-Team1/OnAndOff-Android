@@ -1,10 +1,7 @@
 package com.onandoff.onandoff_android.presentation.mypage
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils.join
-import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.JsonElement
+import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.MyFeedService
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
@@ -21,17 +18,14 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.FragmentMypageBinding
 import com.onandoff.onandoff_android.presentation.MainActivity
-import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
-import com.onandoff.onandoff_android.util.SharePreference
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class MypageFragment: Fragment(){
     private lateinit var binding: FragmentMypageBinding
@@ -43,7 +37,9 @@ class MypageFragment: Fragment(){
     val currentCompareDate:LocalDateTime = LocalDateTime.now()
     var currentDate:LocalDateTime = LocalDateTime.now()
     var parsingDate:String = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+    var myfeedDate:String = "01"
 //    lateinit var joinDate:LocalDateTime
+    var pageNum:Int = 1
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -145,14 +141,14 @@ class MypageFragment: Fragment(){
         val myfeedService: MyFeedService? = RetrofitClient.getClient()?.create(
             MyFeedService::class.java)
         val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
-        var myfeedDate:String = "01"
+
         //날을 어떻게 넣을지 고민해봐야될듯
         if(currentDate.monthValue < 10){
             myfeedDate = "0"+currentDate.monthValue.toString()
         }else{
             myfeedDate = currentDate.monthValue.toString()
         }
-        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,1)
+        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,pageNum)
         call?.enqueue(object: Callback<getFeedResponeData> {
             override fun onResponse(
                 call: Call<getFeedResponeData>,
@@ -175,12 +171,65 @@ class MypageFragment: Fragment(){
             }
         })
     }
+    private fun getMoreFeedData(){
+        val myfeedService: MyFeedService? = RetrofitClient.getClient()?.create(
+            MyFeedService::class.java)
+        val profileId = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+        Log.d("page",myfeedDate)
+        Log.d("page",pageNum.toString())
+        val call = myfeedService?.getMyFeed(profileId,profileId,currentDate.year, myfeedDate,pageNum)
+        call?.enqueue(object: Callback<getFeedResponeData> {
+            override fun onResponse(
+                call: Call<getFeedResponeData>,
+                response: Response<getFeedResponeData>
+            ){
+
+                var tmpFeedList = response.body()?.result?.feedArray
+                if (tmpFeedList!!.isNotEmpty()) {
+                    for(item in tmpFeedList){
+                        feedList.apply{add(item)}
+                    }
+                }else{
+                    Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
+                }
+                onInitRecyclerView()
+            }
+            override fun onFailure(call: Call<getFeedResponeData>, t: Throwable){
+
+            }
+        })
+    }
     private fun onInitRecyclerView(){
         Log.d("feed","RecyclerView init")
         val mypageRVAdapter =MypageRVAdapter(feedList, mainActivity)
         binding.rvProfileList.adapter = mypageRVAdapter;
         binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true);
         Log.d("feed","${feedList.size}")
+        //게시글 paging 처리 관련 스크롤 감지 이벤트리스너
+        binding.rvProfileList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                var itemCount =  binding.rvProfileList.getAdapter()?.getItemCount()
+                Log.d("page",itemCount.toString())
+
+                if(itemCount!! ==10){
+                    Log.d("page","찍힘?")
+                    val lastVisibleItemPosition =
+                        (binding.rvProfileList.getLayoutManager() as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount: Int = itemCount - 1
+                    if (lastVisibleItemPosition == itemTotalCount ) {
+                        Toast.makeText(mainActivity,"Last Position", Toast.LENGTH_SHORT).show();
+                        pageNum +=1
+                        getMoreFeedData()
+                    }
+                }
+
+            }
+        })
+
+
+
+
 
     }
 }
