@@ -2,6 +2,7 @@ package com.onandoff.onandoff_android.presentation.home.setting
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +19,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "AlarmFragment"
 class AlarmFragment:Fragment() {
     private lateinit var binding :FragmentSettingAlarmBinding
     lateinit var mainActivity: MainActivity
     var isSwitchLike:Boolean = true
     var isSwitchFollowing:Boolean = true
-    var isSwitchPosting:Boolean = true
-    var isSwitchFollowingPosting:Boolean = true
     var isSwitchNotice:Boolean = true
 
     private val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(NotificationInterface::class.java)
@@ -54,24 +54,6 @@ class AlarmFragment:Fragment() {
             isSwitchFollowing = !isSwitchFollowing
             updateFollowSetting()
         }
-        binding.switchPosting.setOnClickListener{
-            if(isSwitchPosting){
-                isSwitchPosting = false
-                binding.switchPosting.setImageResource(R.drawable.ic_switch_off_40)
-            }else{
-                isSwitchPosting = true
-                binding.switchPosting.setImageResource(R.drawable.ic_switch_on_40)
-            }
-        }
-        binding.switchFollowingPosting.setOnClickListener{
-            if(isSwitchFollowingPosting){
-                isSwitchFollowingPosting = false
-                binding.switchFollowingPosting.setImageResource(R.drawable.ic_switch_off_40)
-            }else{
-                isSwitchFollowingPosting = true
-                binding.switchFollowingPosting.setImageResource(R.drawable.ic_switch_on_40)
-            }
-        }
         binding.switchNotice.setOnClickListener{
             isSwitchNotice = !isSwitchNotice
             updateNoticeSetting()
@@ -100,7 +82,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: update notice")
             }
 
         })
@@ -127,7 +109,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: update follow")
             }
 
         })
@@ -154,7 +136,7 @@ class AlarmFragment:Fragment() {
             }
 
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: notice update")
             }
 
         })
