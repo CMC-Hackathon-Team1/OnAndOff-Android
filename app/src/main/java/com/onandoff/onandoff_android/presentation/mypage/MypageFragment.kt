@@ -3,6 +3,7 @@ package com.onandoff.onandoff_android.presentation.mypage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.join
 import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,34 +40,48 @@ class MypageFragment: Fragment(){
     lateinit var profile:ProfileListResultResponse
     lateinit var mainActivity: MainActivity
     var feedList = ArrayList<FeedResponseData>()
+    val currentCompareDate:LocalDateTime = LocalDateTime.now()
     var currentDate:LocalDateTime = LocalDateTime.now()
     var parsingDate:String = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
-
+//    lateinit var joinDate:LocalDateTime
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
-        binding.tvMypageDate.text = parsingDate
-        binding.ivMypageDateBack.setOnClickListener{
-            currentDate = currentDate.minusMonths(1)
-            parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
-            Log.d("time",parsingDate)
-            binding.tvMypageDate.text = parsingDate
-        }
-        binding.ivMypageDateForward.setOnClickListener{
-            currentDate =  currentDate.plusMonths(1)
-            parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
-            Log.d("time",parsingDate)
-            binding.tvMypageDate.text = parsingDate
-        }
+
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
-//        setupListeners()
+        binding.tvMypageDate.text = parsingDate
+        binding.ivMypageDateBack.setOnClickListener{
+//            if(currentDate.minusMonths(1).isAfter(joinDate)){
+            currentDate = currentDate.minusMonths(1)
+            parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+            Log.d("time",parsingDate)
+            binding.tvMypageDate.text = parsingDate
+            getFeedData()
+//            }else{
+//                Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
+//            }
+
+        }
+        binding.ivMypageDateForward.setOnClickListener{
+            Log.d("calender",currentDate.toString())
+            if(currentCompareDate.isAfter(currentDate.plusMonths(1)) || currentCompareDate.monthValue == currentDate.plusMonths(1).monthValue){
+                currentDate =  currentDate.plusMonths(1)
+                parsingDate = currentDate.year.toString()+"년 "+currentDate.monthValue.toString()+"월"
+                Log.d("time",parsingDate)
+                binding.tvMypageDate.text = parsingDate
+                getFeedData()
+            }else{
+                Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -107,6 +122,15 @@ class MypageFragment: Fragment(){
                 Log.d(TAG,"api 호출")
                 profile = response.body()?.result!!
                 binding.profile = profile
+//                var tmpDate = profile.createdAt
+//                var tmpDateList = tmpDate.split("년")
+//                var year = tmpDateList[0].toInt()
+//                tmpDateList = tmpDateList[1].split("월")
+//                var month = tmpDateList[0].toInt()
+//                tmpDateList = tmpDateList[1].split("일")
+//                var day = tmpDateList[0].toInt()
+//                joinDate = LocalDateTime.of(year,month,day,0,0,0)
+//                Log.d("feed",joinDate.toString())
                 //마이페이지가 처음 splash 되었을때 오늘날에 해당하는
                 //년, 월의 게시글 목록이 나옴
 
@@ -135,11 +159,14 @@ class MypageFragment: Fragment(){
                 response: Response<getFeedResponeData>
             ){
 
-                val tmpFeedList = response.body()?.result?.feedArray
-                if (tmpFeedList != null) {
+                var tmpFeedList = response.body()?.result?.feedArray
+                if (tmpFeedList!!.isNotEmpty()) {
                     for(item in tmpFeedList){
                         feedList.apply{add(item)}
                     }
+                }else{
+                    feedList.clear()
+                    Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
                 }
                 onInitRecyclerView()
             }
