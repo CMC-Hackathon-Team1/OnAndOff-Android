@@ -3,16 +3,24 @@ package com.onandoff.onandoff_android.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import android.widget.Toast
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.messaging.FirebaseMessaging
 import com.onandoff.onandoff_android.FragmentAdapter
 import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.api.notification.NotificationInterface
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.NotificationResponse
+import com.onandoff.onandoff_android.data.model.TokenData
 import com.onandoff.onandoff_android.databinding.ActivityMainBinding
 import com.onandoff.onandoff_android.presentation.home.HomeFragment
 import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
 import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
@@ -46,12 +54,33 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     }
 
     private fun initFirebase() {
+        val notificationInterface: NotificationInterface? = RetrofitClient.getClient()?.create(
+            NotificationInterface::class.java)
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
 
             val token = task.result
+            val tokenData = TokenData(token)
+            notificationInterface?.setAlarmTokenResponse(tokenData)?.enqueue(object :
+                Callback<NotificationResponse> {
+                override fun onResponse(
+                    call: Call<NotificationResponse>,
+                    response: Response<NotificationResponse>
+                ) {
+                    if (response.code() == 201){
+                        Toast.makeText(this@MainActivity, "Fcm token setting complete", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
 
         })
     }
