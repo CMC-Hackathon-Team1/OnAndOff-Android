@@ -1,6 +1,7 @@
 package com.onandoff.onandoff_android.presentation.look
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -28,6 +29,7 @@ import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.CategoryResponse
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.FragmentLookAroundBinding
+import com.onandoff.onandoff_android.presentation.home.otheruser.OtherUserFragment
 import com.onandoff.onandoff_android.presentation.look.viewmodel.LookAroundViewModel
 import gun0912.tedkeyboardobserver.TedKeyboardObserver
 import kotlinx.coroutines.launch
@@ -532,8 +534,10 @@ class LookAroundFragment : Fragment() {
 
     private fun onFeedProfileClick(feedData: LookAroundFeedData) {
         // TODO: 해당 데이터의 상세 페이지로 이동하기
-//        val intent = Intent(requireActivity(), OtherUserFragment::class.java)
-//        startActivity(intent)
+        val intent = OtherUserFragment.newInstance(feedData.feedId, feedData.profileId)
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.add(R.id.fcv_main, intent)?.commit()
+        Log.d("abcd", "onFeedProfileClick: ")
     }
 
     private fun onClickFollow(feedData: LookAroundFeedData) {

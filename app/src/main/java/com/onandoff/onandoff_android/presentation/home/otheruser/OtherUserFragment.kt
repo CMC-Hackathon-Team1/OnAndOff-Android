@@ -250,6 +250,20 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         })
     }
 
+
+    companion object {
+        private const val FEED_ID = "feed_id"
+        private const val PROFILE_ID = "profile_id"
+
+        fun newInstance(feedId: Int, profileId: Int): OtherUserFragment =
+            OtherUserFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(FEED_ID, feedId)
+                    putInt(PROFILE_ID, profileId)
+                }
+            }
+    }
+
     override fun onClick(v: View, feedId: Int) {
         val bottomSheetDialogFragment =
             BottomSheetLookAroundFeedOptionMenu.newInstance(feedId = feedId)
