@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -49,6 +50,9 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
     private var profileId by Delegates.notNull<Int>()
     private var otherUserId by Delegates.notNull<Int>()
     private var feedList = ArrayList<FeedResponseData>()
+    private var page: Int = 1
+    private var yearFeed: Int = 2023
+    private var monthFeed: String = "03"
 
     private val feedService = RetrofitClient.getClient()?.create(FeedInterface::class.java)
     override fun onCreateView(
@@ -63,7 +67,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         profileId = SharePreference.prefs.getSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, 0
         )
-        otherUserId = if(arguments?.getInt(PROFILE_ID) != null) {
+        otherUserId = if (arguments?.getInt(PROFILE_ID) != null) {
             arguments?.getInt(PROFILE_ID)!!
         } else {
             -1
@@ -74,7 +78,10 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         getProfileData()
         onInitRecyclerView()
         binding.backBtn.setOnClickListener {
-            activity?.supportFragmentManager?.popBackStack("otherUserFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            activity?.supportFragmentManager?.popBackStack(
+                "otherUserFragment",
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
         }
     }
 
@@ -91,6 +98,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
             monthFormat = "0${monthFormat}"
         }
 
+        page = 1
         getFeedData(year, monthFormat)
 
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
@@ -189,21 +197,19 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
     }
 
     private fun setupCalendar() {
-        val baseCalendar = BaseCalendar()
-
-        baseCalendar.initBaseCalendar {
-            onMonthChanged(it)
-        }
-
         calendarAdapter = CalendarAdapter(this)
         calendarAdapter.setItemClickListener(this)
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
         binding.fgCalDay.adapter = calendarAdapter
 
         binding.fgCalPre.setOnClickListener {
+            feedList.clear()
+            otherUserFeedListAdapter.removeItems()
             calendarAdapter.changeToPrevMonth()
         }
         binding.fgCalNext.setOnClickListener {
+            feedList.clear()
+            otherUserFeedListAdapter.removeItems()
             calendarAdapter.changeToNextMonth()
         }
     }
@@ -230,17 +236,23 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         binding.rvFeedList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Log.d(TAG, "onScrolled: ${(recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()}")
-                if ((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() == feedList.size - 1){
-                    otherUserFeedListAdapter.setItems(feedList)
-                    Log.d(TAG, "onScrolled: true")
+                var itemCount = binding.rvFeedList.adapter?.itemCount
+
+                if (itemCount != null && itemCount == 10) {
+                    if ((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() == itemCount - 1) {
+                        page += 1
+                        getFeedData(yearFeed, monthFeed)
+                    }
                 }
             }
         })
     }
 
     private fun getFeedData(year: Int, month: String) {
-        val call = feedService?.getOtherUserFeedListResponse(profileId, otherUserId, year, month, 1)
+        yearFeed = year
+        monthFeed = month
+        val call =
+            feedService?.getOtherUserFeedListResponse(profileId, otherUserId, year, month, page)
         call?.enqueue(object : Callback<getFeedListRespone> {
             override fun onResponse(
                 call: Call<getFeedListRespone>, response: Response<getFeedListRespone>
