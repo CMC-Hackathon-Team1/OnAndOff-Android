@@ -94,9 +94,11 @@ class PostingReadActivity : AppCompatActivity() {
 
             if(!likeImg) {
                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
+                binding.posting.textLikeCount.visibility = View.VISIBLE
 
             } else {
                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
+                binding.posting.textLikeCount.visibility = View.INVISIBLE
             }
         }
 
@@ -182,9 +184,12 @@ class PostingReadActivity : AppCompatActivity() {
                             likeImg = response.body()!!.isLike
                             if(response.body()!!.isLike) {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
+                                binding.posting.textLikeCount.visibility = View.VISIBLE
                             } else {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
+                                binding.posting.textLikeCount.visibility = View.INVISIBLE
                             }
+                            binding.posting.textLikeCount.text = response.body()!!.likeNum.toString()
                             val hashTagList = response.body()!!.hashTagList
                             var tagText = ""
                             if(hashTagList.isNotEmpty()) {
