@@ -193,10 +193,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
             }
         }
 
-        binding.ivAlarm.setOnClickListener {
-
-        }
-
         binding.ivSetting.setOnClickListener {
             mainActivity.getSupportFragmentManager()
                 .beginTransaction()
@@ -305,12 +301,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
 
     private fun setupCalendar() {
-        val baseCalendar = BaseCalendar()
-
-        baseCalendar.initBaseCalendar {
-            onMonthChanged(it)
-        }
-
         calendarAdapter = CalendarAdapter(this)
         calendarAdapter.setItemClickListener(this)
         binding.fgCalDay.layoutManager = GridLayoutManager(context, BaseCalendar.DAYS_OF_WEEK)
@@ -321,6 +311,10 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
         binding.fgCalNext.setOnClickListener {
             calendarAdapter.changeToNextMonth()
+        }
+        binding.containerCalendar.setOnClickListener {
+            calendarAdapter.changeToNextMonth()
+            calendarAdapter.changeToPrevMonth()
         }
     }
 
@@ -412,10 +406,10 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
                 when(response.code()) {
                     200 -> {
-                        val feedList = response.body()?.result
-                        Log.d("feedList", "onResponse: ${feedList?.size}")
-                        if (!feedList.isNullOrEmpty()) {
-                            calendarAdapter.setItems(feedList)
+                        val feeds = response.body()?.result
+                        Log.d("feedList", "onResponse: ${feeds?.size}")
+                        if (!feeds.isNullOrEmpty()) {
+                            calendarAdapter.setItems(feeds)
                         }
                     }
                 }
