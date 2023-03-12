@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
@@ -21,6 +22,7 @@ import com.onandoff.onandoff_android.databinding.FragmentOtherUserBinding
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
+import com.onandoff.onandoff_android.presentation.look.BottomSheetLookAroundFeedOptionMenu
 import com.onandoff.onandoff_android.presentation.mypage.MypageRVAdapter
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
@@ -34,7 +36,7 @@ import kotlin.properties.Delegates
 private const val TAG = "OtherUserFragment"
 
 class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
-    CalendarAdapter.OnItemClickListener {
+    CalendarAdapter.OnItemClickListener, OtherUserFeedListAdapter.OnItemClickListener {
     private var _binding: FragmentOtherUserBinding? = null
     private val binding
         get() = _binding!!
@@ -59,11 +61,11 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         profileId = SharePreference.prefs.getSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, 0
         )
-        otherUserId = 27
+        otherUserId = 29
         setupCalendar()
         setupFollowButton()
+        setupFollowStatus()
         getProfileData()
-        getFeedData()
         onInitRecyclerView()
     }
 
@@ -79,6 +81,8 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         if (month < 10) {
             monthFormat = "0${monthFormat}"
         }
+
+        getFeedData(year, monthFormat)
 
         val sdf = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         binding.fgCalMonth.text = sdf.format(calendar.time)
@@ -115,7 +119,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         val profileService: ProfileInterface? = RetrofitClient.getClient()?.create(
             ProfileInterface::class.java
         )
-        val call = profileService?.getMyProfile(profileId)
+        val call = profileService?.getMyProfile(otherUserId)
         call?.enqueue(object : Callback<getMyProfileResponse> {
             override fun onResponse(
                 call: Call<getMyProfileResponse>, response: Response<getMyProfileResponse>
@@ -131,6 +135,27 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         })
     }
 
+    private fun setupFollowStatus() {
+        val request = FollowRequest(profileId, otherUserId)
+        val call = feedService?.followStatusResponse(request)
+        call?.enqueue(object : Callback<LikeFollowResponse> {
+            override fun onResponse(
+                call: Call<LikeFollowResponse>, response: Response<LikeFollowResponse>
+            ) {
+                if (response.body()?.message == "Follow") {
+                    binding.followingBtn.setImageResource(R.drawable.ic_is_following)
+                } else {
+                    binding.followingBtn.setImageResource(R.drawable.ic_not_following)
+                }
+            }
+
+            override fun onFailure(call: Call<LikeFollowResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
     private fun setupFollowButton() {
         binding.followingBtn.setOnClickListener {
             val request = FollowRequest(profileId, otherUserId)
@@ -139,7 +164,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
                 override fun onResponse(
                     call: Call<LikeFollowResponse>, response: Response<LikeFollowResponse>
                 ) {
-                    if(response.body()?.message == "Follow") {
+                    if (response.body()?.message == "Follow") {
                         binding.followingBtn.setImageResource(R.drawable.ic_is_following)
                     } else {
                         binding.followingBtn.setImageResource(R.drawable.ic_not_following)
@@ -192,10 +217,21 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         binding.rvFeedList.layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.VERTICAL, true
         )
+        otherUserFeedListAdapter.setItemClickListener(this)
+        binding.rvFeedList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                Log.d(TAG, "onScrolled: ${(recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()}")
+                if ((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() == feedList.size - 1){
+                    otherUserFeedListAdapter.setItems(feedList)
+                    Log.d(TAG, "onScrolled: true")
+                }
+            }
+        })
     }
 
-    private fun getFeedData() {
-        val call = feedService?.getOtherUserFeedListResponse(profileId, otherUserId, 2023, "03", 1)
+    private fun getFeedData(year: Int, month: String) {
+        val call = feedService?.getOtherUserFeedListResponse(profileId, otherUserId, year, month, 1)
         call?.enqueue(object : Callback<getFeedListRespone> {
             override fun onResponse(
                 call: Call<getFeedListRespone>, response: Response<getFeedListRespone>
@@ -212,5 +248,11 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
                 Log.d(TAG, "fail")
             }
         })
+    }
+
+    override fun onClick(v: View, feedId: Int) {
+        val bottomSheetDialogFragment =
+            BottomSheetLookAroundFeedOptionMenu.newInstance(feedId = feedId)
+        bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
     }
 }

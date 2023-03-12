@@ -47,6 +47,11 @@ interface FeedInterface {
         @Body followRequest: FollowRequest
     ): Call<LikeFollowResponse>
 
+    @POST("/follow/test")
+    fun followStatusResponse(
+        @Body followRequest: FollowRequest
+    ): Call<LikeFollowResponse>
+
     @POST("/reports")
     suspend fun reportFeed(
         @Body reportFeedRequest: ReportFeedRequest
