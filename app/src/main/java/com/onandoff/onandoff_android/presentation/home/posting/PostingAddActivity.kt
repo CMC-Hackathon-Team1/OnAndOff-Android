@@ -42,7 +42,7 @@ import java.io.*
 
 
 class PostingAddActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityPostingAddBinding
+    private lateinit var binding: ActivityPostingAddBinding
     var categoryId = 0
 
     var imgFile: MultipartBody.Part? = null
@@ -55,11 +55,33 @@ class PostingAddActivity : AppCompatActivity() {
         setContentView(view)
         val profileId = intent.getIntExtra("profileId", -1)
 
-        binding.btnPostingAdd.setOnClickListener{
-            // 게시물 추가
-            addPosting(profileId)
+        binding.btnPostingAdd.setOnClickListener {
+            val hashTag = binding.textHashtag.text.toString()
+            var hashTagList = hashTag.split("#")
+            hashTagList = hashTagList.filter { it.isNotEmpty() }
+
+            val content = binding.textContent.text.toString()
+            val isSecret = when (binding.checkboxSecret.isChecked) {
+                false -> "PUBLIC"
+                true -> "PRIVATE"
+            }
+
+            if (profileId == -1) {
+                finish()
+            } else if (hashTagList.isEmpty()) {
+                Toast.makeText(this@PostingAddActivity, "해쉬태그를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else if (content.isEmpty() || content == "") {
+                Toast.makeText(this@PostingAddActivity, "피드의 내용을 입력해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (categoryId == 0) {
+                Toast.makeText(this@PostingAddActivity, "피드의 카테고리를 선택해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                // 게시물 추가
+                addPosting(profileId, hashTagList, content, isSecret)
+            }
         }
-        binding.ivCamera.setOnClickListener{
+        binding.ivCamera.setOnClickListener {
             showBottomSheet(this)
 
         }
@@ -67,12 +89,12 @@ class PostingAddActivity : AppCompatActivity() {
             // 이전으로
             val builder = AlertDialog.Builder(this)
             builder.setMessage("글 쓰기를 취소하시겠습니까?")
-                .setPositiveButton("네") { _, _ -> finish()}
-                .setNegativeButton("아니오") { _, _ ->}
+                .setPositiveButton("네") { _, _ -> finish() }
+                .setNegativeButton("아니오") { _, _ -> }
             builder.show()
         }
-        binding.btnCategory.setOnClickListener {
-            val bottomPostingCategoryFragment = PostingCategoryFragment{
+        binding.categoryLayout.setOnClickListener {
+            val bottomPostingCategoryFragment = PostingCategoryFragment {
                 when (it) {
                     1 -> binding.textCategory.text = "문화 및 예술"
                     2 -> binding.textCategory.text = "스포츠"
@@ -81,66 +103,71 @@ class PostingAddActivity : AppCompatActivity() {
                 }
                 categoryId = it
             }
-            bottomPostingCategoryFragment.show(supportFragmentManager,bottomPostingCategoryFragment.tag)
+            bottomPostingCategoryFragment.show(
+                supportFragmentManager,
+                bottomPostingCategoryFragment.tag
+            )
         }
     }
 
 
     /**
      *  val profiledId: Int,
-        val categoryId: Int,
-        val hashTagList: List<String>,
-        val content: String,
-        val isSecret: String
+    val categoryId: Int,
+    val hashTagList: List<String>,
+    val content: String,
+    val isSecret: String
      */
-    private fun addPosting(profileId: Int){
-        val hashTag = binding.textHashtag.text.toString()
-        var hashTagList = hashTag.split(" ", "#")
-        hashTagList = hashTagList.filter { it.isNotEmpty() }
-
-        val content = binding.textContent.text.toString()
-        val isSecret = when(binding.checkboxSecret.isChecked) {
-            false -> "PUBLIC"
-            true -> "PRIVATE"
-        }
-
-        val formProfileId = FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
-        // TODO:CategoryId <- API List에서 가져와서 처리해야함
-        val formCategroyId = FormDataUtil.getBody("categoryId", 3)    // 2-way binding 되어 있는 LiveData
+    private fun addPosting(
+        profileId: Int,
+        hashTagList: List<String>,
+        content: String,
+        isSecret: String
+    ) {
+        val formProfileId =
+            FormDataUtil.getBody("profileId", profileId)       // 2-way binding 되어 있는 LiveData
+        val formCategoryId =
+            FormDataUtil.getBody("categoryId", categoryId)    // 2-way binding 되어 있는 LiveData
         val formHasTagList = ArrayList<MultipartBody.Part>()
         for (item in hashTagList) {
             formHasTagList.add(FormDataUtil.getBody("hashTagList", item))
         }
         val formContent = FormDataUtil.getBody("content", content)
-    // 2-way binding 되어 있는 LiveData
-        val formIsSecret = FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
+        // 2-way binding 되어 있는 LiveData
+        val formIsSecret =
+            FormDataUtil.getBody("isSecret", isSecret)    // 2-way binding 되어 있는 LiveData
 
-        Log.d("gallery","$imgFile")
 
-
-        val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
+        val feedInterface: FeedInterface? =
+            RetrofitClient.getClient()?.create(FeedInterface::class.java)
         var call = imgFile?.let {
-            feedInterface?.addFeedResponse(formProfileId,formCategroyId,formHasTagList,
-                it,formContent,formIsSecret)
-        }?: run {
-            feedInterface?.addFeedResponse(formProfileId,formCategroyId,formHasTagList,
-                null,formContent,formIsSecret)
+            feedInterface?.addFeedResponse(
+                formProfileId, formCategoryId, formHasTagList,
+                it, formContent, formIsSecret
+            )
+        } ?: run {
+            feedInterface?.addFeedResponse(
+                formProfileId, formCategoryId, formHasTagList,
+                null, formContent, formIsSecret
+            )
         }
 
         call?.enqueue(object : Callback<FeedResponse> {
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
-                when(response.code()) {
+                when (response.code()) {
                     200 -> {
                         Log.d("addFeed", "onResponse: Success + ${response.body()!!.message}")
-                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT)
+                            .show()
                         finish()
                     }
                     201 -> {
                         Log.d("addFeed", "onResponse: Success + ${response.body()!!.message}")
-                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PostingAddActivity, "게시글 작성 완료!", Toast.LENGTH_SHORT)
+                            .show()
                         finish()
                     }
-                    else-> Log.d("addFeed", "${response.code()} , ${response.body()!!.message}")
+                    else -> Log.d("addFeed", "${response.code()} , ${response.body()!!.message}")
 
                 }
             }
@@ -151,23 +178,24 @@ class PostingAddActivity : AppCompatActivity() {
 
         })
     }
+
     //갤러리, 기본이미지 변경여부 체크
-    private fun showBottomSheet(context: Context){
+    private fun showBottomSheet(context: Context) {
         val dialog = BottomSheetDialog(context)
         val dialogView = BottomsheetSelectPostImageBinding.inflate(LayoutInflater.from(context))
 
         dialog.setContentView(dialogView.root)
 
         dialog.show()
-        dialogView.layoutGallery.setOnClickListener{
-            if(checkPermission(STORAGE_PERMISSION, FLAG_PERM_STORAGE) ){
+        dialogView.layoutGallery.setOnClickListener {
+            if (checkPermission(STORAGE_PERMISSION, FLAG_PERM_STORAGE)) {
                 move_gallery()
             }
             dialog.dismiss()
         }
-        dialogView.layoutCamera.setOnClickListener{
-            Log.d("image","Camera")
-            if(checkPermission(CAMERA_PERMISSION, FLAG_PERM_CAMERA) ){
+        dialogView.layoutCamera.setOnClickListener {
+            Log.d("image", "Camera")
+            if (checkPermission(CAMERA_PERMISSION, FLAG_PERM_CAMERA)) {
                 move_camera()
             }
             dialog.dismiss()
@@ -187,6 +215,7 @@ class PostingAddActivity : AppCompatActivity() {
         photoPickerIntent.type = MediaStore.Images.Media.CONTENT_TYPE
         startActivityForResult(photoPickerIntent, FLAG_PERM_STORAGE)
     }
+
     fun checkPermission(permissions: Array<out String>, flag: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             for (permission in permissions) {
@@ -203,12 +232,13 @@ class PostingAddActivity : AppCompatActivity() {
         }
         return true
     }
+
     // 촬영한 사진을 파일로 저장
     fun saveImageToFile(bitmap: Bitmap): File {
         val filename = "image_${System.currentTimeMillis()}.png"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val imageFile = File(storageDir, filename)
-        Log.d("camera","$filename ${imageFile.path}")
+        Log.d("camera", "$filename ${imageFile.path}")
         val outputStream = FileOutputStream(imageFile)
         bitmap.compress(Bitmap.CompressFormat.PNG, 30, outputStream)
         outputStream.flush()
@@ -219,45 +249,58 @@ class PostingAddActivity : AppCompatActivity() {
     fun uriToMultipartBody(context: Context, uri: Uri): File {
         val inputStream = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
-       val imgFile =  saveImageToFile(bitmap)
+        val imgFile = saveImageToFile(bitmap)
         return imgFile
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("gallery","req=$requestCode, result = $resultCode, data =$data")
-        if(resultCode== Activity.RESULT_OK){
-            when(requestCode){
+        Log.d("gallery", "req=$requestCode, result = $resultCode, data =$data")
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
                 //Gallery- 저장소 권한 Flag일때
-                FLAG_PERM_STORAGE ->{
+                FLAG_PERM_STORAGE -> {
                     val uri = data?.data // 선택한 이미지의 Uri 객체
                     binding.ivCamera.setImageURI(uri)
-                    val filePath = uri?.let { getPathFromUri(it) }
-                    val file = File(filePath)
-                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                    Log.d("gallery","${File(file?.path).length()}")
-                    val body = MultipartBody.Part.createFormData("images", file.name, requestFile)
-                    imgFile = body
-                    Log.d("gallery","${imgFile?.body?.contentType()}")
+                    val file = uri?.let { uriToMultipartBody(this@PostingAddActivity, it) }
+                    Log.d("gallery", "${File(file?.path).length()}")
+//                    val file = File(filePath)
+//
+//                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+//                    imgFile = body
+                    val requestFile =
+                        file?.let { RequestBody.create("image/*".toMediaTypeOrNull(), it) }
+                    imgFile =
+                        requestFile?.let {
+                            MultipartBody.Part.createFormData(
+                                "images", file.name,
+                                it
+                            )
+                        }
+                    Log.d("gallery", "${imgFile}")
                 }
-                FLAG_REQ_CAMERA ->{
-                  if (data?.extras?.get("data") != null) {
+                FLAG_REQ_CAMERA -> {
+                    if (data?.extras?.get("data") != null) {
                         //카메라로 방금 촬영한 이미지를 미리 만들어 놓은 이미지뷰로 전달 합니다.
                         val bitmap = data?.extras?.get("data") as Bitmap
                         binding.ivCamera.setImageBitmap(bitmap)
-                      val file = saveImageToFile(bitmap)
-                      Log.d("Camera","${file::class.simpleName}")
-                      val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-                      imgFile = MultipartBody.Part.createFormData("images", file.name, requestFile)
+                        val file = saveImageToFile(bitmap)
+                        Log.d("Camera", "${file::class.simpleName}")
+                        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                        imgFile =
+                            MultipartBody.Part.createFormData("images", file.name, requestFile)
                     }
                 }
             }
         }
     }
+
     private fun getPathFromUri(uri: Uri): String {
         val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null) ?: return uri.path ?: ""
+        val cursor =
+            contentResolver.query(uri, projection, null, null, null) ?: return uri.path ?: ""
         val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
         val path = cursor.getString(columnIndex)
@@ -274,7 +317,7 @@ class PostingAddActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             FLAG_PERM_CAMERA -> {
-                Log.d("permission","2")
+                Log.d("permission", "2")
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "저장소 권한을 승인하지않으면 앱을 실행할수없습니다", Toast.LENGTH_SHORT)
@@ -287,7 +330,7 @@ class PostingAddActivity : AppCompatActivity() {
 
             }
             FLAG_PERM_STORAGE -> {
-                Log.d("permission","2")
+                Log.d("permission", "2")
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "카메라 권한을 승인하지않으면 앱을 실행할수없습니다", Toast.LENGTH_SHORT)

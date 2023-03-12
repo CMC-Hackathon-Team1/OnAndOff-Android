@@ -11,10 +11,11 @@
 
     <ImageButton
         android:id="@+id/btn_posting_read_out"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="28dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="#00ff0000"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:contentDescription="@string/btn_out"
         app:layout_constraintBottom_toBottomOf="@+id/btn_posting_read_dots"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,13 +25,14 @@
 
     <ImageButton
         android:id="@+id/btn_posting_read_dots"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="#00ff0000"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/btn_category"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_dots" />
 

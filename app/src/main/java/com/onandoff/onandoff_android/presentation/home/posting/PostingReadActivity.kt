@@ -17,7 +17,10 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.FeedSimpleData
 import com.onandoff.onandoff_android.data.model.FeedReadData
 import com.onandoff.onandoff_android.data.model.FeedResponse
+import com.onandoff.onandoff_android.data.model.LikeFollowResponse
+import com.onandoff.onandoff_android.data.request.FollowRequest
 import com.onandoff.onandoff_android.databinding.ActivityPostingReadBinding
+import com.onandoff.onandoff_android.presentation.look.BottomSheetLookAroundFeedOptionMenu
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,8 +30,10 @@ class PostingReadActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPostingReadBinding
     private val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
     var profileId by Delegates.notNull<Int>()
+    var otherUserId by Delegates.notNull<Int>()
     var feedId by Delegates.notNull<Int>()
     var likeImg by Delegates.notNull<Boolean>()
+    var followImg by Delegates.notNull<Boolean>()
     private lateinit var imageAdapter: PostingImageAdapter
 
 
@@ -39,8 +44,15 @@ class PostingReadActivity : AppCompatActivity() {
 
         setContentView(view)
 
-        profileId = intent.getIntExtra("profileId",0)
-        feedId = intent.getIntExtra("feedId",0)
+        profileId = intent.getIntExtra("profileId",-1)
+        otherUserId = intent.getIntExtra("otherUserId",-1)
+        feedId = intent.getIntExtra("feedId",-1)
+        if(profileId == -1 || feedId == -1) finish()
+        if (otherUserId == -1) {
+            binding.posting.imageFollow.visibility = View.GONE
+        } else {
+            binding.posting.imageFollow.visibility = View.VISIBLE
+        }
         readPost(profileId, feedId)
         init()
     }
@@ -55,31 +67,76 @@ class PostingReadActivity : AppCompatActivity() {
             finish()
         }
         binding.btnPostingReadDots.setOnClickListener {
-            val bottomPostingOptionFragment = PostingOptionFragment{
-                when(it) {
-                    1 -> {
-                        val intent = Intent(this, PostingModifyActivity::class.java)
-                        intent.putExtra("profileId", profileId)
-                        intent.putExtra("feedId", feedId)
-                        startActivity(intent)
-                    }
-                    0 -> {
-                        showDeleteDialog()
+            if(otherUserId == -1) {
+                val bottomPostingOptionFragment = PostingOptionFragment{
+                    when(it) {
+                        1 -> {
+                            val intent = Intent(this, PostingModifyActivity::class.java)
+                            intent.putExtra("profileId", profileId)
+                            intent.putExtra("feedId", feedId)
+                            startActivity(intent)
+                        }
+                        0 -> {
+                            showDeleteDialog()
+                        }
                     }
                 }
+                bottomPostingOptionFragment.show(supportFragmentManager, bottomPostingOptionFragment.tag)
+            } else {
+                val bottomSheetDialogFragment =
+                    BottomSheetLookAroundFeedOptionMenu.newInstance(feedId = feedId)
+                bottomSheetDialogFragment.show(supportFragmentManager, bottomSheetDialogFragment.tag)
             }
-            bottomPostingOptionFragment.show(supportFragmentManager, bottomPostingOptionFragment.tag)
         }
+
         binding.posting.imageLike.setOnClickListener {
             clickLike(profileId, feedId)
 
             if(!likeImg) {
                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
+                binding.posting.textLikeCount.visibility = View.VISIBLE
 
             } else {
                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
+                binding.posting.textLikeCount.visibility = View.INVISIBLE
             }
         }
+
+        setupFollowStatus()
+
+        binding.posting.imageFollow.setOnClickListener {
+            clickFollow(profileId, otherUserId)
+
+            if(!followImg) {
+                binding.posting.imageFollow.setImageResource(R.drawable.ic_is_following)
+
+            } else {
+                binding.posting.imageFollow.setImageResource(R.drawable.ic_not_following)
+            }
+        }
+    }
+
+    private fun setupFollowStatus() {
+        val request = FollowRequest(profileId, otherUserId)
+        val call = feedInterface?.followStatusResponse(request)
+        call?.enqueue(object : Callback<LikeFollowResponse> {
+            override fun onResponse(
+                call: Call<LikeFollowResponse>, response: Response<LikeFollowResponse>
+            ) {
+                followImg = if (response.body()?.message == "Follow") {
+                    binding.posting.imageFollow.setImageResource(R.drawable.ic_is_following)
+                    true
+                } else {
+                    binding.posting.imageFollow.setImageResource(R.drawable.ic_not_following)
+                    false
+                }
+            }
+
+            override fun onFailure(call: Call<LikeFollowResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun clickLike(profileId: Int, feedId: Int) {
@@ -98,6 +155,23 @@ class PostingReadActivity : AppCompatActivity() {
 
         })
     }
+
+    private fun clickFollow(profileId: Int, otherUserId: Int) {
+        val feedSimpleData = FollowRequest(profileId, otherUserId)
+        val call = feedInterface?.followResponse(feedSimpleData)
+        call?.enqueue(object : Callback<LikeFollowResponse> {
+            override fun onResponse(call: Call<LikeFollowResponse>, response: Response<LikeFollowResponse>) {
+                if (response.body() != null) {
+                    followImg = response.body()!!.message == "Follow"
+                }
+            }
+
+            override fun onFailure(call: Call<LikeFollowResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
     private fun readPost(profileId: Int, feedId: Int){
         val call = feedInterface?.readFeedResponse(feedId, profileId)
         call?.enqueue(object : Callback<FeedReadData> {
@@ -110,14 +184,20 @@ class PostingReadActivity : AppCompatActivity() {
                             likeImg = response.body()!!.isLike
                             if(response.body()!!.isLike) {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_full)
+                                binding.posting.textLikeCount.visibility = View.VISIBLE
                             } else {
                                 binding.posting.imageLike.setImageResource(R.drawable.ic_heart_mono)
+                                binding.posting.textLikeCount.visibility = View.INVISIBLE
                             }
+                            binding.posting.textLikeCount.text = response.body()!!.likeNum.toString()
                             val hashTagList = response.body()!!.hashTagList
                             var tagText = ""
-                            for (tag in hashTagList) {
-                                tagText = "#$tag $tagText "
+                            if(hashTagList.isNotEmpty()) {
+                                for (tag in hashTagList) {
+                                    tagText = "#$tag $tagText "
+                                }
                             }
+
                             binding.posting.textHashtag.text = tagText
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName

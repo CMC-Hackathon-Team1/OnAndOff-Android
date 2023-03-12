@@ -99,5 +99,6 @@ data class FeedReadData(
     val feedContent: String,
     val profileImg: String,
     val createdAt: String,
-    val isLike: Boolean
+    val isLike: Boolean,
+    val likeNum : Int
 )
