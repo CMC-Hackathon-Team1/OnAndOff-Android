@@ -11,7 +11,9 @@ import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.FeedResponse
 import com.onandoff.onandoff_android.data.model.FeedResponseData
 import com.onandoff.onandoff_android.data.model.FeedSimpleData
+import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
+import com.onandoff.onandoff_android.presentation.look.BottomSheetLookAroundFeedOptionMenu
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
@@ -23,6 +25,7 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("NotifyDataSetChanged")
 class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : RecyclerView.Adapter<OtherUserFeedListAdapter.OtherUserFeedListViewHolder>() {
 
+    private lateinit var itemClickListener : OnItemClickListener
     inner class OtherUserFeedListViewHolder(val binding: ItemMypageUserfeedBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(write: FeedResponseData){
             binding.tvMypageRvItemPostText.text = write.feedContent
@@ -62,6 +65,10 @@ class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : 
 
                     })
             }
+
+            binding.ivMypageRvItemMore.setOnClickListener {
+                itemClickListener.onClick(itemView, write.feedId)
+            }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserFeedListViewHolder {
@@ -75,12 +82,21 @@ class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : 
 
     override fun getItemCount(): Int = feedList.size
 
+
+    interface OnItemClickListener {
+        fun onClick(v: View, feedId: Int)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
     override fun getItemViewType(position: Int): Int {
         return position
     }
 
     fun setItems(item: List<FeedResponseData>) {
-        feedList = item
+        feedList = feedList + item
         notifyDataSetChanged()
     }
 }
