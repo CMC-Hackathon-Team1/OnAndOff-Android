@@ -99,4 +99,9 @@ class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : 
         feedList = feedList + item
         notifyDataSetChanged()
     }
+
+    fun removeItems() {
+        feedList = emptyList()
+        notifyDataSetChanged()
+    }
 }
