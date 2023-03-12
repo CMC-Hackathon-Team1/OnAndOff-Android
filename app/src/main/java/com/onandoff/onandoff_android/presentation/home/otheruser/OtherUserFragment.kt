@@ -61,7 +61,11 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         profileId = SharePreference.prefs.getSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, 0
         )
-        otherUserId = 29
+        otherUserId = if(arguments?.getInt(PROFILE_ID) != null) {
+            arguments?.getInt(PROFILE_ID)!!
+        } else {
+            -1
+        }
         setupCalendar()
         setupFollowButton()
         setupFollowStatus()
