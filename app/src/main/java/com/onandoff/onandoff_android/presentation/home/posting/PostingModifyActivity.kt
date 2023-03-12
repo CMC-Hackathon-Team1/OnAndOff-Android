@@ -158,7 +158,7 @@ class PostingModifyActivity : AppCompatActivity() {
                     val file = File(filePath)
                     val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
 //                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                    val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                    val body = MultipartBody.Part.createFormData("images", file.name, requestFile)
                     imgFile = body
 
                     Log.d("gallery","${imgFile}")
