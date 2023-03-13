@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:context=".presentation.home.posting.PostingOptionFragment">
+
+    <TextView
+        android:id="@+id/title_posting_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="21dp"
+        android:gravity="center"
+        android:text="@string/posting_option"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/btn_modify"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="19dp"
+        android:background="#00ff0000"
+        android:gravity="center_vertical"
+        android:text="@string/modify"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_posting_option" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginStart="64dp"
+        android:background="#00ff0000"
+        android:gravity="center_vertical"
+        android:text="@string/delete"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_modify" />
+
+    <View
+        android:id="@+id/view_line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginRight="10dp"
+        android:background="#DDDDDD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_modify" />
+
+
+    <ImageView
+        android:id="@+id/image_modify"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="28dp"
+        android:contentDescription="@string/modify"
+        app:layout_constraintEnd_toStartOf="@+id/btn_modify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_posting_option_out"
+        app:srcCompat="@drawable/pencil" />
+
+    <ImageView
+        android:id="@+id/image_delete"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="84dp"
+        android:contentDescription="@string/delete"
+        app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_posting_option_out"
+        app:srcCompat="@drawable/redx" />
+
+    <ImageButton
+        android:id="@+id/btn_posting_option_out"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="28dp"
+        android:background="#00ff0000"
+        android:contentDescription="@string/btn_out"
+        app:layout_constraintBottom_toBottomOf="@+id/title_posting_option"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_posting_option"
+        app:srcCompat="@drawable/close" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

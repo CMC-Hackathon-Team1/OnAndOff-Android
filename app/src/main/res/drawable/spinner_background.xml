@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="8dp" />
+    <solid android:color="?android:colorBackground" />
+</shape>
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item-->
+<!--        android:start="40dp"-->
+<!--        android:top="-15dp"> &lt;!&ndash; How to make this 50% of height? &ndash;&gt;-->
+<!--        <rotate-->
+<!--            android:fromDegrees="45"-->
+<!--            android:toDegrees="0"-->
+<!--            android:pivotX="9%"-->
+<!--            android:pivotY="0%"> &lt;!&ndash; How to make the triangle more acute? &ndash;&gt;-->
+<!--            <shape-->
+<!--                android:shape="rectangle" >-->
+<!--                <solid-->
+<!--                    android:color="@color/white"/>-->
+<!--            </shape>-->
+<!--        </rotate>-->
+<!--    </item>-->
+
+<!--    <item-->
+<!--        android:top="0dp">-->
+<!--        <shape-->
+<!--            android:shape="rectangle">-->
+<!--            <solid-->
+<!--                android:color="@color/white"/>-->
+<!--            <corners-->
+<!--                android:radius="8dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</layer-list>-->
+
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item-->
+<!--        android:id="@+id/triangle"-->
+<!--        android:start="0dp"-->
+<!--        android:top="0dp"> &lt;!&ndash; How to make this 50% of height? &ndash;&gt;-->
+<!--        <rotate-->
+<!--            android:fromDegrees="45"-->
+<!--            android:toDegrees="0"-->
+<!--            android:pivotX="50%"-->
+<!--            android:pivotY="50%"> &lt;!&ndash; How to make the triangle more acute? &ndash;&gt;-->
+<!--            <shape-->
+<!--                android:shape="rectangle">-->
+<!--                <size-->
+<!--                    android:width="100dp" android:height="100dp"/>-->
+<!--                <solid-->
+<!--                    android:color="@color/white"/>-->
+<!--            </shape>-->
+<!--        </rotate>-->
+<!--    </item>-->
+
+<!--    <item-->
+<!--        android:id="@+id/rectangle"-->
+<!--        android:top="0dp">-->
+<!--        <shape-->
+<!--            android:shape="rectangle">-->
+<!--            <solid-->
+<!--                android:color="@color/white"/>-->
+<!--            <corners-->
+<!--                android:radius="25dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</layer-list>-->
+
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item-->
+<!--        android:bottom="2dp"-->
+<!--        android:left="10dp"-->
+<!--        android:right="10dp"-->
+<!--        >-->
+<!--        <rotate-->
+<!--            android:toDegrees="45"-->
+<!--            android:fromDegrees="45"-->
+<!--            android:pivotX="20%"-->
+<!--            android:pivotY="18%">-->
+
+<!--            <vector-->
+<!--                android:width="10dp"-->
+<!--                android:height="24dp" />-->
+<!--        </rotate>-->
+<!--    </item>-->
+
+<!--    <item-->
+<!--        android:top="0dp">-->
+<!--        <shape-->
+<!--            android:shape="rectangle">-->
+<!--            <solid-->
+<!--                android:color="@color/white"/>-->
+<!--            <corners-->
+<!--                android:radius="8dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</layer-list>-->

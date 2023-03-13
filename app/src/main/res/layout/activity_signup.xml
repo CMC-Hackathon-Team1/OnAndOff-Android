@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="31dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/iv_back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp"
+        android:layout_marginTop="45dp"
+        >
+        <TextView
+            android:id="@+id/tv_signup_email_header"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="이메일"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"
+            android:layout_weight = "0"
+            />
+        <EditText
+            android:id="@+id/et_signup_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_weight = "1"
+            />
+        <ImageView
+            android:id="@+id/btn_email_reset"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_16"
+            android:layout_weight = "0"
+            />
+    </LinearLayout>
+    <View
+        android:id="@+id/tv_signin_email_error_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#9A9A9A"/>
+    <TextView
+        android:id="@+id/tv_signin_email_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_fifth"
+        android:textSize="10sp"
+        android:text="인증번호를 받기위해 정확한 이메일 주소를 입력해주세요."
+        android:textStyle="bold"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp">
+
+        <TextView
+            android:id="@+id/tv_signup_password_header"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:text="비밀번호"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_weight = "0"/>
+
+        <EditText
+            android:id="@+id/et_signup_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_weight = "1"
+            android:inputType="textPassword"
+            />
+        <ImageView
+            android:id="@+id/btn_password_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_eye_close_16"
+            android:layout_weight = "0"/>
+        <ImageView
+            android:id="@+id/btn_password_reset"
+            android:layout_marginStart="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_16"
+            android:layout_weight = "0"
+            />
+    </LinearLayout>
+    <View
+        android:id="@+id/tv_signin_password_error_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#9A9A9A"/>
+    <TextView
+        android:id="@+id/tv_signin_password_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_fifth"
+        android:textSize="10sp"
+        android:text="영문, 숫자, 특수문자 포함 8글자 이상"
+        android:textStyle="bold"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="9dp">
+        <TextView
+            android:id="@+id/tv_signup_password_header2"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="비밀번호 확인"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="16dp"
+            android:layout_weight = "0"
+            />
+        <EditText
+            android:id="@+id/et_signup_password_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_weight = "1"
+            android:inputType="textPassword"
+            />
+        <ImageView
+            android:id="@+id/btn_password_repeat_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_eye_close_16"
+            android:layout_weight = "0"
+            />
+        <ImageView
+            android:id="@+id/btn_password_repeat_reset"
+            android:layout_marginStart="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_16"
+            android:layout_weight = "0"
+
+            />
+    </LinearLayout>
+    <View
+        android:id="@+id/tv_signin_password_same_error_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#9A9A9A"/>
+    <TextView
+        android:id="@+id/tv_signin_password_same_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_fifth"
+        android:textSize="10sp"
+        android:text="영문, 숫자, 특수문자 포함 8글자 이상"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:background="@drawable/button_disable"
+        android:id="@+id/bt_singup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:paddingVertical="14dp"
+        android:textStyle="bold"
+        android:layout_marginTop="72dp"
+        />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
