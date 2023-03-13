@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.R
@@ -19,6 +20,7 @@ import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
+import com.onandoff.onandoff_android.presentation.home.posting.PostingImageAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingModifyActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingOptionFragment
 import com.onandoff.onandoff_android.util.APIPreferences
@@ -34,22 +36,22 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
    var profileId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_USERID,0)
     var fragmentManager:FragmentManager = fragmentManager
     private val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
-
+    private lateinit var imageAdapter: PostingImageAdapter
     inner class MypageViewHolder(val binding:ItemMypageUserfeedBinding):RecyclerView.ViewHolder(binding.root) {
         fun bind(write: FeedResponseData) {
-//                binding.feedListItem = write
+            imageAdapter = PostingImageAdapter()
+            binding.ivMypageRvItemPostImg.layoutManager = LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
+            binding.ivMypageRvItemPostImg.adapter = imageAdapter
             binding.tvMypageRvItemPostText.text = write.feedContent
-            binding.tvMypageRvItemDate.text =
-                write.createdAt.substring(0, 4) + '/' + write.createdAt.substring(
-                    5,
-                    7
-                ) + '/' + write.createdAt.substring(8, 10)
+            binding.tvMypageRvItemDate.text = write.createdAt.substring(0,4)+'/'+write.createdAt.substring(5,7)+'/'+write.createdAt.substring(8,10)
             binding.tvMypageRvItemLike.text = write.likeNum.toString()
-            if (write.feedImgList.isNotEmpty()) {
-                Glide.with(context).load(write.feedImgList[0]).into(binding.ivMypageRvItemPostImg)
-            } else {
+            if(write.feedImgList.isEmpty()) {
                 binding.ivMypageRvItemPostImg.visibility = View.GONE
+            } else {
+                imageAdapter.setItems(write.feedImgList)
+                imageAdapter.notifyDataSetChanged()
             }
+            Log.d("feed","그려짐..?")
             binding.ivMypageRvItemMore.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putInt("feedId", write.feedId)

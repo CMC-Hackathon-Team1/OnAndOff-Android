@@ -26,7 +26,6 @@ import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
 import com.onandoff.onandoff_android.presentation.look.BottomSheetLookAroundFeedOptionMenu
-import com.onandoff.onandoff_android.presentation.mypage.MypageRVAdapter
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
 import retrofit2.Call
