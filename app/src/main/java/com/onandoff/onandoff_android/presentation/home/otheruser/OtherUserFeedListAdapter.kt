@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
@@ -34,6 +35,13 @@ class OtherUserFeedListAdapter(private var feedList : List<FeedResponseData>) : 
             imageAdapter = PostingImageAdapter()
             binding.ivMypageRvItemPostImg.layoutManager = LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
             binding.ivMypageRvItemPostImg.adapter = imageAdapter
+
+            if(write.feedImgList.isEmpty()) {
+                binding.ivMypageRvItemPostImg.visibility = View.GONE
+            } else {
+                imageAdapter.setItems(write.feedImgList)
+                imageAdapter.notifyDataSetChanged()
+            }
 
             binding.tvMypageRvItemPostText.text = write.feedContent
             binding.tvMypageRvItemDate.text = write.createdAt.split("T")[0].replace("-","/")
