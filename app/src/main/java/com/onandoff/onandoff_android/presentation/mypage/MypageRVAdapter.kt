@@ -1,47 +1,86 @@
 package com.onandoff.onandoff_android.presentation.mypage
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
-import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
-import com.onandoff.onandoff_android.data.request.LikeRequest
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
+import com.onandoff.onandoff_android.presentation.home.posting.PostingModifyActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingOptionFragment
 import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_USERID
 import com.onandoff.onandoff_android.util.SharePreference
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,private val context: Context):RecyclerView.Adapter<MypageRVAdapter.MypageViewHolder>() {
-    inner class MypageViewHolder(val binding:ItemMypageUserfeedBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(write: FeedResponseData){
+class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,private val context: Context,fragmentManager: FragmentManager):RecyclerView.Adapter<MypageRVAdapter.MypageViewHolder>() {
+    var feedId:Int = 0
+   var profileId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_USERID,0)
+    var fragmentManager:FragmentManager = fragmentManager
+    private val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
+
+    inner class MypageViewHolder(val binding:ItemMypageUserfeedBinding):RecyclerView.ViewHolder(binding.root) {
+        fun bind(write: FeedResponseData) {
 //                binding.feedListItem = write
             binding.tvMypageRvItemPostText.text = write.feedContent
-            binding.tvMypageRvItemDate.text = write.createdAt.substring(0,4)+'/'+write.createdAt.substring(5,7)+'/'+write.createdAt.substring(8,10)
+            binding.tvMypageRvItemDate.text =
+                write.createdAt.substring(0, 4) + '/' + write.createdAt.substring(
+                    5,
+                    7
+                ) + '/' + write.createdAt.substring(8, 10)
             binding.tvMypageRvItemLike.text = write.likeNum.toString()
-            if(write.feedImgList.isNotEmpty()){
+            if (write.feedImgList.isNotEmpty()) {
                 Glide.with(context).load(write.feedImgList[0]).into(binding.ivMypageRvItemPostImg)
-            }else{
+            } else {
                 binding.ivMypageRvItemPostImg.visibility = View.GONE
             }
-            binding.ivMypageRvItemMore.setOnClickListener{
+            binding.ivMypageRvItemMore.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putInt("feedId", write.feedId)
-//                supportFragmentManager.beginTransaction().show(PostingOptionFragment).commit()
+                feedId = write.feedId
+                val bottomPostingOptionFragment = PostingOptionFragment {
+                    when (it) {
+                        1 -> {
+                            var intent:Intent = Intent(context, PostingModifyActivity::class.java)
+                            intent.putExtra("profileId",profileId )
+                            intent.putExtra("feedId", feedId)
+                            startActivity(context,intent,bundle)
+                        }
+                        0 -> {
+                            showDeleteDialog()
+                        }
+                    }
+                }
+                try {
+                    bottomPostingOptionFragment.show(
+                        fragmentManager,
+                        bottomPostingOptionFragment.tag
+                    )
+                } catch (e: Exception) {
+                    Log.d("hh","${e}")
+                }
 
             }
+
+
+
+
             var isLike = write.isLike
             if(write.isLike){
                 binding.ivMypageRvItemLike.setImageResource(R.drawable.ic_heart_full)
@@ -107,6 +146,47 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
                 Log.d("mypage","$t")
 
             }
+        })
+    }
+    private fun showDeleteDialog() {
+        val dialog = AlertDialog.Builder(context)
+        dialog.setTitle("Feed Delete")
+        dialog.setMessage("이 글을 정말로 삭제하시겠습니까?")
+
+        val dialogListener = DialogInterface.OnClickListener { _, p1 ->
+            when(p1){
+                DialogInterface.BUTTON_POSITIVE -> {
+                    deleteFeed()
+                }
+                DialogInterface.BUTTON_NEGATIVE -> Log.d("Dialog","다이얼로그 닫기!")
+            }
+        }
+
+        dialog.setPositiveButton("삭제",dialogListener)
+        dialog.setNegativeButton("취소",dialogListener)
+        dialog.show()
+    }
+
+    private fun deleteFeed(){
+        val feedSimpleData = FeedSimpleData(profileId, feedId)
+
+        val call = feedInterface?.deleteFeedResponse(feedSimpleData)
+        call?.enqueue(object : Callback<FeedResponse>{
+            override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
+                when(response.code()) {
+                    200 -> {
+                        Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<FeedResponse>, t: Throwable) {
+                // TODO("Not yet implemented")
+            }
+
         })
     }
 }

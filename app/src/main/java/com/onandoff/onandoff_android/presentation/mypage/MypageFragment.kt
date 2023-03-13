@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
@@ -30,6 +31,7 @@ import java.util.*
 
 class MypageFragment: Fragment(){
     private lateinit var binding: FragmentMypageBinding
+    private lateinit var mFragmentManager : FragmentManager
     private var writeList = ArrayList<MyPosting>()
     private val TAG = "Mypage"
     lateinit var profile:ProfileListResultResponse
@@ -108,6 +110,8 @@ class MypageFragment: Fragment(){
 
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
+        mFragmentManager = childFragmentManager
+
     }
     private fun setupView(){
 
@@ -227,7 +231,7 @@ class MypageFragment: Fragment(){
     }
     private fun onInitRecyclerView(){
         Log.d("feed","RecyclerView init")
-        val mypageRVAdapter = MypageRVAdapter(feedList, mainActivity)
+        val mypageRVAdapter = MypageRVAdapter(feedList, mainActivity,mFragmentManager)
         binding.rvProfileList.adapter = mypageRVAdapter;
         binding.rvProfileList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true)
         Log.d("feed","${feedList.size}")
@@ -244,8 +248,6 @@ class MypageFragment: Fragment(){
                         (binding.rvProfileList.getLayoutManager() as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     val itemTotalCount: Int = itemCount - 1
                     if (lastVisibleItemPosition == itemTotalCount ) {
-                        Toast.makeText(mainActivity, "Last Position", Toast.LENGTH_SHORT).show()
-                        Log.d("page", itemCount.toString())
                         callbacks.onLoadMore()
                     }
                 }
