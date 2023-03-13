@@ -7,7 +7,7 @@
 
         <variable
             name="posting"
-            type="com.onandoff.onandoff_android.data.model.Posting" />
+            type="com.onandoff.onandoff_android.data.model.FeedReadData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +50,7 @@
             android:background="#F5F5F5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_camera" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_camera" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/category_layout"
@@ -83,11 +83,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@={posting.category}"
+                android:text="스포츠"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/title_category"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="스포츠" />
+                 />
 
             <ImageView
                 android:id="@+id/btn_category"
@@ -119,7 +119,7 @@
             android:background="@null"
             android:hint="@string/hashtag_hint"
             android:padding="20dp"
-            android:text="@={posting.hashtag}"
+            android:text="임시텍스트"
             android:textColorHint="#DDDDDD"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/view_line3"
@@ -154,12 +154,12 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_camera"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
             android:layout_marginTop="36dp"
-            android:background="@drawable/add_image"
+            android:src="@{posting.feedImgList[0]}"
             android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -175,7 +175,7 @@
             android:hint="@string/content_hint"
             android:padding="20dp"
             android:scrollHorizontally="false"
-            android:text="@={posting.content}"
+            android:text="@{posting.feedContent}"
             android:textColorHint="#DDDDDD"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/view_line"
@@ -188,7 +188,7 @@
             android:id="@+id/checkbox_secret"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={posting.status}"
+            android:checked="true"
             android:text="@string/secret"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

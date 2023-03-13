@@ -103,6 +103,9 @@ dependencies {
 
     // 구글 로그인 모듈
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
+    //pagination 모듈
+    implementation 'com.github.markomilos:paginate:1.0.0'
 }
 
 kapt {

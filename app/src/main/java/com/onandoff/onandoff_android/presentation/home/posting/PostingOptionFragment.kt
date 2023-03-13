@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.databinding.FragmentPostingOptionBinding
 
+
 class PostingOptionFragment(val itemClick: (Int) -> Unit) : BottomSheetDialogFragment() {
     private var _binding : FragmentPostingOptionBinding? = null
     private val binding

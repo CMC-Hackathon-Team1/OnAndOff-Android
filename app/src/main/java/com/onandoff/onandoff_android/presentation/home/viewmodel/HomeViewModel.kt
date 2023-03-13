@@ -17,6 +17,7 @@ import com.onandoff.onandoff_android.data.repository.StatisticsRepository
 import com.onandoff.onandoff_android.data.repository.StatisticsRepositoryImpl
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
+import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -170,12 +171,13 @@ class HomeViewModel(
 
         getMyPersona(profileId)
         getMonthlyStatistics(profileId) // like, my feed, follower
-
+        Log.d("home",profileId.toString())
         // 프로필 변경시마다 현재 Profile id를 등록
-        SharePreference.prefs.putSharedPreference(
+        prefs.putSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
             item.myProfile.profileId
         )
+
 //        getMonthlyLikesCount(profileId)  // like 만
 //        getMonthlyMyFeedsCount(profileId) // my feed
 //        getMonthlyFollowersCount(profileId) // follower

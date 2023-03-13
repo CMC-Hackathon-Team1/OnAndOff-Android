@@ -76,9 +76,16 @@ interface FeedInterface {
         @Path("feedId") feedId: Int, @Path("profileId") profileId: Int
     ): Call<FeedReadData>
 
+    @Multipart
     @PATCH("/feeds")
     fun updateFeedResponse(
-        @Body body: FeedData
+        @Part profileId: MultipartBody.Part,
+        @Part feedId: MultipartBody.Part,
+        @Part categoryId: MultipartBody.Part,
+        @Part hashTagList:List<MultipartBody.Part>,
+        @Part images: MultipartBody.Part?=null,
+        @Part content: MultipartBody.Part,
+        @Part isSecret: MultipartBody.Part
     ): Call<FeedResponse>
 
     @PATCH("/feeds/status")
