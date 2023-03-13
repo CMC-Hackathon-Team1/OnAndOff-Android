@@ -59,7 +59,7 @@ class SettingFragment:Fragment() {
 
         binding.ivBackArrow.setOnClickListener{
 
-            mainActivity.getSupportFragmentManager()
+            mainActivity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fcv_main, HomeFragment())
                 .commit()
@@ -70,26 +70,26 @@ class SettingFragment:Fragment() {
             bundle.putString("email", email)
             val accountFragment = AccountFragment()
             accountFragment.arguments = bundle
-            mainActivity.getSupportFragmentManager()
+            mainActivity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fcv_main, accountFragment)
                 .commit()
 
         }
         binding.layoutSettingAlarm.setOnClickListener {
-            mainActivity.getSupportFragmentManager()
+            mainActivity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fcv_main, AlarmFragment())
                 .commit()
         }
         binding.layoutSettingFeedback.setOnClickListener {
-            mainActivity.getSupportFragmentManager()
+            mainActivity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fcv_main, FeedbackFragment())
                 .commit()
         }
         binding.layoutSettingPolicy.setOnClickListener {
-            mainActivity.getSupportFragmentManager()
+            mainActivity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fcv_main, PolicyFragment())
                 .commit()
