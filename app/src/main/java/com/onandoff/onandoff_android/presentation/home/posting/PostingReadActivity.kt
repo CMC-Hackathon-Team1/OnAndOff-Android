@@ -192,7 +192,7 @@ class PostingReadActivity : AppCompatActivity() {
                             binding.posting.textLikeCount.text = response.body()!!.likeNum.toString()
                             val hashTagList = response.body()!!.hashTagList
                             var tagText = ""
-                            if(hashTagList.isNotEmpty()) {
+                            if(!hashTagList.isNullOrEmpty()) {
                                 for (tag in hashTagList) {
                                     tagText = "#$tag $tagText "
                                 }

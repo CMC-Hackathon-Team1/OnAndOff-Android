@@ -4,19 +4,17 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.user.MyPersonaInterface
 import com.onandoff.onandoff_android.data.api.user.StatisticsInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.data.model.error.NetworkError
+import com.onandoff.onandoff_android.data.remote.CalendarDataSourceImpl
 import com.onandoff.onandoff_android.data.remote.ProfileRemoteDataSourceImpl
 import com.onandoff.onandoff_android.data.remote.StatisticsRemoteDataSourceImpl
-import com.onandoff.onandoff_android.data.repository.ProfileRepository
-import com.onandoff.onandoff_android.data.repository.ProfileRepositoryImpl
-import com.onandoff.onandoff_android.data.repository.StatisticsRepository
-import com.onandoff.onandoff_android.data.repository.StatisticsRepositoryImpl
+import com.onandoff.onandoff_android.data.repository.*
 import com.onandoff.onandoff_android.util.APIPreferences
-import com.onandoff.onandoff_android.util.SharePreference
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +24,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     application: Application,
     private val profileRepository: ProfileRepository,
-    private val statisticsRepository: StatisticsRepository
+    private val statisticsRepository: StatisticsRepository,
+    private val calendarRepository: CalendarRepository
 ) : AndroidViewModel(application) {
 
     sealed class State {
@@ -70,6 +69,10 @@ class HomeViewModel(
             val monthlyLikesCount: Int,
             val monthMyFeedsCount: Int,
             val monthlyMyFollowersCount: Int
+        ) : State()
+
+        data class GetCalendarFeedListSuccess(
+            val calendarList : List<CalendarData>
         ) : State()
 
         object Idle : State()
@@ -171,6 +174,7 @@ class HomeViewModel(
 
         getMyPersona(profileId)
         getMonthlyStatistics(profileId) // like, my feed, follower
+        getCalendarFeedList(profileId, 2023, "03")
         Log.d("home",profileId.toString())
         // 프로필 변경시마다 현재 Profile id를 등록
         prefs.putSharedPreference(
@@ -183,6 +187,29 @@ class HomeViewModel(
 //        getMonthlyFollowersCount(profileId) // follower
     }
 
+    private fun getCalendarFeedList(profileId: Int, year: Int, month : String) {
+        viewModelScope.launch {
+            kotlin.runCatching { calendarRepository.getCalendarFeedList(profileId, year, month) }
+                .onSuccess {
+                    _state.value = State.GetCalendarFeedListSuccess(it.result)
+                }
+                .onFailure {
+                    if (it is NetworkError) {
+                        when (it) {
+                            is NetworkError.BodyError -> _state.value =
+                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
+                            is NetworkError.JwtError -> _state.value =
+                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
+                            is NetworkError.ServerError -> _state.value =
+                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
+                            is NetworkError.JwtTokenAndProfileNotSame -> _state.value =
+                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
+                            else -> {}
+                        }
+                    }
+                }
+        }
+    }
 
     // TODO: 페르소나 별 월 별 공감, 게시글, 팔로워 수가 보이게 하기
     private fun getMonthlyStatistics(profileId: Int) {
@@ -326,6 +353,11 @@ class HomeViewModel(
                         StatisticsRemoteDataSourceImpl(
                             RetrofitClient.getClient()
                                 ?.create(StatisticsInterface::class.java)!!
+                        )
+                    ),
+                    CalendarRepositoryImpl(
+                        CalendarDataSourceImpl(
+                            RetrofitClient.getClient()?.create(CalendarInterface::class.java)!!
                         )
                     )
                 ) as T

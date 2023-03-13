@@ -174,6 +174,9 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                             binding.tvMonthlyMyFeedsCount.text = "${state.monthMyFeedsCount}"
                             binding.tvMonthlyMyFollowersCount.text = "${state.monthlyMyFollowersCount}"
                         }
+                        is HomeViewModel.State.GetCalendarFeedListSuccess -> {
+                            calendarAdapter.setItems(state.calendarList)
+                        }
                     }
                 }
             }
@@ -311,10 +314,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
         binding.fgCalNext.setOnClickListener {
             calendarAdapter.changeToNextMonth()
-        }
-        binding.containerCalendar.setOnClickListener {
-            calendarAdapter.changeToNextMonth()
-            calendarAdapter.changeToPrevMonth()
         }
     }
 
