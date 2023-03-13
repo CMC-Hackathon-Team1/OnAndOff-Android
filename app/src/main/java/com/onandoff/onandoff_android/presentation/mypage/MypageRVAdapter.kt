@@ -37,7 +37,8 @@ import retrofit2.Response
 
 class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,private val context: Context,fragmentManager: FragmentManager):RecyclerView.Adapter<MypageRVAdapter.MypageViewHolder>() {
     var feedId:Int = 0
-   var profileId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_USERID,0)
+    var profileId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+
     var fragmentManager:FragmentManager = fragmentManager
     private val feedInterface : FeedInterface? = RetrofitClient.getClient()?.create(FeedInterface::class.java)
     private lateinit var imageAdapter: PostingImageAdapter
@@ -174,8 +175,7 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
     }
 
     private fun deleteFeed(){
-        var personaId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
-        val feedSimpleData = FeedSimpleData(personaId, feedId)
+        val feedSimpleData = FeedSimpleData(profileId, feedId)
         val call = feedInterface?.deleteFeedResponse(feedSimpleData)
         call?.enqueue(object : Callback<FeedResponse>{
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
