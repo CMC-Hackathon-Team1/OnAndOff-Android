@@ -132,16 +132,17 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 }
             }
             R.id.menu_my_page -> {
-                val myPageFragment = supportFragmentManager.fragments.find { it is MypageFragment }
-                if (myPageFragment != null) {
-                    supportFragmentManager.beginTransaction().show(myPageFragment).commit()
-                } else {
-                    supportFragmentManager.beginTransaction()
-                        .add(binding.fcvMain.id, MypageFragment()).commit()
-                }
-            }
-            else -> {
-                throw IllegalArgumentException("Not found menu item")
+//                val myPageFragment = supportFragmentManager.fragments.find { it is MypageFragment }
+//                if (myPageFragment != null) {
+//                    supportFragmentManager.beginTransaction().show(myPageFragment).commit()
+//                } else {
+                supportFragmentManager.beginTransaction()
+                    .add(binding.fcvMain.id, MypageFragment()).commit()
+//                }
+//            }
+//            else -> {
+//                throw IllegalArgumentException("Not found menu item")
+//            }
             }
         }
 
