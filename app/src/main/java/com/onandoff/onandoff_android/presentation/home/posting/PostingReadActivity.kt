@@ -201,13 +201,13 @@ class PostingReadActivity : AppCompatActivity() {
                             binding.posting.textHashtag.text = tagText
                             binding.posting.textWriteDate.text = response.body()!!.createdAt
                             binding.posting.textWriter.text = response.body()!!.personaName + " " + response.body()!!.profileName
-                            if(response.body()!!.feedImgList.isEmpty()) {
+                            if(response.body()!!.feedImgList.isNullOrEmpty()) {
                                 binding.posting.imagePhotoList.visibility = View.GONE
                             } else {
                                 imageAdapter.setItems(response.body()!!.feedImgList)
                                 imageAdapter.notifyDataSetChanged()
                             }
-                            if (response.body()!!.profileImg.isNotEmpty()) {
+                            if (!response.body()!!.profileImg.isNullOrEmpty()) {
                                 Glide.with(binding.root.context)
                                     .load(response.body()!!.profileImg)
                                     .into(binding.posting.imageProfile)
