@@ -159,7 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_marginTop="36dp"
-            android:src="@{posting.feedImgList[0]}"
+            android:src="@drawable/add_image"
             android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
