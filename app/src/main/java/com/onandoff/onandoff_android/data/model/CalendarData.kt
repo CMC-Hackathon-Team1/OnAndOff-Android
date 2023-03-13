@@ -14,5 +14,5 @@ data class CalendarResponse(
     @SerializedName("message")
     val message: String?,
     @SerializedName("result")
-    val result: List<CalendarData>?
+    val result: List<CalendarData>
 )

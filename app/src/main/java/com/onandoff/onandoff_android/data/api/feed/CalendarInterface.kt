@@ -7,7 +7,14 @@ import retrofit2.http.Query
 
 interface CalendarInterface {
     @GET("/feeds/my-feeds/in-calendar")
-    fun getCalendarList(
+    suspend fun getCalendarListResponse(
+        @Query("profileId") profileId: Int,
+        @Query("year") year: Int,
+        @Query("month") month: String
+    ): CalendarResponse
+
+    @GET("/feeds/my-feeds/in-calendar")
+     fun getCalendarList(
         @Query("profileId") profileId: Int,
         @Query("year") year: Int,
         @Query("month") month: String
