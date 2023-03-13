@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,10 +21,13 @@ import com.onandoff.onandoff_android.data.api.feed.FeedInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 import com.onandoff.onandoff_android.databinding.ItemMypageUserfeedBinding
+import com.onandoff.onandoff_android.presentation.MainActivity
+import com.onandoff.onandoff_android.presentation.home.HomeFragment
 import com.onandoff.onandoff_android.presentation.home.posting.PostingImageAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingModifyActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingOptionFragment
 import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_USERID
 import com.onandoff.onandoff_android.util.SharePreference
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
@@ -60,7 +64,7 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
                     when (it) {
                         1 -> {
                             var intent:Intent = Intent(context, PostingModifyActivity::class.java)
-                            intent.putExtra("profileId",profileId )
+                            intent.putExtra("profileId",profileId)
                             intent.putExtra("feedId", feedId)
                             startActivity(context,intent,bundle)
                         }
@@ -170,14 +174,16 @@ class MypageRVAdapter(private val writeList : ArrayList<FeedResponseData>,privat
     }
 
     private fun deleteFeed(){
-        val feedSimpleData = FeedSimpleData(profileId, feedId)
-
+        var personaId:Int = prefs.getSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID,0)
+        val feedSimpleData = FeedSimpleData(personaId, feedId)
         val call = feedInterface?.deleteFeedResponse(feedSimpleData)
         call?.enqueue(object : Callback<FeedResponse>{
             override fun onResponse(call: Call<FeedResponse>, response: Response<FeedResponse>) {
                 when(response.code()) {
                     200 -> {
                         Toast.makeText(context, "해당 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+
+
                     }
                     else -> {
                     }

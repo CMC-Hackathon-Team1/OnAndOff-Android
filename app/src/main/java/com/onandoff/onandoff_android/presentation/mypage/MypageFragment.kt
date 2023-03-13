@@ -218,8 +218,6 @@ class MypageFragment: Fragment(){
                     for(item in tmpFeedList){
                         feedList.apply{add(item)}
                     }
-                }else{
-                    Toast.makeText(mainActivity,"해당 달에 기록한 게시글이 없습니다",Toast.LENGTH_SHORT).show()
                 }
                 loading = false
             }
