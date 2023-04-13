@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.BottomSheetBlockOtherUserOptionMenuBinding
-import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaDialog
 
 class BottomSheetBlockOtherUserOptionMenu : BottomSheetDialogFragment() {
     private var _binding: BottomSheetBlockOtherUserOptionMenuBinding? = null
@@ -58,8 +57,9 @@ class BottomSheetBlockOtherUserOptionMenu : BottomSheetDialogFragment() {
             val otherUserID = requireArguments().getInt(USER_ID)
 //            viewModel.blockOtherUser(otherUserID)
 
-            val createPersonaDialog = BlockOtherUserConfirmedDialog.newInstance()
-            createPersonaDialog.show(childFragmentManager, BlockOtherUserConfirmedDialog.TAG)
+
+            val blockOtherUserConfirmedDialog = BlockOtherUserConfirmedDialog.newInstance()
+            blockOtherUserConfirmedDialog.show(childFragmentManager, BlockOtherUserConfirmedDialog.TAG)
         }
     }
 

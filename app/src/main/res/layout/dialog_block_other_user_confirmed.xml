@@ -61,27 +61,27 @@
 
         </LinearLayout>
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/buttonPanel"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="30dp"-->
-<!--            android:orientation="horizontal"-->
-<!--            app:strokeColor="@color/color_main">-->
-<!--            -->
-<!--        </LinearLayout>-->
-
-        <com.skydoves.elasticviews.ElasticButton
-            android:id="@+id/btn_unblock_other_user_confirmed"
+        <LinearLayout
+            android:id="@+id/buttonPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@drawable/round_main_bottom_left_right_corner_background"
-            android:text="확인"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:strokeColor="@color/color_main"
-            app:imageView_duration="150" />
+            android:orientation="horizontal"
+            app:strokeColor="@color/color_main">
+
+            <com.skydoves.elasticviews.ElasticButton
+                android:id="@+id/btn_unblock_other_user_confirmed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_main_bottom_left_right_corner_background"
+                android:text="확인"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:imageView_duration="150" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

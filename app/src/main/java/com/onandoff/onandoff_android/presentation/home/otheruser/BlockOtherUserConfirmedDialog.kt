@@ -48,7 +48,7 @@ class BlockOtherUserConfirmedDialog: DialogFragment() {
 
     private fun setupListeners() {
         binding.btnUnblockOtherUserConfirmed.setOnClickListener {
-            dismiss()
+//            dismiss()
             activity?.supportFragmentManager?.popBackStack(
                 "otherUserFragment",
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
