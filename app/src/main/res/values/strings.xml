@@ -46,10 +46,10 @@
     <string name="thursday">목</string>
     <string name="friday">금</string>
     <string name="saturday">토</string>
-    <string name="persona_alert_msg_header"><font color ="#58B8A1">페르소나</font>는 <font color ="#FF6767">한 번 생성되면 더이상 수정할 수 없습니다.</font></string>
+    <string name="persona_alert_msg_header"><font color="#58B8A1">페르소나</font>는 <font color="#FF6767">한 번 생성되면 더이상 수정할 수 없습니다.</font></string>
     <string name="persona_alert_msg">이대로 생성하시겠습니까?\n(페르소나 변경을 원할시, 프로필을 다시 만들어야합니다.)</string>
-    <string name="profile_delete_default"><bold>프로필을 정말로 <font color ="#FF6767">삭제</font>하시겠습니까?</bold></string>
-    <string name="profile_delete"><bold>반드시 <font color ="#FF6767">하나의 프로필은</font>있어야합니다.\n해당 프로필의 삭제를 원하실 경우,\n새 프로필 생성후 다시 시도해주세요.</bold></string>
+    <string name="profile_delete_default"><bold>프로필을 정말로 <font color="#FF6767">삭제</font>하시겠습니까?</bold></string>
+    <string name="profile_delete"><bold>반드시 <font color="#FF6767">하나의 프로필은</font>있어야합니다.\n해당 프로필의 삭제를 원하실 경우,\n새 프로필 생성후 다시 시도해주세요.</bold></string>
     <string name="private_policy">
         <big>[온앤오프] 개인정보처리방침</big>
 
@@ -527,10 +527,10 @@ B. 계정 관련
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="age_string"><font color ="#58B8A1">(필수)</font> 만 14세 이상입니다</string>
-    <string name="string_service"><font color ="#58B8A1">(필수)</font> 서비스 이용약관</string>
-    <string name="string_privacy"><font color ="#58B8A1">(필수)</font> 개인정보 처리방침</string>
-    <string name="password_update"><u><font color ="#58B8A1">비밀번호 재설정</font></u></string>
+    <string name="age_string"><font color="#58B8A1">(필수)</font> 만 14세 이상입니다</string>
+    <string name="string_service"><font color="#58B8A1">(필수)</font> 서비스 이용약관</string>
+    <string name="string_privacy"><font color="#58B8A1">(필수)</font> 개인정보 처리방침</string>
+    <string name="password_update"><u><font color="#58B8A1">비밀번호 재설정</font></u></string>
     <string name="search_hashtag">해시태그 검색</string>
     <string name="report">신고하기</string>
     <string name="report_feed">게시글 신고하기</string>
@@ -539,7 +539,7 @@ B. 계정 관련
     <string name="no_following_found">팔로우가 없습니다</string>
     <string name="no_feed_found">게시글이 없습니다</string>
 
-    <string name="dialog_delete_account">계정을 정말로 <font color ="#ff6767">삭제</font>하시겠습니까?</string>
+    <string name="dialog_delete_account">계정을 정말로 <font color="#ff6767">삭제</font>하시겠습니까?</string>
     <string name="alaram_example_like"><b>개발자 온오프</b>님이 회원님의 게시글 좋아합니다.</string>
     <string name="alaram_example_following"><b>개발자 온오프님</b>이 회원님을 팔로잉 합니다.</string>
     <string name="alaram_example_following_posting"><b>개발자 온오프</b>님이 새로운 글을 올렸습니다.</string>
