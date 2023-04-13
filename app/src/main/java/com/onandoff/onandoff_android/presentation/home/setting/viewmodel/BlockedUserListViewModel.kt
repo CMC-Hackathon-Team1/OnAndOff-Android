@@ -1,13 +1,18 @@
 package com.onandoff.onandoff_android.presentation.home.setting.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.onandoff.onandoff_android.data.api.user.UserInterface
+import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.data.model.error.NetworkError
+import com.onandoff.onandoff_android.data.remote.UserRemoteDataSourceImpl
 import com.onandoff.onandoff_android.data.repository.UserRepository
+import com.onandoff.onandoff_android.data.repository.UserRepositoryImpl
 import com.onandoff.onandoff_android.data.request.BlockOrUnblockOtherUserRequest
+import com.onandoff.onandoff_android.presentation.home.otheruser.BlockOtherUserViewModel
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,6 +58,10 @@ class BlockedUserListViewModel(
             -1
         )
 
+    init {
+        getBlockedUserList(profileId)
+    }
+
     fun getBlockedUserList(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { userRepository.getBlockedUserList(profileId) }
@@ -66,7 +75,7 @@ class BlockedUserListViewModel(
         }
     }
 
-    fun unblockUser(toProfileId: Int, callback: (isBlocked: Boolean) -> Unit) {
+    fun unblockUser(toProfileId: Int) {
         val request = BlockOrUnblockOtherUserRequest(
             fromProfileId = profileId,
             toProfileId = toProfileId,
@@ -76,11 +85,11 @@ class BlockedUserListViewModel(
         viewModelScope.launch {
             kotlin.runCatching { userRepository.blockOrUnblockOtherUser(request) }
                 .onSuccess {
-                    if (it.statusCode == 3704) {
-                        val isBlocked = it.message == "UNBLOCK"
-                        callback(isBlocked)
-                    }
-//                    _state.value = State.UnblockUserSuccess
+//                    if (it.statusCode == 3704) {
+//                        val isBlocked = it.message == "UNBLOCK"
+//                        callback(isBlocked)
+//                    }
+                    _state.value = State.UnblockUserSuccess
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -95,6 +104,32 @@ class BlockedUserListViewModel(
                         }
                     }
                 }
+        }
+    }
+
+    companion object {
+        const val USER_ID = "user_id"
+
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                // Get the Application object from extras
+                val application =
+                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
+                // Create a SavedStateHandle for this ViewModel from extras
+                val savedStateHandle = extras.createSavedStateHandle()
+
+                return BlockedUserListViewModel(
+                    application,
+                    UserRepositoryImpl(
+                        UserRemoteDataSourceImpl(
+                            RetrofitClient.getClient()?.create(UserInterface::class.java)!!
+                        )
+                    )
+                ) as T
+            }
         }
     }
 }
