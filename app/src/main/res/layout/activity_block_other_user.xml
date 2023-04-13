@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.onandoff.onandoff_android.R" />
+
+        <variable
+            name="viewModel"
+            type="com.onandoff.onandoff_android.presentation.home.otheruser.BlockOtherUserViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".presentation.look.ReportUserActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.skydoves.elasticviews.ElasticImageView
+                    android:id="@+id/iv_back_arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:imageView_duration="150" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_spam_promotion"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="스팸 및 홍보글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_porn"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="음란성이 포함된 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_despise"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="욕설 / 생명경시 / 혐오 / 차별적인 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_dobae"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="게시글 도배"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_private_info_illegal_info"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="개인정보 노출 및 불법 정보"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_etc"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="기타 부적절한 글"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edit_etc"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="30dp"
+                android:enabled="false"
+                android:hint="기타 신고 사유를 입력하세요. (20자 이내)"
+                android:maxLength="20"
+                android:paddingVertical="15dp"
+                android:textColorHint="@color/black_fifth"
+                android:textSize="@dimen/body_text_size" />
+
+        </LinearLayout>
+
+        <com.skydoves.elasticviews.ElasticButton
+            android:id="@+id/btn_agree"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_disable"
+            android:clickable="false"
+            android:text="동의"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:imageView_duration="150" />
+
+    </LinearLayout>
+</layout>
