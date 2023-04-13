@@ -53,8 +53,8 @@ class SettingActivity : AppCompatActivity() {
 
         }
         binding.layoutSettingBlockedUserList.setOnClickListener {
-//            val intent = BlockedUserListActivity.getIntent(this)
-//            startActivity(intent)
+            val intent = BlockedUserListActivity.getIntent(this)
+            startActivity(intent)
         }
         binding.layoutSettingAlarm.setOnClickListener {
             val intent = AlarmActivity.getIntent(this)
