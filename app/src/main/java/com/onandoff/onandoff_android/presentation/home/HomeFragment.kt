@@ -36,8 +36,6 @@ import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
 import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivity
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
-import com.onandoff.onandoff_android.presentation.home.posting.PostingReadFragment
-import com.onandoff.onandoff_android.presentation.mypage.MypageFragment
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
 import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
@@ -62,14 +60,11 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
             onClick = ::onClickPersona
         )
     }
-    lateinit var mainActivity: MainActivity
+
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
     private lateinit var calendarAdapter: CalendarAdapter
     private var profileId: Int? = null
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -197,10 +192,8 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
 
         binding.ivSetting.setOnClickListener {
-            mainActivity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fcv_main, SettingFragment())
-                .commit()
+            val intent = SettingActivity.getIntent(requireActivity())
+            startActivity(intent)
         }
 
         binding.btnPost.setOnClickListener {

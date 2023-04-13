@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <import type="com.onandoff.onandoff_android.R" />
+
+        <variable
+            name="blockedUserItem"
+            type="com.onandoff.onandoff_android.data.model.BlockedUser" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_user_persona"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                app:fallbackImage="@{R.drawable.ic_persona_profile}"
+                app:imageUrl="@{blockedUserItem.profileImgUrl}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/Circle" />
+
+            <TextView
+                android:id="@+id/tv_persona_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="10dp"
+                android:text="@{blockedUserItem.profileName}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/body_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_user_persona"
+                app:layout_constraintTop_toTopOf="@id/iv_user_persona"
+                app:layout_constraintBottom_toTopOf="@id/tv_all_personas_blocked"/>
+
+            <TextView
+                android:id="@+id/tv_all_personas_blocked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="이 사람이 소유한 다른 프로필 모두 차단됨"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/small_text_size"
+                app:layout_constraintTop_toBottomOf="@id/tv_persona_name"
+                app:layout_constraintBottom_toBottomOf="@id/iv_user_persona"
+                app:layout_constraintStart_toEndOf="@id/iv_user_persona" />
+
+            <Button
+                android:id="@+id/btn_unblock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="20dp"
+                android:text="차단 해제"
+                android:textSize="@dimen/small_text_size"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </LinearLayout>
+
+</layout>

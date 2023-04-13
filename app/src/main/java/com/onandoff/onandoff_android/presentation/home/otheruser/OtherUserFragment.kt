@@ -7,16 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.feed.FeedInterface
-import com.onandoff.onandoff_android.data.api.feed.MyFeedService
 import com.onandoff.onandoff_android.data.api.user.ProfileInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
@@ -24,10 +26,12 @@ import com.onandoff.onandoff_android.data.request.FollowRequest
 import com.onandoff.onandoff_android.databinding.FragmentOtherUserBinding
 import com.onandoff.onandoff_android.presentation.home.calendar.BaseCalendar
 import com.onandoff.onandoff_android.presentation.home.calendar.CalendarAdapter
+import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaDialog
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
 import com.onandoff.onandoff_android.presentation.look.BottomSheetLookAroundFeedOptionMenu
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +46,10 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
     private var _binding: FragmentOtherUserBinding? = null
     private val binding
         get() = _binding!!
+
+    private val viewModel : BlockOtherUserViewModel by activityViewModels(factoryProducer = {
+        BlockOtherUserViewModel.Factory
+    })
 
     private lateinit var calendarAdapter: CalendarAdapter
     private lateinit var otherUserFeedListAdapter: OtherUserFeedListAdapter
@@ -58,6 +66,10 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOtherUserBinding.inflate(inflater)
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+
         return binding.root
     }
 
@@ -76,11 +88,65 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         setupFollowStatus()
         getProfileData()
         onInitRecyclerView()
+        setupViewModel()
+
         binding.backBtn.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack(
                 "otherUserFragment",
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
+        }
+        binding.ivOptionMenu.setOnClickListener {
+            val bottomSheet = BottomSheetBlockOtherUserOptionMenu.newInstance(otherUserId)
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+        }
+    }
+
+    private fun setupViewModel() {
+        with(viewModel) {
+            lifecycleScope.launch {
+                state.collect { state ->
+                    when (state) {
+                        is BlockOtherUserViewModel.State.BlockOtherUserFailed -> {
+                            when (state.reason) {
+                                BlockOtherUserViewModel.State.BlockOtherUserFailed.Reason.DB_ERROR -> {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "db error",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                BlockOtherUserViewModel.State.BlockOtherUserFailed.Reason.ALREADY_BLOCKED -> {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "already blocked",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                BlockOtherUserViewModel.State.BlockOtherUserFailed.Reason.INVALID_FROM_PROFILE_ID -> {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "invalid from profile",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                BlockOtherUserViewModel.State.BlockOtherUserFailed.Reason.INVALID_TO_PROFILE_ID -> {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "invalid to profile",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                        is BlockOtherUserViewModel.State.Idle -> {}
+                        is BlockOtherUserViewModel.State.BlockOtherUserSuccess -> {
+                            val blockOtherUserConfirmedDialog = BlockOtherUserConfirmedDialog.newInstance()
+                            blockOtherUserConfirmedDialog.show(childFragmentManager, BlockOtherUserConfirmedDialog.TAG)
+                        }
+                    }
+                }
+            }
         }
     }
 
