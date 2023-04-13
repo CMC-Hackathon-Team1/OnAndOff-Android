@@ -1,8 +1,8 @@
 package com.onandoff.onandoff_android.data.api.user
 
 import com.google.gson.JsonElement
-import com.google.gson.annotations.SerializedName
 import com.onandoff.onandoff_android.data.model.*
+import com.onandoff.onandoff_android.data.request.BlockOrUnblockOtherUserRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -35,5 +35,13 @@ interface UserInterface {
     @GET("/users/email")
     fun getEmail():Call<getMyEmail>
 
+    @POST("/profile-block")
+    suspend fun blockOrUnblockOtherUser(
+        @Body blockOrUnblockOtherUserRequest: BlockOrUnblockOtherUserRequest
+    ): BlockOtherUserResponse
 
+    @GET("/profile-block/blocked-profiles")
+    suspend fun getBlockedUserList(
+        @Path("profileId") profileId: Int
+    ) : GetBlockedUserListResponse
 }
