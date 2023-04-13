@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="31dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
+
+        <com.skydoves.elasticviews.ElasticImageView
+            android:id="@+id/iv_back_arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            app:imageView_duration="150"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_back_arrow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_account"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="계정"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_account"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:background="@color/black_fifth"/>-->
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/layout_setting_private"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:paddingVertical="14dp">-->
+    <!--        <ImageView-->
+    <!--            android:layout_width="20dp"-->
+    <!--            android:layout_height="20dp"-->
+    <!--            android:src="@drawable/ic_setting_lock_30"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_marginStart="17dp"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="개인정보 보호"-->
+    <!--            android:textSize="14sp"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:layout_marginRight="16dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            />-->
+    <!--        <ImageView-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            -->
+    <!--            android:layout_width="16dp"-->
+    <!--            android:layout_height="20dp"-->
+    <!--            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />-->
+    <!--    </LinearLayout>-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_blocked_user_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_blocked_user_list"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_blocked_user_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:text="차단한 계정"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_blocked_user_list"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_setting_alarm"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting_alarm_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="알림"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_setting_alarm"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_feedback"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting_feedback_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="피드백 / 문의하기"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_feedback"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_policy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_policy"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting_policy_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="약관 및 정책"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_policy"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_version"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting_version_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="버전"
+            android:textColor="@color/black"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_version"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="v1.0"
+            android:textColor="@color/black_fifth"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_setting_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <ImageView
+            android:id="@+id/iv_setting_logout"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting_logout_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="16dp"
+            android:text="로그아웃"
+            android:textColor="@color/errorColor"
+            android:textSize="@dimen/body_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_logout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_fifth" />
+
+</LinearLayout>
