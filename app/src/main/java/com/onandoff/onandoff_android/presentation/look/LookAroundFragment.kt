@@ -533,11 +533,11 @@ class LookAroundFragment : Fragment() {
     }
 
     private fun onFeedProfileClick(feedData: LookAroundFeedData) {
-        // TODO: 해당 데이터의 상세 페이지로 이동하기
+        // 해당 데이터의 상세 페이지로 이동하기
         val intent = OtherUserFragment.newInstance(feedData.feedId, feedData.profileId)
         val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction?.add(R.id.fcv_main, intent)?.addToBackStack("otherUserFragment")?.commit()
-        Log.d("abcd", "onFeedProfileClick: ")
+        transaction?.add(R.id.fcv_main, intent)?.commit()
+        Log.d("onFeedProfileClick", "onFeedProfileClick: ${feedData.feedId} ${feedData.profileId}")
     }
 
     private fun onClickFollow(feedData: LookAroundFeedData) {
