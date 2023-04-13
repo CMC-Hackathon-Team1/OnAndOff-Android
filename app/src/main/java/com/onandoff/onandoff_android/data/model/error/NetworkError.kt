@@ -39,6 +39,8 @@ sealed class NetworkError(message: String) : Throwable(message = message) {
                 3000 -> AlreadyReportedFeedError(message)
                 3001 -> InvalidReportCategoryIdError(message)
                 3002 -> NoReportReasonError(message)
+                3701 -> InvalidFromProfileId(message)
+                3702 -> InvalidToProfileId(message)
                 else -> null
             }
     }
