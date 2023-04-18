@@ -63,11 +63,12 @@ class UnblockOtherUserDialog : DialogFragment() {
     companion object {
         const val RESULT_ACTION = "result_action"
         const val ACTION_UNBLOCK = "action_unblock"
+        private const val TO_PROFILE_ID = "to_profile_id"
 
-        fun newInstance(): UnblockOtherUserDialog =
+        fun newInstance(profileId: Int): UnblockOtherUserDialog =
             UnblockOtherUserDialog().apply {
                 arguments = Bundle().apply {
-
+                    putInt(TO_PROFILE_ID, profileId)
                 }
             }
 

@@ -1,18 +1,17 @@
 package com.onandoff.onandoff_android.presentation.home.setting.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
-import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.data.model.error.NetworkError
 import com.onandoff.onandoff_android.data.remote.UserRemoteDataSourceImpl
 import com.onandoff.onandoff_android.data.repository.UserRepository
 import com.onandoff.onandoff_android.data.repository.UserRepositoryImpl
 import com.onandoff.onandoff_android.data.request.BlockOrUnblockOtherUserRequest
-import com.onandoff.onandoff_android.presentation.home.otheruser.BlockOtherUserViewModel
 import com.onandoff.onandoff_android.util.APIPreferences
 import com.onandoff.onandoff_android.util.SharePreference
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +32,7 @@ class BlockedUserListViewModel(
         }
 
         data class GetBlockedUserListSuccess(
-            val blockedUserList: List<BlockedUser>
+            val blockedUserList: List<GetBlockedUserResponse>
         ) : State()
 
         data class UnblockUserFailed(val reason: Reason) : State() {
@@ -59,18 +58,28 @@ class BlockedUserListViewModel(
         )
 
     init {
-        getBlockedUserList(profileId)
+        viewModelScope.launch {
+            getBlockedUserList(profileId)
+            Log.d("init", "init: $profileId")
+        }
+//        getBlockedUserList(profileId)
+//        Log.d("init", "init: $profileId")
     }
 
     fun getBlockedUserList(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { userRepository.getBlockedUserList(profileId) }
                 .onSuccess {
-//                    _state.value = State.GetBlockedUserListSuccess(it.result)
+                    _state.value = State.GetBlockedUserListSuccess(it.result)
+                    Log.d("getBlockedUserList", "getBlockedUserList: ${it.result} $profileId")
+                    Log.d("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
                 }
                 .onFailure {
                     _state.value =
                         State.GetBlockedUserListFailed(State.GetBlockedUserListFailed.Reason.DB_ERROR)
+                    it.printStackTrace()
+                    Log.d("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
+
                 }
         }
     }
@@ -85,11 +94,9 @@ class BlockedUserListViewModel(
         viewModelScope.launch {
             kotlin.runCatching { userRepository.blockOrUnblockOtherUser(request) }
                 .onSuccess {
-//                    if (it.statusCode == 3704) {
-//                        val isBlocked = it.message == "UNBLOCK"
-//                        callback(isBlocked)
-//                    }
                     _state.value = State.UnblockUserSuccess
+                    _state.value = State.Idle
+                    getBlockedUserList(profileId)
                 }
                 .onFailure {
                     if (it is NetworkError) {
@@ -108,7 +115,7 @@ class BlockedUserListViewModel(
     }
 
     companion object {
-        const val USER_ID = "user_id"
+        const val PROFILE_ID = "profile_id"
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(

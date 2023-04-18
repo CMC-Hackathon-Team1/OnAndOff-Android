@@ -6,22 +6,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.data.model.BlockedUser
+import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.databinding.ItemBlockedUserBinding
 
 class BlockedUserListAdapter(
-    private val onButtonClick: (BlockedUser) -> Unit
-) : ListAdapter<BlockedUser, BlockedUserListAdapter.BlockedUserViewHolder>(BlockedUserDiffUtil) {
+    private val onButtonClick: (GetBlockedUserResponse) -> Unit
+) : ListAdapter<GetBlockedUserResponse, BlockedUserListAdapter.BlockedUserViewHolder>(BlockedUserDiffUtil) {
 
-    class BlockedUserViewHolder(
+    private val blockedUserList = mutableListOf<GetBlockedUserResponse>()
+
+    inner class BlockedUserViewHolder(
          private val binding: ItemBlockedUserBinding,
-         private val onClick: (BlockedUser) -> Unit
+         private val onClick: (GetBlockedUserResponse) -> Unit
      ) : RecyclerView.ViewHolder(binding.root) {
 
-         fun bind(blockedUserItem: BlockedUser) {
+         fun bind(blockedUserItem: GetBlockedUserResponse) {
              binding.blockedUserItem = blockedUserItem
 
              binding.btnUnblock.setOnClickListener {
                  onClick(blockedUserItem)
+                 blockedUserList.add(blockedUserItem)
              }
 
              binding.executePendingBindings()
@@ -39,12 +43,16 @@ class BlockedUserListAdapter(
          holder.bind(blockedUserItem)
      }
 
-     companion object BlockedUserDiffUtil : DiffUtil.ItemCallback<BlockedUser>() {
-         override fun areItemsTheSame(oldItem: BlockedUser, newItem: BlockedUser): Boolean {
+    fun getItem(): List<GetBlockedUserResponse> {
+        return blockedUserList
+    }
+
+     companion object BlockedUserDiffUtil : DiffUtil.ItemCallback<GetBlockedUserResponse>() {
+         override fun areItemsTheSame(oldItem: GetBlockedUserResponse, newItem: GetBlockedUserResponse): Boolean {
              return oldItem.profileId == newItem.profileId
          }
 
-         override fun areContentsTheSame(oldItem: BlockedUser, newItem: BlockedUser): Boolean {
+         override fun areContentsTheSame(oldItem: GetBlockedUserResponse, newItem: GetBlockedUserResponse): Boolean {
              return oldItem == newItem
          }
      }

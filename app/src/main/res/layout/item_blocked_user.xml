@@ -10,7 +10,7 @@
 
         <variable
             name="blockedUserItem"
-            type="com.onandoff.onandoff_android.data.model.BlockedUser" />
+            type="com.onandoff.onandoff_android.data.model.GetBlockedUserResponse" />
     </data>
 
     <LinearLayout
@@ -35,19 +35,37 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="@style/Circle" />
 
-            <TextView
-                android:id="@+id/tv_persona_name"
+            <LinearLayout
+                android:id="@+id/layout_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="1dp"
                 android:layout_marginStart="10dp"
-                android:text="@{blockedUserItem.profileName}"
-                android:textColor="@color/black"
-                android:textSize="@dimen/body_text_size"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/iv_user_persona"
                 app:layout_constraintTop_toTopOf="@id/iv_user_persona"
-                app:layout_constraintBottom_toTopOf="@id/tv_all_personas_blocked"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_all_personas_blocked">
+
+                <TextView
+                    android:id="@+id/tv_persona_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{blockedUserItem.personaName}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@{blockedUserItem.profileName}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/body_text_size"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_all_personas_blocked"
@@ -58,7 +76,7 @@
                 android:text="이 사람이 소유한 다른 프로필 모두 차단됨"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/small_text_size"
-                app:layout_constraintTop_toBottomOf="@id/tv_persona_name"
+                app:layout_constraintTop_toBottomOf="@id/layout_name"
                 app:layout_constraintBottom_toBottomOf="@id/iv_user_persona"
                 app:layout_constraintStart_toEndOf="@id/iv_user_persona" />
 
@@ -67,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="15dp"
                 android:text="차단 해제"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="@color/white"
