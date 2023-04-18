@@ -62,6 +62,7 @@ class BlockOtherUserViewModel(
 //                        callback(isBlocked)
 //                    }
                     _state.value = State.BlockOtherUserSuccess
+                    _state.value = State.Idle
                 }
                 .onFailure {
                     if (it is NetworkError) {

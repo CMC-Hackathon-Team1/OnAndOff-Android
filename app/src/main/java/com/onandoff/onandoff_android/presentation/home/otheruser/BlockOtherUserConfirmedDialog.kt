@@ -1,5 +1,6 @@
 package com.onandoff.onandoff_android.presentation.home.otheruser
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
@@ -11,8 +12,10 @@ import android.view.Window
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.databinding.DialogBlockOtherUserConfirmedBinding
+import com.onandoff.onandoff_android.presentation.look.LookAroundFragment
 
 class BlockOtherUserConfirmedDialog: DialogFragment() {
     private var _binding: DialogBlockOtherUserConfirmedBinding? = null
@@ -36,7 +39,7 @@ class BlockOtherUserConfirmedDialog: DialogFragment() {
     }
 
     private fun setupView() {
-        binding.btnUnblockOtherUserConfirmed.background = GradientDrawable().apply {
+        binding.buttonPanel.background = GradientDrawable().apply {
             val radius = resources.getDimension(R.dimen.create_persona_dialog_radius)
             cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, radius, radius, radius, radius)
 
@@ -48,11 +51,14 @@ class BlockOtherUserConfirmedDialog: DialogFragment() {
 
     private fun setupListeners() {
         binding.btnUnblockOtherUserConfirmed.setOnClickListener {
-//            dismiss()
-            activity?.supportFragmentManager?.popBackStack(
-                "otherUserFragment",
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+            dismiss()
+            val fragment = requireActivity().supportFragmentManager.fragments.find { it is LookAroundFragment }!!
+            fragment.onResume()
+            requireActivity().supportFragmentManager.beginTransaction().replace(
+                R.id.fcv_main,
+                fragment
+            ).commit()
+//            parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
     }
 
