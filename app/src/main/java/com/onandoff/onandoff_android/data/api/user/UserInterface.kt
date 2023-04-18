@@ -42,6 +42,6 @@ interface UserInterface {
 
     @GET("/profile-block/blocked-profiles")
     suspend fun getBlockedUserList(
-        @Path("profileId") profileId: Int
+        @Query("profileId") profileId: Int
     ) : GetBlockedUserListResponse
 }
