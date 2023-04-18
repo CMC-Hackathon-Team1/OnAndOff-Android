@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_weight = "1"
-            android:text="test@email.com"
+            android:text=""
             />
         <ImageView
             android:id="@+id/btn_email_reset"
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_weight = "1"
-            android:text="test"
+            android:text=""
             android:inputType="textPassword"
             />
         <ImageView
