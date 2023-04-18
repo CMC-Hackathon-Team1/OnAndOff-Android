@@ -47,7 +47,7 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
     private val binding
         get() = _binding!!
 
-    private val viewModel : BlockOtherUserViewModel by activityViewModels(factoryProducer = {
+    private val viewModel by activityViewModels<BlockOtherUserViewModel>(factoryProducer = {
         BlockOtherUserViewModel.Factory
     })
 
@@ -91,10 +91,8 @@ class OtherUserFragment : Fragment(), CalendarAdapter.OnMonthChangeListener,
         setupViewModel()
 
         binding.backBtn.setOnClickListener {
-            activity?.supportFragmentManager?.popBackStack(
-                "otherUserFragment",
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+            requireActivity().supportFragmentManager.popBackStack()
         }
         binding.ivOptionMenu.setOnClickListener {
             val bottomSheet = BottomSheetBlockOtherUserOptionMenu.newInstance(otherUserId)
