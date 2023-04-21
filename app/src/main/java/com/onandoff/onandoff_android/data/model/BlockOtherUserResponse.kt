@@ -13,9 +13,7 @@ data class BlockedUser(
     val profileId: Int,
     val personaName: String?,
     val profileName: String?,
-    val statusMessage: String?,
-    val profileImgUrl: String?,
-    val createdAt: String?
+    val profileImgUrl: String?
 )
 
 data class GetBlockedUserResponse(
@@ -25,12 +23,8 @@ data class GetBlockedUserResponse(
     val personaName: String?,
     @SerializedName("profileName")
     val profileName: String?,
-    @SerializedName("statusMessage")
-    val statusMessage: String?,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String?,
-    @SerializedName("createdAt")
-    val createdAt: String?
+    val profileImgUrl: String?
 )
 
 data class GetBlockedUserListResponse(

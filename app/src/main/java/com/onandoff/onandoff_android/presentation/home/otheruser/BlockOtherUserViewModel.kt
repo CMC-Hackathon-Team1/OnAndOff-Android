@@ -47,7 +47,7 @@ class BlockOtherUserViewModel(
             -1
         )
 
-    fun blockOtherUser(toProfileId: Int, callback: (isBlocked: Boolean) -> Unit) {
+    fun blockOtherUser(toProfileId: Int) {
         val request = BlockOrUnblockOtherUserRequest(
             fromProfileId = profileId,
             toProfileId = toProfileId,
@@ -57,11 +57,12 @@ class BlockOtherUserViewModel(
         viewModelScope.launch {
             kotlin.runCatching { userRepository.blockOrUnblockOtherUser(request) }
                 .onSuccess {
-                    if (it.statusCode == 3703) {
-                        val isBlocked = it.message == "BLOCK"
-                        callback(isBlocked)
-                    }
-//                    _state.value = State.BlockOtherUserSuccess
+//                    if (it.statusCode == 3703) {
+//                        val isBlocked = it.message == "BLOCK"
+//                        callback(isBlocked)
+//                    }
+                    _state.value = State.BlockOtherUserSuccess
+                    _state.value = State.Idle
                 }
                 .onFailure {
                     if (it is NetworkError) {

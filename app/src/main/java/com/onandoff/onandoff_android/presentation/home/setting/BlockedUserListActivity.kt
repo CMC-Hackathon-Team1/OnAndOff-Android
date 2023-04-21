@@ -4,22 +4,29 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
-import com.onandoff.onandoff_android.data.model.BlockedUser
+import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.databinding.ActivityBlockedUserListBinding
 import com.onandoff.onandoff_android.presentation.home.setting.viewmodel.BlockedUserListViewModel
+import com.onandoff.onandoff_android.util.APIPreferences
+import com.onandoff.onandoff_android.util.SharePreference
 import kotlinx.coroutines.launch
 
 class BlockedUserListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlockedUserListBinding
 
-    private val viewModel by viewModels<BlockedUserListViewModel>()
+    private val viewModel by viewModels<BlockedUserListViewModel>(factoryProducer = {
+        BlockedUserListViewModel.Factory
+    })
     private lateinit var blockedUserListAdapter: BlockedUserListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +34,33 @@ class BlockedUserListActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_blocked_user_list)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        setContentView(R.layout.activity_blocked_user_list)
 
-        initRecyclerView(binding.rvBlockedUserList)
+        setupView()
+        setupListeners()
         setupViewModel()
+    }
+
+    private fun setupView() {
+        initRecyclerView(binding.rvBlockedUserList)
+    }
+
+    private fun setupListeners() {
+        binding.ivBackArrow.setOnClickListener {
+            finish()
+        }
+
+        supportFragmentManager.setFragmentResultListener(
+            UnblockOtherUserDialog.TAG,
+            this@BlockedUserListActivity
+        ) { _: String, result: Bundle ->
+            val action = result.getString(UnblockOtherUserDialog.RESULT_ACTION)
+            if (action == UnblockOtherUserDialog.ACTION_UNBLOCK) {
+                blockedUserListAdapter.getItem().map { blockedUser ->
+                    val toProfileId = blockedUser.profileId
+                    viewModel.unblockUser(toProfileId)
+                }
+            }
+        }
     }
 
     private fun setupViewModel() {
@@ -60,11 +90,25 @@ class BlockedUserListActivity : AppCompatActivity() {
                         }
                         is BlockedUserListViewModel.State.Idle -> {}
                         is BlockedUserListViewModel.State.GetBlockedUserListSuccess -> {
+
                             blockedUserListAdapter.submitList(state.blockedUserList)
+                            if (blockedUserListAdapter.currentList.isEmpty()) {
+                                binding.rvBlockedUserList.isGone = true
+                                binding.tvNoBlockedUsers.isVisible = true
+                                Log.d("setupViewModel - Empty", "setupViewModel: ${state.blockedUserList}")
+                            } else {
+//                                blockedUserListAdapter.submitList(state.blockedUserList)
+                                binding.rvBlockedUserList.isGone = false
+                                binding.tvNoBlockedUsers.isVisible = false
+                                Log.d("setupViewModel - Not Empty", "setupViewModel: ${state.blockedUserList}")
+                            }
                         }
                         is BlockedUserListViewModel.State.UnblockUserSuccess -> {
                             val unblockOtherUserConfirmedDialog = UnblockOtherUserConfirmedDialog.newInstance()
                             unblockOtherUserConfirmedDialog.show(supportFragmentManager, UnblockOtherUserConfirmedDialog.TAG)
+//                            val profileId = SharePreference.prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, -1)
+//                            viewModel.getBlockedUserList(profileId)
+                            blockedUserListAdapter.notifyDataSetChanged()
                         }
                     }
                 }
@@ -75,20 +119,22 @@ class BlockedUserListActivity : AppCompatActivity() {
     private fun initRecyclerView(recyclerView: RecyclerView) {
         blockedUserListAdapter = BlockedUserListAdapter(
             onButtonClick = {
-                unblockUser(it)
+                openUnblockOtherUserDialog(it)
             }
         )
 
         recyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-//            adapter = BlockedUserListAdapter
+            adapter = blockedUserListAdapter
         }
+
+        Log.d("initRecyclerView", "initRecyclerView: ${blockedUserListAdapter.currentList}")
     }
 
-    private fun unblockUser(blockedUser: BlockedUser) {
+    private fun openUnblockOtherUserDialog(blockedUser: GetBlockedUserResponse) {
 //        viewModel.unblockUser(blockedUser.profileId)
-        val unblockOtherUserDialog = UnblockOtherUserDialog.newInstance()
+        val unblockOtherUserDialog = UnblockOtherUserDialog.newInstance(blockedUser.profileId)
         unblockOtherUserDialog.show(supportFragmentManager, UnblockOtherUserDialog.TAG)
     }
 

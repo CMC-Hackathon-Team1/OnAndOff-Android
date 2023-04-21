@@ -60,6 +60,7 @@ class LookAroundFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.refresh()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +81,7 @@ class LookAroundFragment : Fragment() {
 
     private fun setupView() {
         initLookAroundTabs()
-        binding.spinner.dropDownVerticalOffset = -20
+//        binding.spinner.dropDownVerticalOffset = -20
         initFeedListRecyclerView(binding.rvFeedList)
 
         TedKeyboardObserver(requireActivity())
@@ -171,15 +172,6 @@ class LookAroundFragment : Fragment() {
 
     private fun setupViewModel() {
         with(viewModel) {
-//            feedList.observe(viewLifecycleOwner) {
-//                lifecycleScope.launch {
-//                    it.collect {
-//                        Log.d("feedRequest", "$it")
-//                        feedListAdapter.submitData(it)
-//                    }
-//                }
-//            }
-
             lifecycleScope.launch {
                 state.collect { state ->
                     when (state) {
