@@ -181,10 +181,6 @@ class HomeViewModel(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
             item.myProfile.profileId
         )
-
-//        getMonthlyLikesCount(profileId)  // like 만
-//        getMonthlyMyFeedsCount(profileId) // my feed
-//        getMonthlyFollowersCount(profileId) // follower
     }
 
     private fun getCalendarFeedList(profileId: Int, year: Int, month : String) {
@@ -220,91 +216,6 @@ class HomeViewModel(
                         it.result.monthlyLikesCount,
                         it.result.monthlyMyFeedsCount,
                         it.result.monthlyMyFollowersCount
-                    )
-                }
-                .onFailure {
-                    if (it is NetworkError) {
-                        when (it) {
-                            is NetworkError.BodyError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-                            is NetworkError.JwtError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-                            is NetworkError.ServerError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-                            is NetworkError.JwtTokenAndProfileNotSame -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-                            else -> {}
-                        }
-                    }
-                }
-        }
-    }
-
-
-    // TODO: 페르소나 별 공감 수가 보이게 하기
-    private fun getMonthlyLikesCount(profileId: Int) {
-        viewModelScope.launch {
-            kotlin.runCatching { statisticsRepository.getMonthlyLikesCount(profileId) }
-                .onSuccess {
-//                    _state.value = State.GetLikesCount(it.result.monthlyLikesCount)
-                }
-                .onFailure {
-                    if (it is NetworkError) {
-                        when (it) {
-                            is NetworkError.BodyError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-                            is NetworkError.JwtError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-                            is NetworkError.ServerError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-                            is NetworkError.JwtTokenAndProfileNotSame -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-                            else -> {}
-                        }
-                    }
-                }
-        }
-    }
-
-    // TODO: 페르소나 별 게시글 수가 보이게 하기
-    private fun getMonthlyMyFeedsCount(profileId: Int) {
-        viewModelScope.launch {
-            kotlin.runCatching { statisticsRepository.getMonthlyMyFeedsCount(profileId) }
-                .onSuccess {
-                    _state.value = State.GetMonthlyCountSuccess(
-                        monthlyLikesCount.value!!,
-                        monthlyMyFeedsCount.value!!,
-                        monthlyMyFollowersCount.value!!
-                    )
-                    //여기 이상함
-                }
-                .onFailure {
-                    if (it is NetworkError) {
-                        when (it) {
-                            is NetworkError.BodyError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.NO_PROFILE_ID_OR_INVALID_VALUE)
-                            is NetworkError.JwtError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_ERROR)
-                            is NetworkError.ServerError -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.SERVER_ERROR)
-                            is NetworkError.JwtTokenAndProfileNotSame -> _state.value =
-                                State.GetMonthlyCountFailed(State.GetMonthlyCountFailed.Reason.JWT_TOKEN_AND_PROFILE_NOT_SAME)
-                            else -> {}
-                        }
-                    }
-                }
-        }
-    }
-
-    // TODO: 페르소나 별 팔로워 수가 보이게 하기
-    private fun getMonthlyFollowersCount(profileId: Int) {
-        viewModelScope.launch {
-            kotlin.runCatching { statisticsRepository.getMonthlyFollowersCount(profileId) }
-                .onSuccess {
-                    _state.value = State.GetMonthlyCountSuccess(
-                        monthlyLikesCount.value!!,
-                        monthlyMyFeedsCount.value!!,
-                        monthlyMyFollowersCount.value!!
                     )
                 }
                 .onFailure {
