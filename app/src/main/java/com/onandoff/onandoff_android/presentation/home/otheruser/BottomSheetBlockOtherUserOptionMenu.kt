@@ -62,14 +62,6 @@ class BottomSheetBlockOtherUserOptionMenu : BottomSheetDialogFragment() {
         }
     }
 
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//        parentFragmentManager.findFragmentByTag(TAG)?.let {
-//            it as BottomSheetBlockOtherUserOptionMenu
-//            it.dismiss()
-//        }
-//    }
-
     companion object {
         private const val USER_ID = "user_id"
         const val RESULT_ACTION = "result_action"

@@ -9,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 object RetrofitClient {
     //retrofit 객체 생성
     private var retrofitClient:Retrofit?=null
@@ -40,18 +39,4 @@ object RetrofitClient {
         }
         return retrofitClient
     }
-
-
 }
-//val getRetrofit by lazy{
-//        Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//    }
-//object RetrofitClient {
-//    //retrofit 객체 생성
-//    private var retrofitClient:Retrofit?=null
-//    //singleton 패턴
-//
-//}

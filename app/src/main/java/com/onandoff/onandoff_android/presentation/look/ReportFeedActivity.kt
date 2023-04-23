@@ -254,61 +254,6 @@ class ReportFeedActivity : AppCompatActivity() {
         }
     }
 
-//    private fun onCheckBoxChecked(checked: Boolean) {
-//        when(checked) {
-//            (binding.checkboxSpamPromotion.isChecked) -> {
-//                binding.checkboxPorn.isChecked = false
-//                binding.checkboxDespise.isChecked = false
-//                binding.checkboxDobae.isChecked = false
-//                binding.checkboxPrivateInfoIllegalInfo.isChecked = false
-//                binding.checkboxEtc.isChecked = false
-//                binding.editEtc.isEnabled = false
-//            }
-//            (binding.checkboxPorn.isChecked) -> {
-//                binding.checkboxSpamPromotion.isChecked = false
-//                binding.checkboxDespise.isChecked = false
-//                binding.checkboxDobae.isChecked = false
-//                binding.checkboxPrivateInfoIllegalInfo.isChecked = false
-//                binding.checkboxEtc.isChecked = false
-//                binding.editEtc.isEnabled = false
-//            }
-//            (binding.checkboxDespise.isChecked) -> {
-//                binding.checkboxSpamPromotion.isChecked = false
-//                binding.checkboxDobae.isChecked = false
-//                binding.checkboxPorn.isChecked = false
-//                binding.checkboxPrivateInfoIllegalInfo.isChecked = false
-//                binding.checkboxEtc.isChecked = false
-//                binding.editEtc.isEnabled = false
-//            }
-//            (binding.checkboxDobae.isChecked) -> {
-//                binding.checkboxSpamPromotion.isChecked = false
-//                binding.checkboxPorn.isChecked = false
-//                binding.checkboxDespise.isChecked = false
-//                binding.checkboxPrivateInfoIllegalInfo.isChecked = false
-//                binding.checkboxEtc.isChecked = false
-//                binding.editEtc.isEnabled = false
-//            }
-//            (binding.checkboxPrivateInfoIllegalInfo.isChecked) -> {
-//                binding.checkboxSpamPromotion.isChecked = false
-//                binding.checkboxPorn.isChecked = false
-//                binding.checkboxDespise.isChecked = false
-//                binding.checkboxDobae.isChecked = false
-//                binding.checkboxEtc.isChecked = false
-//                binding.editEtc.isEnabled = false
-//            }
-//            (binding.checkboxEtc.isChecked) -> {
-//                binding.checkboxSpamPromotion.isChecked = false
-//                binding.checkboxPorn.isChecked = false
-//                binding.checkboxDespise.isChecked = false
-//                binding.checkboxDobae.isChecked = false
-//                binding.checkboxPrivateInfoIllegalInfo.isChecked = false
-//                binding.editEtc.isEnabled = true
-//            }
-//            else -> {}
-//        }
-//    }
-
-
     companion object {
         fun getIntent(context: Context, feedId: Int) =
             Intent(context, ReportFeedActivity::class.java)

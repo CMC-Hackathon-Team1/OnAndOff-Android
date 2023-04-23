@@ -244,34 +244,6 @@ class LookAroundViewModel(
         viewModelScope.launch {
             feedRequest.send(FeedRequest(profileId, categoryId, fResult))
         }
-
-//
-//        viewModelScope.launch {
-//            kotlin.runCatching {
-//                feedRepository.getFeedListSource(
-//
-//                )
-//            }
-//                .onSuccess {
-//                    Log.d("LookAroundViewModel : ", "$it")
-////                    _state.value = State.GetFeedListSuccess(it)
-//                    _feedList.value = it
-//                }
-//                .onFailure {
-//                    it.printStackTrace()
-//                    if (it is NetworkError) {
-//                        when (it) {
-//                            is NetworkError.BodyError -> _state.value =
-//                                State.GetFeedListFailed(State.GetFeedListFailed.Reason.BODY_ERROR)
-//                            is NetworkError.JwtError -> _state.value =
-//                                State.GetFeedListFailed(State.GetFeedListFailed.Reason.JWT_ERROR)
-//                            is NetworkError.DBError -> _state.value =
-//                                State.GetFeedListFailed(State.GetFeedListFailed.Reason.SERVER_ERROR)
-//                            else -> {}
-//                        }
-//                    }
-//                }
-//        }
     }
 
 
@@ -309,28 +281,6 @@ class LookAroundViewModel(
             Log.d("query", "FeedListViewModel - getSearchFeedResult: categoryId - $categoryId")
             Log.d("query", "FeedListViewModel - getSearchFeedResult: fResult - $fResult")
         }
-//        viewModelScope.launch {
-//            kotlin.runCatching {
-//                feedRepository.getFeedListSource(
-//                    FeedRequest(profileId, categoryId, fResult, query)
-//                )
-//            }
-//                .onSuccess {
-//                    Log.d("LookAroundViewModel : ", "$it")
-//                    _state.value = State.SearchFeedSuccess
-//                }
-//                .onFailure {
-//                    if (it is NetworkError) {
-//                        when (it) {
-//                            is NetworkError.NoProfileIdError -> _state.value =
-//                                State.SearchFeedFailed(State.SearchFeedFailed.Reason.NO_PROFILE_ID)
-////                            is NetworkError.NoSearchKeyword -> _state.value =
-////                                State.SearchFeedFailed(State.SearchFeedFailed.Reason.NO_SEARCH_KEYWORD)
-//                            else -> {}
-//                        }
-//                    }
-//                }
-//        }
     }
 
     fun like(feedId: Int, callback: (isLike: Boolean) -> Unit) {

@@ -58,7 +58,6 @@ class BlockOtherUserConfirmedDialog: DialogFragment() {
                 R.id.fcv_main,
                 fragment
             ).commit()
-//            parentFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
     }
 
