@@ -113,9 +113,6 @@ class CreatePersonaActivity : AppCompatActivity() {
         binding.ivPersonaProfile.setOnClickListener {
             val bottomSheet = BottomSheetSelectImageOptionMenu.newInstance()
             bottomSheet.show(supportFragmentManager, bottomSheet.tag)
-//            if (checkStoragePermission()) {
-//                openGallery()
-//            }
         }
         binding.tvFinish.setOnClickListener {
             if (binding.editPersona.length() < 2 || binding.editNickname.length() < 2) {
@@ -170,26 +167,6 @@ class CreatePersonaActivity : AppCompatActivity() {
         val result = cursor?.getString(index!!)
 
         return result!!
-    }
-
-    private fun checkStoragePermission(): Boolean {
-        val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
-        val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-        return if (ActivityCompat.checkSelfPermission(this, readPermission)
-            == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, writePermission)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            true
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(readPermission, writePermission),
-                PERMISSION_REQ_CODE
-            )
-            false
-        }
     }
 
     override fun onRequestPermissionsResult(

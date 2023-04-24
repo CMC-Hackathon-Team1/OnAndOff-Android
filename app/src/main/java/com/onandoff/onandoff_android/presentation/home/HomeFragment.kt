@@ -271,31 +271,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         cornerRadii = floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius)
     }
 
-
-
-    private fun getMonthlyStatistics() {
-        // TODO: 월 별 작성한 공감, 게시글, 팔로워 수 데이터 연동 추가하기
-//        binding.tvMonthlyLikesCount.text
-//        binding.tvMonthlyMyFeedsCount.text
-//        binding.tvMonthlyFollowersCount.text
-    }
-
-    private fun getMonthlyLikes(statisticsResponse: StatisticsResponse) {
-        // TODO: 월 별 공감 수 데이터 연동 표시하기
-//        binding.tvMonthlyLikesCount.text
-    }
-
-    private fun getMonthlyMyFeeds(statisticsResponse: StatisticsResponse) {
-        // TODO: 월 별 작성한 게시글 수 데이터 연동 표시하기
-//        binding.tvMonthlyLikesCount.text
-    }
-
-    private fun getMonthlyFollowers(statisticsResponse: StatisticsResponse) {
-        // TODO: 월 별 팔로워 수 데이터 연동 표시하기
-//        binding.tvMonthlyFollowersCount.text
-    }
-
-
     private fun setupCalendar() {
         calendarAdapter = CalendarAdapter(this)
         calendarAdapter.setItemClickListener(this)
@@ -366,15 +341,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         startActivity(intent)
     }
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
-    }
-
     override fun onMonthChanged(calendar: Calendar) {
         val userId = if(profileId != null) profileId!! else 0
         val year = calendar.get(Calendar.YEAR)
@@ -424,5 +390,14 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         intent.putExtra("profileId", profileId)
         intent.putExtra("feedId", feedId)
         startActivity(intent)
+    }
+
+    companion object {
+        fun newInstance() = HomeFragment()
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

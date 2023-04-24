@@ -24,8 +24,6 @@ class BlockOtherUserViewModel(
     sealed class State {
         data class BlockOtherUserFailed(val reason: Reason) : State() {
             enum class Reason {
-//                PARAMETER_ERROR,
-//                JWT_ERROR,
                 DB_ERROR,
                 ALREADY_BLOCKED,
                 INVALID_FROM_PROFILE_ID,
@@ -57,20 +55,12 @@ class BlockOtherUserViewModel(
         viewModelScope.launch {
             kotlin.runCatching { userRepository.blockOrUnblockOtherUser(request) }
                 .onSuccess {
-//                    if (it.statusCode == 3703) {
-//                        val isBlocked = it.message == "BLOCK"
-//                        callback(isBlocked)
-//                    }
                     _state.value = State.BlockOtherUserSuccess
                     _state.value = State.Idle
                 }
                 .onFailure {
                     if (it is NetworkError) {
                         when (it) {
-//                            is NetworkError.BodyError -> _state.value =
-//                                State.BlockOtherUserFailed(State.BlockOtherUserFailed.Reason.PARAMETER_ERROR)
-//                            is NetworkError.JwtError -> _state.value =
-//                                State.BlockOtherUserFailed(State.BlockOtherUserFailed.Reason.JWT_ERROR)
                             is NetworkError.DBError -> _state.value =
                                 State.BlockOtherUserFailed(State.BlockOtherUserFailed.Reason.DB_ERROR)
                             is NetworkError.AlreadyReportedFeedError -> _state.value =

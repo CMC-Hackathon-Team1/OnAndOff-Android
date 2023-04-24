@@ -49,7 +49,6 @@ class UnblockOtherUserConfirmedDialog : DialogFragment() {
     private fun setupListeners() {
         binding.btnUnblockOtherUserConfirmed.setOnClickListener {
             dismiss()
-//            requireActivity().finish()
         }
     }
 

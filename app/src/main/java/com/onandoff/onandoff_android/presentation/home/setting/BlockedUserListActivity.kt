@@ -97,7 +97,6 @@ class BlockedUserListActivity : AppCompatActivity() {
                                 binding.tvNoBlockedUsers.isVisible = true
                                 Log.d("setupViewModel - Empty", "setupViewModel: ${state.blockedUserList}")
                             } else {
-//                                blockedUserListAdapter.submitList(state.blockedUserList)
                                 binding.rvBlockedUserList.isGone = false
                                 binding.tvNoBlockedUsers.isVisible = false
                                 Log.d("setupViewModel - Not Empty", "setupViewModel: ${state.blockedUserList}")
@@ -106,8 +105,6 @@ class BlockedUserListActivity : AppCompatActivity() {
                         is BlockedUserListViewModel.State.UnblockUserSuccess -> {
                             val unblockOtherUserConfirmedDialog = UnblockOtherUserConfirmedDialog.newInstance()
                             unblockOtherUserConfirmedDialog.show(supportFragmentManager, UnblockOtherUserConfirmedDialog.TAG)
-//                            val profileId = SharePreference.prefs.getSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID, -1)
-//                            viewModel.getBlockedUserList(profileId)
                             blockedUserListAdapter.notifyDataSetChanged()
                         }
                     }
@@ -133,7 +130,6 @@ class BlockedUserListActivity : AppCompatActivity() {
     }
 
     private fun openUnblockOtherUserDialog(blockedUser: GetBlockedUserResponse) {
-//        viewModel.unblockUser(blockedUser.profileId)
         val unblockOtherUserDialog = UnblockOtherUserDialog.newInstance(blockedUser.profileId)
         unblockOtherUserDialog.show(supportFragmentManager, UnblockOtherUserDialog.TAG)
     }
