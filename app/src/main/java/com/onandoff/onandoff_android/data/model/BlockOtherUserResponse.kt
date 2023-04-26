@@ -27,6 +27,15 @@ data class GetBlockedUserResponse(
     val profileImgUrl: String?
 )
 
+fun GetBlockedUserResponse.toEntity(): BlockedUser {
+    return BlockedUser(
+        profileId = profileId,
+        personaName = personaName,
+        profileName = profileName,
+        profileImgUrl = profileImgUrl
+    )
+}
+
 data class GetBlockedUserListResponse(
     @SerializedName("statusCode")
     val statusCode: Int,
