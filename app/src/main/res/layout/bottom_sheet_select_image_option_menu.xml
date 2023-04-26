@@ -34,10 +34,10 @@
                     app:imageView_duration="150" />
 
                 <TextView
-                    android:id="@+id/tv_title_report"
+                    android:id="@+id/tv_title_upload_profile_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="프로필 사진 업로드"
+                    android:text="@string/upload_profile_image"
                     android:textColor="@color/black"
                     android:textSize="@dimen/title_text_size"
                     android:textStyle="bold"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="2dp"
-                android:text="기본 이미지로 변경"
+                android:text="@string/change_to_default_image"
                 android:textColor="@color/black"
                 android:textSize="@dimen/body_text_size" />
 
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="엘범에서 찾기"
+                android:text="@string/search_album"
                 android:textColor="@color/black"
                 android:textSize="@dimen/body_text_size" />
 

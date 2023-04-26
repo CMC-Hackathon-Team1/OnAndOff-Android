@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:text="해당 게시글를 신고하시겠습니까?"
+            android:text="@string/would_you_report_feed"
             android:textColor="@color/black"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="취소"
+                android:text="@string/cancel"
                 android:textColor="@color/color_main"
                 android:textStyle="bold"
                 app:imageView_duration="150" />
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/round_main_bottom_right_corner_background"
-                android:text="신고"
+                android:text="@string/btn_report"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:imageView_duration="150" />

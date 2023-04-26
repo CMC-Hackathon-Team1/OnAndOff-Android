@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:text="신고가 완료되었습니다."
+            android:text="@string/report_feed_is_confirmed"
             android:textColor="@color/black"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold" />
@@ -36,9 +36,8 @@
                 android:id="@+id/btn_report_feed_confirmed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/round_main_bottom_left_right_corner_background"
-                android:text="확인"
+                android:text="@string/confirmed"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:imageView_duration="150" />

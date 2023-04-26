@@ -34,10 +34,10 @@
                     app:imageView_duration="150" />
 
                 <TextView
-                    android:id="@+id/tv_title_report"
+                    android:id="@+id/tv_title_block"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="차단하기"
+                    android:text="@string/block"
                     android:textColor="@color/black"
                     android:textSize="@dimen/body_text_size"
                     android:textStyle="bold"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:text="유저 차단하기"
+                android:text="@string/block_user"
                 android:textColor="@color/errorColor"
                 android:textSize="@dimen/body_text_size" />
 

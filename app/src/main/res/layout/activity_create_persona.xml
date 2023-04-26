@@ -32,7 +32,7 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="프로필 생성"
+            android:text="@string/title_create_persona"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="21dp"
-            android:text="생성하기"
+            android:text="@string/create"
             android:textColor="#58B8A1"
             app:layout_constraintBottom_toBottomOf="@id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,14 +87,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="*"
+                android:text="@string/asterisk"
                 android:textColor="@color/color_main" />
 
             <TextView
                 android:id="@+id/tv_personas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="페르소나?"
+                android:text="@string/persona_if"
                 android:textColor="#000000"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
-            android:hint="ex. 작가"
+            android:hint="@string/ex_author"
             android:text="@={viewModel.personaName}"
             android:textSize="@dimen/small_text_size"
             android:inputType="text"
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="필수로 입력해야 합니다"
+            android:text="@string/persona_error"
             android:textColor="@color/errorColor"
             android:textSize="@dimen/sub_text_size"
             android:textStyle="bold"
@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="31dp"
             android:layout_marginTop="41dp"
-            android:text="한줄소개"
+            android:text="@string/one_line_introduce"
             android:textColor="#000000"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
-            android:hint="최대 30자까지 가능합니다"
+            android:hint="@string/max_30"
             android:text="@={viewModel.introduce}"
             android:textSize="@dimen/small_text_size"
             android:inputType="text"
@@ -195,14 +195,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="*"
+                android:text="@string/asterisk"
                 android:textColor="@color/color_main" />
 
             <TextView
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="닉네임"
+                android:text="@string/nickname"
                 android:textColor="#000000"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -239,7 +239,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="필수로 입력해야 합니다"
+            android:text="@string/nickname_error"
             android:textColor="@color/errorColor"
             android:textSize="@dimen/sub_text_size"
             android:textStyle="bold"
