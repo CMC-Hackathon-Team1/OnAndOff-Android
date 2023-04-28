@@ -56,10 +56,7 @@ class BlockedUserListActivity : AppCompatActivity() {
         ) { _: String, result: Bundle ->
             val action = result.getString(UnblockOtherUserDialog.RESULT_ACTION)
             if (action == UnblockOtherUserDialog.ACTION_UNBLOCK) {
-                blockedUserListAdapter.getItem().map { blockedUser ->
-                    val toProfileId = blockedUser.profileId
-                    viewModel.unblockUser(toProfileId)
-                }
+                viewModel.unblockUser(result.getInt(UnblockOtherUserDialog.TO_PROFILE_ID))
             }
         }
     }
