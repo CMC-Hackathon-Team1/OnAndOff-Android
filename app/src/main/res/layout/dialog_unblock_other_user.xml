@@ -24,7 +24,7 @@
                 android:id="@+id/tv_other_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="해당 유저를 "
+                android:text="@string/that_user"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -33,8 +33,9 @@
                 android:id="@+id/tv_unblock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="0.5dp"
-                android:text="차단 해제"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="0.5dp"
+                android:text="@string/unblock"
                 android:textColor="@color/errorColor"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -43,7 +44,7 @@
                 android:id="@+id/tv_would_you"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="하시겠습니까?"
+                android:text="@string/would_you"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -64,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="취소"
+                android:text="@string/cancel"
                 android:textColor="@color/color_main"
                 android:textStyle="bold"
                 app:imageView_duration="150" />
@@ -75,10 +76,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/round_main_bottom_right_corner_background"
-                android:text="차단 해제"
+                android:text="@string/unblock"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                app:imageView_duration="150" />
+                app:imageView_duration="50" />
 
         </LinearLayout>
 

@@ -24,7 +24,7 @@
                 android:id="@+id/tv_that"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="해당"
+                android:text="@string/that"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="유저 차단"
+                android:text="@string/user_block"
                 android:textColor="@color/errorColor"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0.5dp"
-                android:text="이"
+                android:text="@string/is"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="완료되었습니다."
+                android:text="@string/completed"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -69,15 +69,14 @@
             android:orientation="horizontal"
             app:strokeColor="@color/color_main">
 
-            <com.skydoves.elasticviews.ElasticButton
+            <Button
                 android:id="@+id/btn_unblock_other_user_confirmed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_main_bottom_left_right_corner_background"
-                android:text="확인"
+                android:text="@string/confirmed"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                app:imageView_duration="150" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 

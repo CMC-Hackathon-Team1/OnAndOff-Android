@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.databinding.ActivityBlockedUserListBinding
 import com.onandoff.onandoff_android.presentation.home.setting.viewmodel.BlockedUserListViewModel
@@ -55,10 +56,7 @@ class BlockedUserListActivity : AppCompatActivity() {
         ) { _: String, result: Bundle ->
             val action = result.getString(UnblockOtherUserDialog.RESULT_ACTION)
             if (action == UnblockOtherUserDialog.ACTION_UNBLOCK) {
-                blockedUserListAdapter.getItem().map { blockedUser ->
-                    val toProfileId = blockedUser.profileId
-                    viewModel.unblockUser(toProfileId)
-                }
+                viewModel.unblockUser(result.getInt(UnblockOtherUserDialog.TO_PROFILE_ID))
             }
         }
     }
@@ -129,7 +127,7 @@ class BlockedUserListActivity : AppCompatActivity() {
         Log.d("initRecyclerView", "initRecyclerView: ${blockedUserListAdapter.currentList}")
     }
 
-    private fun openUnblockOtherUserDialog(blockedUser: GetBlockedUserResponse) {
+    private fun openUnblockOtherUserDialog(blockedUser: BlockedUser) {
         val unblockOtherUserDialog = UnblockOtherUserDialog.newInstance(blockedUser.profileId)
         unblockOtherUserDialog.show(supportFragmentManager, UnblockOtherUserDialog.TAG)
     }

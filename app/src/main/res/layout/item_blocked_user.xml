@@ -10,7 +10,7 @@
 
         <variable
             name="blockedUserItem"
-            type="com.onandoff.onandoff_android.data.model.GetBlockedUserResponse" />
+            type="com.onandoff.onandoff_android.data.model.BlockedUser" />
     </data>
 
     <LinearLayout
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="이 사람이 소유한 다른 프로필 모두 차단됨"
+                android:text="@string/all_personas_blocked"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/small_text_size"
                 app:layout_constraintTop_toBottomOf="@id/layout_name"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="15dp"
-                android:text="차단 해제"
+                android:text="@string/unblock"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"

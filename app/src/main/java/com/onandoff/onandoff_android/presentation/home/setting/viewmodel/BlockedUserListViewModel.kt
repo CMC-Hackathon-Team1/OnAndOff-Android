@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.onandoff.onandoff_android.data.api.user.UserInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
+import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.GetBlockedUserResponse
 import com.onandoff.onandoff_android.data.model.error.NetworkError
 import com.onandoff.onandoff_android.data.remote.UserRemoteDataSourceImpl
@@ -32,7 +33,7 @@ class BlockedUserListViewModel(
         }
 
         data class GetBlockedUserListSuccess(
-            val blockedUserList: List<GetBlockedUserResponse>
+            val blockedUserList: List<BlockedUser>
         ) : State()
 
         data class UnblockUserFailed(val reason: Reason) : State() {
@@ -58,20 +59,16 @@ class BlockedUserListViewModel(
         )
 
     init {
-        viewModelScope.launch {
-            getBlockedUserList(profileId)
-            Log.d("init", "init: $profileId")
-        }
-//        getBlockedUserList(profileId)
-//        Log.d("init", "init: $profileId")
+        getBlockedUserList(profileId)
+        Log.d("init", "init: $profileId")
     }
 
-    fun getBlockedUserList(profileId: Int) {
+    private fun getBlockedUserList(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { userRepository.getBlockedUserList(profileId) }
                 .onSuccess {
-                    _state.value = State.GetBlockedUserListSuccess(it.result)
-                    Log.d("getBlockedUserList", "getBlockedUserList: ${it.result} $profileId")
+                    _state.value = State.GetBlockedUserListSuccess(it)
+                    Log.d("getBlockedUserList", "getBlockedUserList: $it $profileId")
                     Log.d("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
                 }
                 .onFailure {

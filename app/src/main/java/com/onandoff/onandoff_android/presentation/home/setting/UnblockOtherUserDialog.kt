@@ -55,6 +55,7 @@ class UnblockOtherUserDialog : DialogFragment() {
             // dialog -> activity
             setFragmentResult(TAG, Bundle().apply {
                 putString(RESULT_ACTION, ACTION_UNBLOCK)
+                putInt(TO_PROFILE_ID, requireArguments().getInt(TO_PROFILE_ID))
             })
             dismiss()
         }
@@ -63,7 +64,7 @@ class UnblockOtherUserDialog : DialogFragment() {
     companion object {
         const val RESULT_ACTION = "result_action"
         const val ACTION_UNBLOCK = "action_unblock"
-        private const val TO_PROFILE_ID = "to_profile_id"
+        const val TO_PROFILE_ID = "to_profile_id"
 
         fun newInstance(profileId: Int): UnblockOtherUserDialog =
             UnblockOtherUserDialog().apply {

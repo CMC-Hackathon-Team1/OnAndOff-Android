@@ -27,21 +27,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_cannot_be_modified"
+                    android:id="@+id/tv_unblock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:text="차단 해제"
+                    android:text="@string/unblock"
                     android:textColor="@color/errorColor"
                     android:textSize="@dimen/small_text_size"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_persona_is"
+                    android:id="@+id/tv_is_done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0.5dp"
-                    android:text="하였습니다."
+                    android:text="@string/is_done"
                     android:textColor="@color/black"
                     android:textSize="@dimen/small_text_size"
                     android:textStyle="bold" />
@@ -49,12 +49,12 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_would_you_create"
+                android:id="@+id/tv_you_can_meet_the_user_by_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="7dp"
-                android:text="검색을 통해 해당 유저를 다시 만나 볼 수 있습니다. "
+                android:text="@string/you_can_meet_the_user_by_search"
                 android:textColor="@color/black"
                 android:textSize="@dimen/small_text_size"
                 android:textStyle="bold" />
@@ -69,16 +69,14 @@
             android:orientation="horizontal"
             app:strokeColor="@color/color_main">
 
-            <com.skydoves.elasticviews.ElasticButton
+            <Button
                 android:id="@+id/btn_unblock_other_user_confirmed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/round_main_bottom_left_right_corner_background"
-                android:text="확인"
+                android:text="@string/confirmed"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                app:imageView_duration="150" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
