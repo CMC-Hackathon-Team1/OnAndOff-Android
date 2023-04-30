@@ -200,38 +200,6 @@ class LookAroundFragment : Fragment() {
                                 }
                             }
                         }
-                        is LookAroundViewModel.State.GetFeedFailed -> {
-                            when (state.reason) {
-                                LookAroundViewModel.State.GetFeedFailed.Reason.BODY_ERROR -> {
-                                    Toast.makeText(
-                                        requireActivity(),
-                                        "body error",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                LookAroundViewModel.State.GetFeedFailed.Reason.JWT_ERROR -> {
-                                    Toast.makeText(
-                                        requireActivity(),
-                                        "jwt error",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                LookAroundViewModel.State.GetFeedFailed.Reason.SERVER_ERROR -> {
-                                    Toast.makeText(
-                                        requireActivity(),
-                                        "server error",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                LookAroundViewModel.State.GetFeedFailed.Reason.NO_PROFILE_ID -> {
-                                    Toast.makeText(
-                                        requireActivity(),
-                                        "no profile id error",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
                         is LookAroundViewModel.State.SearchFeedFailed -> {
                             when (state.reason) {
                                 LookAroundViewModel.State.SearchFeedFailed.Reason.NO_PROFILE_ID -> {
@@ -342,9 +310,6 @@ class LookAroundFragment : Fragment() {
                         }
                         LookAroundViewModel.State.Idle -> {}
                         is LookAroundViewModel.State.GetFeedListSuccess -> {
-
-                        }
-                        is LookAroundViewModel.State.GetFeedSuccess -> {
 
                         }
                         is LookAroundViewModel.State.SearchFeedSuccess -> {
