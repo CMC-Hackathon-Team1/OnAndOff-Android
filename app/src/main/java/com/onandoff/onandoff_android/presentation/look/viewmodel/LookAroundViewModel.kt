@@ -39,19 +39,6 @@ class LookAroundViewModel(
 
         data class GetFeedListSuccess(val feedList: Flow<PagingData<LookAroundFeedData>>) : State()
 
-        data class GetFeedFailed(val reason: Reason) : State() {
-
-            enum class Reason {
-                BODY_ERROR,
-                JWT_ERROR,
-                SERVER_ERROR,
-                NO_PROFILE_ID
-            }
-        }
-
-        object GetFeedSuccess : State()
-
-
         data class SearchFeedFailed(val reason: Reason) : State() {
 
             enum class Reason {
@@ -243,34 +230,6 @@ class LookAroundViewModel(
     private fun getFeedList(categoryId: Int) {
         viewModelScope.launch {
             feedRequest.send(FeedRequest(profileId, categoryId, fResult))
-        }
-    }
-
-
-    private fun getFeedDetail(feedId: Int, profileId: Int) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                feedRepository.getFeedDetailResult(feedId, profileId)
-            }
-                .onSuccess {
-                    Log.d("FeedListViewModel : ", "$it")
-                    _state.value = State.GetFeedSuccess
-                }
-                .onFailure {
-                    if (it is NetworkError) {
-                        when (it) {
-                            is NetworkError.BodyError -> _state.value =
-                                State.GetFeedFailed(State.GetFeedFailed.Reason.BODY_ERROR)
-                            is NetworkError.JwtError -> _state.value =
-                                State.GetFeedFailed(State.GetFeedFailed.Reason.JWT_ERROR)
-                            is NetworkError.DBError -> _state.value =
-                                State.GetFeedFailed(State.GetFeedFailed.Reason.SERVER_ERROR)
-                            is NetworkError.NoProfileIdError -> _state.value =
-                                State.GetFeedFailed(State.GetFeedFailed.Reason.NO_PROFILE_ID)
-                            else -> {}
-                        }
-                    }
-                }
         }
     }
 

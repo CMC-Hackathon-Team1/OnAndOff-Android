@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
+import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
 import com.onandoff.onandoff_android.presentation.home.MyProfileListAdapter
+import com.onandoff.onandoff_android.presentation.home.setting.BlockedUserListAdapter
 import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
 import com.onandoff.onandoff_android.presentation.look.LookAroundFeedListAdapter
 import kotlinx.coroutines.flow.Flow
@@ -34,4 +36,12 @@ fun RecyclerView.setLookAroundFeedItems(pagingDataLiveData: LiveData<Flow<Paging
             }
         }
     }
+}
+
+@BindingAdapter("blockedUsers")
+fun RecyclerView.setBlockedUsers(items: List<BlockedUser>?) {
+    items ?: return
+
+    val adapter = this.adapter as? BlockedUserListAdapter
+    adapter?.submitList(items)
 }
