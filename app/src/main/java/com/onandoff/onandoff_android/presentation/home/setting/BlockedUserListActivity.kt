@@ -87,23 +87,10 @@ class BlockedUserListActivity : AppCompatActivity() {
                             }
                         }
                         is BlockedUserListViewModel.State.Idle -> {}
-                        is BlockedUserListViewModel.State.GetBlockedUserListSuccess -> {
-
-                            blockedUserListAdapter.submitList(state.blockedUserList)
-                            if (blockedUserListAdapter.currentList.isEmpty()) {
-                                binding.rvBlockedUserList.isGone = true
-                                binding.tvNoBlockedUsers.isVisible = true
-                                Log.d("setupViewModel - Empty", "setupViewModel: ${state.blockedUserList}")
-                            } else {
-                                binding.rvBlockedUserList.isGone = false
-                                binding.tvNoBlockedUsers.isVisible = false
-                                Log.d("setupViewModel - Not Empty", "setupViewModel: ${state.blockedUserList}")
-                            }
-                        }
+                        is BlockedUserListViewModel.State.GetBlockedUserListSuccess -> {}
                         is BlockedUserListViewModel.State.UnblockUserSuccess -> {
                             val unblockOtherUserConfirmedDialog = UnblockOtherUserConfirmedDialog.newInstance()
                             unblockOtherUserConfirmedDialog.show(supportFragmentManager, UnblockOtherUserConfirmedDialog.TAG)
-                            blockedUserListAdapter.notifyDataSetChanged()
                         }
                     }
                 }

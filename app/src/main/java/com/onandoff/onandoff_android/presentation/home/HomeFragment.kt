@@ -157,7 +157,6 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                         }
                         is HomeViewModel.State.GetPersonaListSuccess -> {
                             Log.d("state.myProfileList", "${state.profileList}")
-                            myProfileListAdapter.submitList(state.profileList)
 
                             val selectedProfile = state.profileList.find { it.isSelected }
                             if (selectedProfile != null) {

@@ -59,6 +59,7 @@
                                 android:orientation="horizontal"
                                 android:clipToPadding="false"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:myPersonaItems="@{viewModel.myProfileList}"
                                 tools:listitem="@layout/item_my_persona"
                                 app:layout_constrainedWidth="true"
                                 app:layout_constraintWidth_max="wrap"

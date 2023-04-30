@@ -81,6 +81,10 @@ class HomeViewModel(
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state.asStateFlow()
 
+    private val _myProfileList = MutableLiveData<List<MyProfileItem>>()
+    val myProfileList: LiveData<List<MyProfileItem>>
+        get() = _myProfileList
+
     val personaName: MutableLiveData<String> = MutableLiveData() // 페르소나 이름
     val profileName: MutableLiveData<String> = MutableLiveData() // 사용자 이름
 
@@ -138,6 +142,7 @@ class HomeViewModel(
                     profileList.clear()
                     profileList.addAll(it)
                     _state.value = State.GetPersonaListSuccess(it)
+                    _myProfileList.value = it
                 }
                 .onFailure {
                     if (it is NetworkError) {

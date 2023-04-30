@@ -52,6 +52,10 @@ class BlockedUserListViewModel(
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state.asStateFlow()
 
+    private val _blockedUserList = MutableLiveData<List<BlockedUser>>()
+    val blockedUserList: LiveData<List<BlockedUser>>
+        get() = _blockedUserList
+
     private val profileId: Int
         get() = SharePreference.prefs.getSharedPreference(
             APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
@@ -68,6 +72,7 @@ class BlockedUserListViewModel(
             kotlin.runCatching { userRepository.getBlockedUserList(profileId) }
                 .onSuccess {
                     _state.value = State.GetBlockedUserListSuccess(it)
+                    _blockedUserList.value = it
                     Log.d("getBlockedUserList", "getBlockedUserList: $it $profileId")
                     Log.d("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
                 }
@@ -75,8 +80,7 @@ class BlockedUserListViewModel(
                     _state.value =
                         State.GetBlockedUserListFailed(State.GetBlockedUserListFailed.Reason.DB_ERROR)
                     it.printStackTrace()
-                    Log.d("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
-
+                    Log.e("getBlockedUserList", "getBlockedUserList: ${_state.value} $profileId")
                 }
         }
     }
