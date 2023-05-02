@@ -29,6 +29,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+        <service android:name="com.onandoff.onandoff_android.data.api.notification.MyFirebaseMessageService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".presentation.home.setting.AccountActivity"
             android:exported="false" />
