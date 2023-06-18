@@ -21,9 +21,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BlockedUserListViewModel(
-    application: Application,
     private val userRepository: UserRepository
-): AndroidViewModel(application) {
+): ViewModel() {
 
     sealed class State {
         data class GetBlockedUserListFailed(val reason: Reason) : State() {
@@ -123,14 +122,7 @@ class BlockedUserListViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                // Get the Application object from extras
-                val application =
-                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                // Create a SavedStateHandle for this ViewModel from extras
-                val savedStateHandle = extras.createSavedStateHandle()
-
                 return BlockedUserListViewModel(
-                    application,
                     UserRepositoryImpl(
                         UserRemoteDataSourceImpl(
                             RetrofitClient.getClient()?.create(UserInterface::class.java)!!
