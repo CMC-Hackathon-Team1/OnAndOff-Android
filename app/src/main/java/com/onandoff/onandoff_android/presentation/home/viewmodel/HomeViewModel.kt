@@ -22,11 +22,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    application: Application,
     private val profileRepository: ProfileRepository,
     private val statisticsRepository: StatisticsRepository,
     private val calendarRepository: CalendarRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     sealed class State {
         data class GetPersonaFailed(val reason: Reason) : State() {
@@ -97,13 +96,7 @@ class HomeViewModel(
 
     private val profileList = mutableListOf<MyProfileItem>()
 
-
-    // TODO: 홈 화면에 진입하면 페르소나 데이터와 공감(좋아요), 게시글, 팔로워 수가 보여야 함
-
-    // TODO: 페르소나 목록 중에서 1개를 선택했을 때 해당 페르소나가 보이게 하기
-    // 사용자 모든 프로필 받아오기 사용하시면 됩니다!
-    // 프로필 별 세부 정보들은 ex) profileId 통해서 요청하면 될 것 같습니다!
-    private fun getMyPersona(profileId: Int) {
+    fun getMyPersona(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { profileRepository.getMyProfile(profileId) }
                 .onSuccess {
@@ -127,7 +120,6 @@ class HomeViewModel(
         }
     }
 
-    // TODO: 나의 페르소나 목록이 보이게 하기
     fun getMyPersonaList() {
         viewModelScope.launch {
             kotlin.runCatching { profileRepository.getMyProfileList() }
@@ -212,7 +204,6 @@ class HomeViewModel(
         }
     }
 
-    // TODO: 페르소나 별 월 별 공감, 게시글, 팔로워 수가 보이게 하기
     private fun getMonthlyStatistics(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { statisticsRepository.getMonthlyStatistics(profileId) }
@@ -251,14 +242,7 @@ class HomeViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                // Get the Application object from extras
-                val application =
-                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                // Create a SavedStateHandle for this ViewModel from extras
-                val savedStateHandle = extras.createSavedStateHandle()
-
                 return HomeViewModel(
-                    application,
                     ProfileRepositoryImpl(
                         ProfileRemoteDataSourceImpl(
                             RetrofitClient.getClient()?.create(MyPersonaInterface::class.java)!!

@@ -236,9 +236,9 @@ class LookAroundViewModel(
     fun getSearchFeedResult(query: String) {
         viewModelScope.launch {
             feedRequest.send(FeedRequest(profileId, categoryId, fResult, query))
-            Log.d("query", "FeedListViewModel - getSearchFeedResult: profileId - $profileId")
-            Log.d("query", "FeedListViewModel - getSearchFeedResult: categoryId - $categoryId")
-            Log.d("query", "FeedListViewModel - getSearchFeedResult: fResult - $fResult")
+            Log.d("getSearchFeedResult", "profileId - $profileId")
+            Log.d("getSearchFeedResult", "categoryId - $categoryId")
+            Log.d("getSearchFeedResult", "fResult - $fResult")
         }
     }
 
@@ -317,16 +317,6 @@ class LookAroundViewModel(
         if (!category.isInvalid) {
             categoryId = category.categoryId
             getFeedList(category.categoryId)
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-    }
-
-    fun setSpinnerEntry(entry: List<Int>) {
-        viewModelScope.launch {
-            _spinnerEntry.emit(entry)
         }
     }
 

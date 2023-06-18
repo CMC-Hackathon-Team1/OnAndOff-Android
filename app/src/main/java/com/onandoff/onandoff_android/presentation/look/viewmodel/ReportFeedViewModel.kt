@@ -16,10 +16,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ReportFeedViewModel(
-    application: Application,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
     sealed class State {
         data class ReportFeedFailed(val reason: Reason) : State() {
             enum class Reason {
@@ -87,14 +86,10 @@ class ReportFeedViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                // Get the Application object from extras
-                val application =
-                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 // Create a SavedStateHandle for this ViewModel from extras
                 val savedStateHandle = extras.createSavedStateHandle()
 
                 return ReportFeedViewModel(
-                    application,
                     savedStateHandle,
                     FeedRepositoryImpl(
                         FeedRemoteDataSourceImpl(
