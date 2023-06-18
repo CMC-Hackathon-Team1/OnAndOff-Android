@@ -22,11 +22,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    application: Application,
     private val profileRepository: ProfileRepository,
     private val statisticsRepository: StatisticsRepository,
     private val calendarRepository: CalendarRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     sealed class State {
         data class GetPersonaFailed(val reason: Reason) : State() {
@@ -251,14 +250,7 @@ class HomeViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                // Get the Application object from extras
-                val application =
-                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                // Create a SavedStateHandle for this ViewModel from extras
-                val savedStateHandle = extras.createSavedStateHandle()
-
                 return HomeViewModel(
-                    application,
                     ProfileRepositoryImpl(
                         ProfileRemoteDataSourceImpl(
                             RetrofitClient.getClient()?.create(MyPersonaInterface::class.java)!!
