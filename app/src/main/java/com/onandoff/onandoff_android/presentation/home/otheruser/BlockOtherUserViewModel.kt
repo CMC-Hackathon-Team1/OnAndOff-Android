@@ -18,9 +18,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BlockOtherUserViewModel(
-    application: Application,
     private val userRepository: UserRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
     sealed class State {
         data class BlockOtherUserFailed(val reason: Reason) : State() {
             enum class Reason {
@@ -84,14 +83,7 @@ class BlockOtherUserViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                // Get the Application object from extras
-                val application =
-                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                // Create a SavedStateHandle for this ViewModel from extras
-                val savedStateHandle = extras.createSavedStateHandle()
-
                 return BlockOtherUserViewModel(
-                    application,
                     UserRepositoryImpl(
                         UserRemoteDataSourceImpl(
                             RetrofitClient.getClient()?.create(UserInterface::class.java)!!
