@@ -1,10 +1,7 @@
 package com.onandoff.onandoff_android.presentation.home.viewmodel
 
-import android.app.Application
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.onandoff.onandoff_android.data.api.user.MyPersonaInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
@@ -19,11 +16,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 
-// MVVM Model - View
 class CreatePersonaViewModel(
-    application: Application,
     private val profileRepository: ProfileRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     sealed class State {
         data class CreateFailed(val reason: Reason) : State() {
@@ -129,13 +124,7 @@ class CreatePersonaViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                // Get the Application object from extras
-                val application = checkNotNull(extras[APPLICATION_KEY])
-                // Create a SavedStateHandle for this ViewModel from extras
-                val savedStateHandle = extras.createSavedStateHandle()
-
                 return CreatePersonaViewModel(
-                    application,
                     ProfileRepositoryImpl(
                         ProfileRemoteDataSourceImpl(
                             RetrofitClient.getClient()?.create(MyPersonaInterface::class.java)!!
