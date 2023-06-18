@@ -1,6 +1,5 @@
 package com.onandoff.onandoff_android.presentation.home
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -20,13 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
 
 import com.onandoff.onandoff_android.databinding.FragmentHomeBinding
-import com.onandoff.onandoff_android.presentation.MainActivity
 
 import com.onandoff.onandoff_android.presentation.home.persona.CreatePersonaActivity
 import com.onandoff.onandoff_android.presentation.home.viewmodel.HomeViewModel
@@ -55,12 +52,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         HomeViewModel.Factory
     })
 
-    private val myProfileListAdapter: MyProfileListAdapter by lazy {
-        MyProfileListAdapter(
-            onClick = ::onClickPersona
-        )
-    }
-
+    private lateinit var myProfileListAdapter: MyProfileListAdapter
     private lateinit var relevantUserListAdapter: RelevantUserListAdapter
     private lateinit var calendarAdapter: CalendarAdapter
     private var profileId: Int? = null
@@ -154,9 +146,11 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                         is HomeViewModel.State.GetPersonaSuccess -> {
                             binding.tvUserPersona1.text = personaName.value.toString()
                             binding.tvUserName1.text = profileName.value.toString()
+                            Log.d("state.myProfile.isSelected : ", "${state.myProfile.isSelected}")
                         }
                         is HomeViewModel.State.GetPersonaListSuccess -> {
                             Log.d("state.myProfileList", "${state.profileList}")
+                            Log.d("selectedProfile", "selectedProfile: $selectedProfile")
 
                             val selectedProfile = state.profileList.find { it.isSelected }
                             if (selectedProfile != null) {
@@ -201,6 +195,10 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
     }
 
     private fun initMyPersonaListRecyclerView(recyclerView: RecyclerView) {
+        myProfileListAdapter = MyProfileListAdapter(
+            onClick = ::onClickPersona
+        )
+
         recyclerView.run {
             adapter = myProfileListAdapter
             val spaceDecoration = HorizontalSpaceItemDecoration(25)
@@ -235,12 +233,11 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
     }
 
     private fun onClickPersona(item: MyProfileItem) {
-        // TODO: 화면에 표시될 페르소나 데이터 연동 추가하기
         viewModel.setSelectedProfile(item)
+        Log.d("onClickPersona", "onClickPersona: ${item.isSelected}")
     }
 
     private fun setUserName(item: MyProfileItem) {
-        Log.d("MyProfileItem하하하", "$item")
         binding.tvUserPersona1.text = item.myProfile.personaName
         binding.tvUserName1.text = item.myProfile.profileName
 
@@ -249,25 +246,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         profileId = item.myProfile.profileId
         prefs.putSharedPreference(SHARED_PREFERENCE_NAME_PROFILEID, profileId!!)
         viewModel.setSelectedProfile(item)
-    }
-
-    /**
-    * 순서 :  1,2,3,4,5,6,7,8
-    * 1, 2 = topLeftRadius
-    * 3, 4 = topRightRadius
-    * 5, 6 = bottomRightRadius
-    * 7, 8 = bottomLeftRadius
-    * */
-    fun makeRoundedRectangleDrawable(
-        radius: Float = 24f,
-        strokeWidth: Int = 1,
-        strokeColor: Int,
-        backgroundColor: Int? = null
-    ): Drawable = GradientDrawable().apply {
-        shape = GradientDrawable.RECTANGLE
-        setStroke(strokeWidth, strokeColor)
-        backgroundColor?.run { setColor(backgroundColor) }
-        cornerRadii = floatArrayOf(radius, radius, radius, radius, radius, radius, radius, radius)
+        Log.d("setUserName", "setUserName: : ${item.isSelected}")
     }
 
     private fun setupCalendar() {
@@ -286,7 +265,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
 
     private fun initRelevantUserListRecyclerView(recyclerView: RecyclerView) {
         relevantUserListAdapter = RelevantUserListAdapter(
-            userProfileClick = ::intentUserProfile
+            userProfileClick = ::onClickOtherUserProfile
         )
 
         recyclerView.run {
@@ -324,7 +303,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         }
     }
 
-    private fun intentUserProfile(relevantUserData: RelevantUserData) {
+    private fun onClickOtherUserProfile(relevantUserData: RelevantUserData) {
 //        val intent = UserProfileActivity.getIntent(requireActivity())
 //        startActivity(intent)
     }
