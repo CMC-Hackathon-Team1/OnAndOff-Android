@@ -111,7 +111,7 @@ class BlockedUserListActivity : AppCompatActivity() {
             adapter = blockedUserListAdapter
         }
 
-        Log.d("initRecyclerView", "initRecyclerView: ${blockedUserListAdapter.currentList}")
+        Log.d("initRecyclerView", "blockedUserListAdapter.currentList: ${blockedUserListAdapter.currentList}")
     }
 
     private fun openUnblockOtherUserDialog(blockedUser: BlockedUser) {
