@@ -239,7 +239,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
     private fun onClickPersona(item: MyProfileItem) {
 //        item.isSelected = true
         viewModel.setSelectedProfile(item)
-        Log.d("onClickPersona", "onClickPersona: ${item.isSelected}") // 여기에서 false 로 표시됨
+        Log.d("onClickPersona", "item.isSelected: ${item.isSelected}") // 여기에서 false 로 표시됨
     }
 
     private fun setUserName(item: MyProfileItem) {
