@@ -147,13 +147,17 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
                             binding.tvUserPersona1.text = personaName.value.toString()
                             binding.tvUserName1.text = profileName.value.toString()
                             Log.d("state.myProfile.isSelected : ", "${state.myProfile.isSelected}")
+//                            setUserName(state.myProfile)
                         }
                         is HomeViewModel.State.GetPersonaListSuccess -> {
                             Log.d("state.myProfileList", "${state.profileList}")
                             Log.d("selectedProfile", "selectedProfile: $selectedProfile")
+                            myProfileListAdapter.submitList(state.profileList)
 
                             val selectedProfile = state.profileList.find { it.isSelected }
+
                             if (selectedProfile != null) {
+                                Log.d("selectedProfile", "selectedProfile.isSelected: ${selectedProfile.isSelected}")
                                 setUserName(selectedProfile)
                             }
                         }
@@ -233,8 +237,9 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
     }
 
     private fun onClickPersona(item: MyProfileItem) {
+//        item.isSelected = true
         viewModel.setSelectedProfile(item)
-        Log.d("onClickPersona", "onClickPersona: ${item.isSelected}")
+        Log.d("onClickPersona", "onClickPersona: ${item.isSelected}") // 여기에서 false 로 표시됨
     }
 
     private fun setUserName(item: MyProfileItem) {
