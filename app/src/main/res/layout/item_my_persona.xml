@@ -7,6 +7,10 @@
         <import type="com.onandoff.onandoff_android.R" />
 
         <variable
+            name="viewModel"
+            type="com.onandoff.onandoff_android.presentation.home.viewmodel.HomeViewModel" />
+
+        <variable
             name="myPersona"
             type="com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem" />
     </data>
@@ -39,9 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardElevation="0dp"
+            app:contentPadding="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:cardCornerRadius="30dp">
+
+<!--            app:myPersonaItemStrokeColor="@{viewModel.personaSelected}"-->
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_my_profile"

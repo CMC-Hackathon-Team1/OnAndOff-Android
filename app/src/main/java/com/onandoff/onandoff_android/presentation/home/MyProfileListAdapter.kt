@@ -1,6 +1,7 @@
 package com.onandoff.onandoff_android.presentation.home
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -34,6 +35,8 @@ class MyProfileListAdapter(
 
             binding.outerCvMyProfile.setContentPadding(7, 7, 7, 7)
             binding.outerCvMyProfile.setCardBackgroundColor(strokeColor)
+
+            Log.d("MyProfileViewHolder", "MyProfileViewHolder - bind: $strokeColor")
 
             binding.myPersona = myProfileItem
             binding.executePendingBindings()

@@ -94,6 +94,10 @@ class HomeViewModel(
     var selectedProfile: MyProfileItem? = null
         private set
 
+    private val _personaSelected = MutableLiveData<Boolean>()
+    val personaSelected: LiveData<Boolean>
+        get() = _personaSelected
+
     private val profileList = mutableListOf<MyProfileItem>()
 
     fun getMyPersona(profileId: Int) {
@@ -164,9 +168,19 @@ class HomeViewModel(
         val newProfileList = profileList.map {
             it.copy(it.myProfile, isSelected = it.myProfile.profileId == item.myProfile.profileId)
         }
+        Log.d("setSelectedProfile", "setSelectedProfile: ${item.myProfile.profileId}")
+        Log.d("setSelectedProfile", "setSelectedProfile: ${item.isSelected}")
+        _personaSelected.value = item.isSelected
         profileList.clear()
         profileList.addAll(newProfileList)
         Log.d("newProfileList", "$newProfileList")
+        Log.d("newProfileList-isSelected", "${newProfileList.map { 
+            it.isSelected
+        }}")
+        val newProfile = newProfileList.find {
+            it.isSelected
+        }
+        _state.value = State.GetPersonaSuccess(newProfile!!)
         _state.value = State.GetPersonaListSuccess(newProfileList)
 
         getMyPersona(profileId)
@@ -265,7 +279,7 @@ class HomeViewModel(
     }
 }
 
-data class MyProfileItem constructor(
+data class MyProfileItem(
     val myProfile: MyProfileResponse,
-    val isSelected: Boolean
+    var isSelected: Boolean
 )
