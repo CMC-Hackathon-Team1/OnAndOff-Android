@@ -46,7 +46,7 @@ class PreferenceUtil(context: Context) {
 
     fun observePreference(targetKey: String?): Flow<Int> {
         return callbackFlow {
-            val listener: (sharedPreferences: SharedPreferences, key: String) -> Unit =
+            val listener: (sharedPreferences: SharedPreferences, key: String?) -> Unit =
                 { _, key ->
                     if (key == targetKey) {
                         trySend(getSharedPreference(targetKey, -1))
