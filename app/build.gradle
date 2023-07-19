@@ -7,12 +7,12 @@ plugins {
 }
 //Properties properties = new Properties() properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.onandoff.onandoff_android"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 2
         versionName "1.1"
         buildConfigField("String", "ON_AND_OFF_URL", '"http://3.36.187.9:5050"')
@@ -98,10 +98,10 @@ dependencies {
     //알람을 위한 파이어베이스 설정
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.0'
 
     //구글 로그인 모듈
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
 
     //pagination 모듈
     implementation 'com.github.markomilos:paginate:1.0.0'
