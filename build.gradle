@@ -13,7 +13,7 @@ buildscript {
         paging_version = "3.1.1"
         glide_version = "4.14.2"
         room_version = "2.4.2"
-        kakao_version ="2.14.0"
+        kakao_version ="2.15.0"
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
