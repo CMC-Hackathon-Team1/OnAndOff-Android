@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     ext{
-        activity_ktx_version = "1.8.1"
+        activity_ktx_version = "1.8.2"
         fragment_ktx_version = "1.6.2"
         retrofit_version = "2.9.0"
         okhttp_version = "4.9.0"
