@@ -96,7 +96,7 @@ dependencies {
     // 알람을 위한 파이어베이스 설정
     implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.3.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.4.0'
 
     // 구글 로그인 모듈
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
