@@ -29,8 +29,18 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.8.20" apply false
     id("com.google.dagger.hilt.android") version "2.48.1" apply false
     id("com.google.gms.google-services") version "4.3.10" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.1" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.19.0" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
+}
+
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+
+    ktlint {
+        reporters {
+            reporter "html"
+        }
+    }
 }
 
 tasks.register("clean", Delete) {
