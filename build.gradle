@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 buildscript {
     repositories {
         google()
@@ -35,15 +38,75 @@ plugins {
 
 subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
 
     ktlint {
         reporters {
             reporter "html"
         }
     }
+
+    detekt {
+        config = files("$projectDir/config/detekt.yml")
+
+        reports {
+            html {
+                enabled true
+                destination file("$projectDir/build/reports/detekt.html")
+            }
+            xml {
+                enabled false
+            }
+            txt {
+                enabled false
+            }
+        }
+    }
+}
+
+tasks.withType(Detekt).configureEach() {
+    autoCorrect = true
+
+    exclude "**/test/**"
+    exclude "**/androidTest/**"
+    exclude "**/build/**"
+    exclude "**/resources/**"
+    exclude "**/tmp/**"
+}
+
+// Apply same path exclusions as for the main task
+tasks.withType(DetektCreateBaselineTask).configureEach() {
+    exclude "**/test/**"
+    exclude "**/androidTest/**"
+    exclude "**/build/**"
+    exclude "**/resources/**"
+    exclude "**/tmp/**"
+}
+
+configurations {
+    ktlint
+}
+
+tasks.register('ktlint', JavaExec) {
+    group = "verification"
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args "app/src/**/*.kt", "!**/build/**/*.kt", "--baseline=ktlint-baseline.xml"
+}
+
+//tasks.register('ktlintFormat', JavaExec) {
+//    description = "Fix Kotlin code style deviations."
+//    classpath = configurations.ktlint
+//    mainClass.set("com.pinterest.ktlint.Main")
+//    args "-F", "app/src/**/*.kt", "!**/build/**/*.kt", "--baseline=ktlint-baseline.xml"
+//}
+
+tasks.withType(Detekt.class).configureEach {
+    exclude("**/resources/**")
+    exclude("**/tmp/**")
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
