@@ -275,10 +275,10 @@ class ProfileCreateActivity:AppCompatActivity() {
                             "Profile Create",
                             "${response.code()}"
                         );
-//                        Log.d(
-//                            "Profile Create",
-//                            response.body()?.result?.profileId!!.toString()
-//                        );
+                        Log.d(
+                            "Profile Create",
+                            response.body()?.result?.profileId!!.toString()
+                        );
 
                         prefs.putSharedPreference(APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID,
                             response.body()?.result?.profileId!!.toString())
