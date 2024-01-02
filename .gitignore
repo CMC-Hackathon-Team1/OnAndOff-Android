@@ -52,3 +52,11 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+/app/config/detekt.yml
+/keystore_base64.txt
+/app/config/lint/lint.xml
+/app/config/lint/lint-baseline.xml
+/private_key.pepk
+/upload_certificate.pem
+
+/app/release/app-release.aab
