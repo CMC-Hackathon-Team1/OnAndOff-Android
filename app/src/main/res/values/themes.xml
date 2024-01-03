@@ -43,14 +43,6 @@
         <item name="android:dateTextAppearance">@style/TextAppearance.AppCompat.Medium</item>
     </style>
 
-    <!-- 달력에 사용하는 스타일 -->
-    <style name="CustomTextAppearance" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/mcv_text_date_light</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:includeFontPadding">false</item>
-    </style>
-
     <!-- 여기서 요일, 달력 안 숫자들의 폰트 설정을 수행할 수 있다 -->
     <style name="CalenderViewCustom" parent="Theme.AppCompat">
         <item name="colorAccent">@android:color/holo_red_light</item>
