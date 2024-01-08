@@ -56,6 +56,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_weight = "1"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
             android:text=""
             />
         <ImageView
@@ -96,6 +98,7 @@
             android:layout_weight = "1"
             android:text=""
             android:inputType="textPassword"
+            android:maxLines="1"
             />
         <ImageView
             android:id="@+id/btn_password_hide"
