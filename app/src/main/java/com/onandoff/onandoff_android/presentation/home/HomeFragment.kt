@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import androidx.recyclerview.widget.GridLayoutManager
+import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.api.feed.CalendarInterface
 import com.onandoff.onandoff_android.data.api.util.RetrofitClient
 import com.onandoff.onandoff_android.data.model.*
@@ -62,7 +64,7 @@ class HomeFragment: Fragment(), CalendarAdapter.OnMonthChangeListener, CalendarA
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
