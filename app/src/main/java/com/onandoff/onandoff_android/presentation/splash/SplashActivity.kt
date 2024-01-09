@@ -86,7 +86,12 @@ class SplashActivity:AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoTalk(this@SplashActivity) { token, error ->
                     if (error != null) {
                         Log.e(Constraints.TAG, "로그인 실패", error)
-                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        if (error.toString().contains("statusCode=302")) {
+                            UserApiClient.instance.loginWithKakaoAccount(
+                                this@SplashActivity,
+                                callback = callback
+                            )
+                        } else if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                             Log.e(Constraints.TAG, "로그인 취소", error)
                         }
                     } else if (token != null) {
