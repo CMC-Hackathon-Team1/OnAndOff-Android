@@ -19,8 +19,8 @@ android {
         applicationId = "com.onandoff.onandoff_android"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "4"
+        versionCode = 5
+        versionName = "5"
         buildConfigField("String", "ON_AND_OFF_URL", "\"https://3.36.187.9:5050\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
