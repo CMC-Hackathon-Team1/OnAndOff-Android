@@ -39,4 +39,3 @@ data class SocialLoginResponseResult(
     @SerializedName("state")val state:String,
     @SerializedName("jwt")val jwt:String
 )
-

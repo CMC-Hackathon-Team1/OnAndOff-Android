@@ -344,6 +344,4 @@ class PostingAddActivity : AppCompatActivity() {
             }
         }
     }
-
 }
-
