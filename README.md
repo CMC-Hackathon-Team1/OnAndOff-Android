@@ -31,6 +31,8 @@ Google Play : <a href="https://play.google.com/store/apps/details?id=com.onandof
 * Flow
 * Databinding
 * Glide
+* Elastic Views
+* SwipeRefreshLayout
 
 ## 🐾 Architecture
 MVVM 패턴을 적용하여, 크게 Model <- ViewModel <- View의 구조를 가집니다.
