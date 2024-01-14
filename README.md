@@ -15,7 +15,7 @@ CMC OnAndOff 팀에서 제작한 서비스입니다.
 
 구동 조건: Google play service, 네트워크 연결
 
-Google Play : <a href="https://play.google.com/store/apps/details?id=com.onandoff.onandoff_android">온앤오프</a>
+Google Play : <a href="https://play.google.com/store/apps/details?id=com.onandoff.onandoff_android" target="_blank">온앤오프</a>
 
 ## 📱 Feature ##
 - 자신만의 페르소나를 만들어서 사람들과 공유할 수 있습니다.
