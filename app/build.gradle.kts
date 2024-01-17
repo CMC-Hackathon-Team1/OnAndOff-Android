@@ -39,6 +39,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             proguardFile("proguard-kakao.pro")
             proguardFile("proguard-google.pro")
+            proguardFile("proguard-retrofit2.pro")
         }
     }
     compileOptions {
