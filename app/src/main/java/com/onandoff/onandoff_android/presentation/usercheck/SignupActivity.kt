@@ -243,10 +243,4 @@ class SignupActivity:AppCompatActivity() {
             view.setBackgroundColor(getColor(R.color.black))
         }
     }
-
-
-
-
-
-
 }

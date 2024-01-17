@@ -13,9 +13,9 @@ import com.google.android.material.card.MaterialCardView
 import com.onandoff.onandoff_android.R
 import com.onandoff.onandoff_android.data.model.BlockedUser
 import com.onandoff.onandoff_android.data.model.LookAroundFeedData
+import com.onandoff.onandoff_android.data.model.MyProfileItem
 import com.onandoff.onandoff_android.presentation.home.MyProfileListAdapter
 import com.onandoff.onandoff_android.presentation.home.setting.BlockedUserListAdapter
-import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
 import com.onandoff.onandoff_android.presentation.look.LookAroundFeedListAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

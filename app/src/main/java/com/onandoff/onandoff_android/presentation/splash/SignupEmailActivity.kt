@@ -78,6 +78,4 @@ class SignupEmailActivity:AppCompatActivity() {
         }
 
     }
-
-
-    }
+}

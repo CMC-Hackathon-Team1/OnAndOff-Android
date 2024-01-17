@@ -297,8 +297,4 @@ class ProfileCreateActivity:AppCompatActivity() {
             }
         })
     }
-
-
-
-
 }

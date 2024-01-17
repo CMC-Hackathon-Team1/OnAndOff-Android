@@ -337,8 +337,4 @@ class ProfileEditFragment: Fragment() {
             dialog.dismiss()
         }
     }
-
 }
-
-
-

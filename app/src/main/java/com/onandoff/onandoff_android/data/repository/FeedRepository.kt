@@ -20,4 +20,3 @@ interface FeedRepository {
 
     suspend fun getCategories(): CategoryListResponse
 }
-

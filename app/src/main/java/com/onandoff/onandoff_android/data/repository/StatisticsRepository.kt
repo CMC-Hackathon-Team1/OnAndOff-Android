@@ -11,4 +11,3 @@ interface StatisticsRepository {
 
     suspend fun getMonthlyFollowersCount(profileId: Int): StatisticsResponse
 }
-

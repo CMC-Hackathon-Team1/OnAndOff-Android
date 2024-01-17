@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.onandoff.onandoff_android.R
+import com.onandoff.onandoff_android.data.model.MyProfileItem
 import com.onandoff.onandoff_android.databinding.ItemMyPersonaBinding
-import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
 
 class MyProfileListAdapter(
     private val onClick: (MyProfileItem) -> Unit

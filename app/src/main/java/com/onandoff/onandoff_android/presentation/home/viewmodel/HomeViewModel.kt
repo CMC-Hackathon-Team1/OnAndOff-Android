@@ -1,6 +1,5 @@
 package com.onandoff.onandoff_android.presentation.home.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -100,7 +99,7 @@ class HomeViewModel(
 
     private val profileList = mutableListOf<MyProfileItem>()
 
-    fun getMyPersona(profileId: Int) {
+    private fun getMyPersona(profileId: Int) {
         viewModelScope.launch {
             kotlin.runCatching { profileRepository.getMyProfile(profileId) }
                 .onSuccess {
@@ -246,10 +245,6 @@ class HomeViewModel(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-    }
-
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
@@ -278,8 +273,3 @@ class HomeViewModel(
         }
     }
 }
-
-data class MyProfileItem(
-    val myProfile: MyProfileResponse,
-    var isSelected: Boolean
-)

@@ -269,8 +269,4 @@ class MypageFragment: Fragment(){
 
 //        })
     }
-
-
-
-
 }

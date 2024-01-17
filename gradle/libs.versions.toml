@@ -18,18 +18,18 @@ swipeRefreshLayout = "1.1.0"
 paging = "3.2.1"
 hilt = "2.48.1"
 
-lifecycle = "2.6.2"
+lifecycle = "2.7.0"
 archCore = "2.2.0"
 
 glide = "4.14.2"
 
-gson = "2.9.0"
+gson = "2.10.1"
 
 firebaseBom = "32.7.0"
 crashlyticsGradle = "2.9.9"
-gms = "4.4.0"
+gms = "4.3.15"
 
-coroutines = "1.7.1"
+coroutines = "1.7.3"
 playCore = "1.10.3"
 
 navigation = "2.7.6"
@@ -53,7 +53,7 @@ elasticView = "2.1.0"
 # Android
 android-application = { id = "com.android.application", version.ref = "comAndroid" }
 android-library = { id = "com.android.library", version.ref = "comAndroid" }
-agp = { id = "com.android.tools.build:gradle", version.ref = "agp" }
+
 
 # Kotlin
 kotlin = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -88,6 +88,7 @@ androidx-annotation = { module = "androidx.annotation:annotation", version.ref =
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 androidx-arch-core = { module = "androidx.arch-core:core-testing", version.ref = "archCore"}
 androidx-paging = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
+agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 

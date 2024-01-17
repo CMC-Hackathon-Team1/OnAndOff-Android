@@ -67,6 +67,4 @@ android:paddingTop="22dp"
 
     </LinearLayout>
 
-
-
 </androidx.appcompat.widget.LinearLayoutCompat>

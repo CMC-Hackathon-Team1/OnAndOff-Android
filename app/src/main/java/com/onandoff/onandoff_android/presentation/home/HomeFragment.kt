@@ -37,7 +37,6 @@ import com.onandoff.onandoff_android.presentation.home.posting.PostingAddActivit
 import com.onandoff.onandoff_android.presentation.home.posting.PostingReadActivity
 import com.onandoff.onandoff_android.util.APIPreferences.SHARED_PREFERENCE_NAME_PROFILEID
 import com.onandoff.onandoff_android.util.SharePreference.Companion.prefs
-import com.onandoff.onandoff_android.presentation.home.viewmodel.MyProfileItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -13,5 +13,4 @@ object BindingAdapterHelper {
             Glide.with(view.context).load(it).circleCrop().into(view)
         }
     }
-
 }

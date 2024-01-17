@@ -19,8 +19,8 @@ android {
         applicationId = "com.onandoff.onandoff_android"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
-        versionName = "5"
+        versionCode = 6
+        versionName = "6"
         buildConfigField("String", "ON_AND_OFF_URL", "\"https://3.36.187.9:5050\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -37,6 +37,9 @@ android {
             isMinifyEnabled = true
             isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFile("proguard-kakao.pro")
+            proguardFile("proguard-google.pro")
+            proguardFile("proguard-retrofit2.pro")
         }
     }
     compileOptions {

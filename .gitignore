@@ -185,6 +185,7 @@ obj/
 .app/config/lint/lint-baseline.yml
 .app/config/detekt.yml
 keystore_base64.txt
+google_play_app_signing_key_hash.txt
 private_key.pepk
 upload_certificate.pem
 
