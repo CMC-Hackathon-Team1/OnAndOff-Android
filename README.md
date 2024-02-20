@@ -13,7 +13,7 @@ CMC OnAndOff 팀에서 제작한 서비스입니다.
 
 운영체제: Android 8.0 이상
 
-구동 조건: Google play service, 네트워크 연결
+구동 조건: Google Play Service, 네트워크 연결
 
 Google Play : <a href="https://play.google.com/store/apps/details?id=com.onandoff.onandoff_android" target="_blank">온앤오프</a>
 
