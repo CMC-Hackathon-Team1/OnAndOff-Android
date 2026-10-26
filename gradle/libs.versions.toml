@@ -1,48 +1,47 @@
 [versions]
-kotlin = "1.9.20"
-agp = "8.0.2"
-kotlinStdlib = "1.9.20"
-ksp = "1.9.20-1.0.14"
-comAndroid = "8.1.1"
+kotlin = "2.4.21"
+agp = "9.4.1"
 
-material = "1.11.0"
-appcompat = "1.6.1"
-androidxCore = "1.13.1"
-androidxActivity = "1.8.2"
-androidxFragment = "1.6.2"
-constraintLayout = "2.1.4"
-recyclerview = "1.3.2"
+ksp = "2.3.9"
+comAndroid = "9.4.1"
 
-annotation = "1.7.1"
-swipeRefreshLayout = "1.1.0"
-paging = "3.2.1"
-hilt = "2.48.1"
+material = "1.14.0"
+appcompat = "1.8.0"
+androidxCore = "1.19.1"
+androidxActivity = "1.13.0"
+androidxFragment = "1.9.1"
+constraintLayout = "2.2.2"
+recyclerview = "1.4.0"
 
-lifecycle = "2.7.0"
-archCore = "2.2.0"
+annotation = "1.11.0"
+swipeRefreshLayout = "1.2.0"
+paging = "3.5.3"
+hilt = "2.60.1"
 
-glide = "4.14.2"
+lifecycle = "2.11.0"
 
-gson = "2.10.1"
+glide = "5.0.9"
 
-firebaseBom = "32.7.0"
-crashlyticsGradle = "2.9.9"
-gms = "4.3.15"
+gson = "2.15.0"
 
-coroutines = "1.7.3"
+firebaseBom = "35.1.0"
+crashlyticsGradle = "3.0.8"
+gms = "4.5.0"
+
+coroutines = "1.11.0"
 #playCore = "1.10.3"
 
-navigation = "2.7.6"
+navigation = "2.10.2"
 
 junit = "4.13.2"
-test_junit = "1.1.5"
-espresso_core = "3.5.1"
+test_junit = "1.3.0"
+espresso_core = "3.7.0"
 
-retrofit = "2.9.0"
-okhttp = "4.10.0"
+retrofit = "3.0.0"
+okhttp = "4.12.0"
 
-kakao = "2.15.0"
-google-login = "20.7.0"
+kakao = "2.21.6"
+google-login = "21.4.0"
 
 tedKeyboard = "1.0.1"
 pagination = "1.0.0"
@@ -56,13 +55,11 @@ android-library = { id = "com.android.library", version.ref = "comAndroid" }
 
 
 # Kotlin
-kotlin = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+# AGP 9 provides Kotlin Android support. Data Binding still uses legacy kapt.
+legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "comAndroid" }
 
 # Hilt
-hilt-plugin = { id = "com.google.dagger.hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 # Navigation
@@ -157,7 +154,6 @@ junit = { module = "junit:junit", version.ref = "junit" }
 
 # ksp
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 
 
 [bundles]
