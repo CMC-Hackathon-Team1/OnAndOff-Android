@@ -1,29 +1,64 @@
-@file:Suppress("UnstableApiUsage")
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.devtools.ksp)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.legacy.kapt)
+}
+
+val supabaseProperties: Properties = Properties().also { properties ->
+    rootProject.file("local.properties").inputStream().use { input ->
+        properties.load(input)
+    }
+}
+
+fun supabaseConfig(name: String): String {
+    val value = requireNotNull(supabaseProperties.getProperty(name)) {
+        "local.properties에 $name 설정이 필요합니다."
+    }.trim()
+    require(value.isNotEmpty()) { "$name 값이 비어 있습니다." }
+
+    return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 }
 
 android {
     namespace = "com.onandoff.onandoff_android"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.onandoff.onandoff_android"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 6
-        versionName = "6"
-        buildConfigField("String", "ON_AND_OFF_URL", "\"https://3.36.187.9:5050\"")
+        targetSdk = 37
+        versionCode = 11
+        versionName = "11"
+        buildConfigField("String", "SUPABASE_URL", supabaseConfig("SUPABASE_URL"))
+        buildConfigField(
+            "String",
+            "SUPABASE_PUBLISHABLE_KEY",
+            supabaseConfig("SUPABASE_PUBLISHABLE_KEY")
+        )
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore.jks")
+            storePassword = file("keystore_password.txt").readText().trim()
+            keyAlias = file("key_alias.txt").readText().trim()
+            keyPassword = file("key_password.txt").readText().trim()
+        }
+        create("release") {
+            storeFile = file("keystore.jks")
+            storePassword = file("keystore_password.txt").readText().trim()
+            keyAlias = file("key_alias.txt").readText().trim()
+            keyPassword = file("key_password.txt").readText().trim()
+        }
     }
 
     buildTypes {
@@ -31,6 +66,7 @@ android {
             isShrinkResources = false
             isMinifyEnabled = false
             isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
             isShrinkResources = true
@@ -40,18 +76,24 @@ android {
             proguardFile("proguard-kakao.pro")
             proguardFile("proguard-google.pro")
             proguardFile("proguard-retrofit2.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -83,8 +125,7 @@ dependencies {
     // Coroutines
     implementation(libs.bundles.coroutines)
 
-    implementation(libs.play.core)
-    testImplementation(libs.androidx.arch.core)
+//    implementation(libs.play.core)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -113,7 +154,6 @@ dependencies {
 
     implementation(libs.ted.keyboard.observer)
 
-    implementation(libs.ksp)
 }
 
 kapt {
