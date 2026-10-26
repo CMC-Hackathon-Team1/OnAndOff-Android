@@ -1,6 +1,5 @@
 [versions]
 kotlin = "2.4.21"
-agp = "9.4.1"
 
 ksp = "2.3.9"
 comAndroid = "9.4.1"
@@ -22,14 +21,11 @@ lifecycle = "2.11.0"
 
 glide = "5.0.9"
 
-gson = "2.15.0"
-
 firebaseBom = "35.1.0"
 crashlyticsGradle = "3.0.8"
 gms = "4.5.0"
 
 coroutines = "1.11.0"
-#playCore = "1.10.3"
 
 navigation = "2.10.2"
 
@@ -51,8 +47,6 @@ elasticView = "2.1.0"
 [plugins]
 # Android
 android-application = { id = "com.android.application", version.ref = "comAndroid" }
-android-library = { id = "com.android.library", version.ref = "comAndroid" }
-
 
 # Kotlin
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
@@ -61,9 +55,6 @@ legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "comAndroid" }
 
 # Hilt
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
-# Navigation
-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 
 # Firebase
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
@@ -84,16 +75,12 @@ androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidxCore
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayout" }
 androidx-paging = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
-agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 
 # Glide
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
-
-# Gson
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Lifecycle
 lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -112,7 +99,6 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
-firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlyticsGradle" }
 
 # Navigation
 navigation-safeargsPlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
@@ -126,9 +112,6 @@ coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
-
-# Play Core
-#play-core = { module = "com.google.android.play:core", version.ref = "playCore" }
 
 # Network
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -152,32 +135,13 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 # Unit Test
 junit = { module = "junit:junit", version.ref = "junit" }
 
-# ksp
-ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-
 
 [bundles]
-lifecycle = [
-    "lifecycle-viewmodel",
-    "lifecycle-livedata",
-    "lifecycle-viewmodel-savedState"
-]
 coroutines = [
     "coroutines-core",
     "coroutines-android",
     "coroutines-play-services",
     "coroutines-test"
-]
-hilt = [
-    "hilt-android",
-    "hilt-compiler"
-]
-navigation = [
-    "navigation-safeargsPlugin",
-    "navigation-fragment",
-    "navigation-ui",
-    "navigation-dynamic-features-fragment",
-    "navigation-testing"
 ]
 firebase = [
     "firebase-auth",
@@ -186,9 +150,6 @@ firebase = [
     "firebase-messaging",
     "firebase-storage",
     "firebase-crashlytics"
-]
-glide = [
-    "glide", "glide-compiler"
 ]
 retrofit = [
     "retrofit",
